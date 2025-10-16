@@ -1,3 +1,3 @@
-AoE2ScenarioParser>=1.0.0
+AoE2ScenarioParser>=0.6.0
 requests>=2.28.0
 pathlib2>=2.3.7 
