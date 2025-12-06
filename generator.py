@@ -546,8 +546,8 @@ def main():
             print("  python generator.py -h                 - Show this help")
             return
 
-    # Get API key from environment variable or use default
-    api_key = os.getenv("OPENROUTER_API_KEY", "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")
+    # Get API key from environment variable
+    api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("Please set the OPENROUTER_API_KEY environment variable")
         return
