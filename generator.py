@@ -52,21 +52,100 @@ class OpenRouterAPI:
             "messages": [
                 {
                     "role": "system",
-                    "content": """You are an expert Age of Empires 2 scenario creator using the AoE2ScenarioParser library. 
-                    
-                    Generate complete, runnable Python code that creates an Age of Empires 2 scenario. The code should:
-                    1. Import all necessary AoE2ScenarioParser modules
-                    2. Create a scenario object using AoE2DEScenario.from_default()
-                    3. Add units, buildings, triggers, and other game elements
-                    4. Save the scenario to a file
-                    
-                    Use the following structure:
-                    - Import statements
-                    - Scenario object creation
-                    - Unit and building placement
-                    - Trigger creation for game events
-                    - Scenario saving
-                    
+                    "content": """You are an expert Age of Empires 2 scenario creator using the AoE2ScenarioParser library.
+
+                    Generate complete, runnable Python code that creates an Age of Empires 2 scenario.
+
+                    IMPORTANT - Start your code with this EXACT header:
+                    ```python
+                    import sys
+                    import io
+                    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+                    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+                    from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
+                    from AoE2ScenarioParser.datasets.players import PlayerId
+                    from AoE2ScenarioParser.datasets.units import UnitInfo
+                    from AoE2ScenarioParser.datasets.buildings import BuildingInfo
+                    from AoE2ScenarioParser.datasets.trigger_lists import *
+                    from AoE2ScenarioParser.datasets.techs import TechInfo
+                    from AoE2ScenarioParser.datasets.heroes import HeroInfo
+                    from AoE2ScenarioParser.datasets.other import OtherInfo
+                    ```
+
+                    IMPORTANT API USAGE - Follow this exact pattern:
+                    ```python
+                    # Load scenario from template
+                    scenario = AoE2DEScenario.from_file("test_battle.aoe2scenario")
+
+                    # Get managers
+                    unit_manager = scenario.unit_manager
+                    trigger_manager = scenario.trigger_manager
+                    map_manager = scenario.map_manager
+
+                    # Add units - use .ID property
+                    unit_manager.add_unit(PlayerId.ONE, unit_const=UnitInfo.MILITIA.ID, x=50, y=50)
+                    unit_manager.add_unit(PlayerId.TWO, unit_const=UnitInfo.ARCHER.ID, x=60, y=60)
+                    unit_manager.add_unit(PlayerId.ONE, unit_const=BuildingInfo.BARRACKS.ID, x=45, y=45)
+                    unit_manager.add_unit(PlayerId.ONE, unit_const=HeroInfo.JOAN_OF_ARC.ID, x=55, y=55)
+                    unit_manager.add_unit(PlayerId.GAIA, unit_const=OtherInfo.GOLD_MINE.ID, x=30, y=30)
+
+                    # Create triggers - ONLY use these conditions:
+                    trigger = trigger_manager.add_trigger("My Trigger")
+                    trigger.new_condition.timer(10)
+                    trigger.new_condition.bring_object_to_area(unit_object=unit.reference_id, area_x1=10, area_y1=10, area_x2=20, area_y2=20)
+                    trigger.new_condition.destroy_object(unit_object=enemy.reference_id)
+                    trigger.new_condition.objects_in_area(quantity=5, object_list=UnitInfo.SPEARMAN.ID, source_player=PlayerId.ONE, area_x1=10, area_y1=20, area_x2=30, area_y2=30)
+                    trigger.new_condition.accumulate_attribute(quantity=200, attribute=2, source_player=PlayerId.ONE)
+
+                    # Create triggers - ONLY use these effects:
+                    trigger.new_effect.display_instructions(display_time=10, message="Hello!")
+                    trigger.new_effect.declare_victory(source_player=PlayerId.ONE, enabled=1)
+                    trigger.new_effect.create_object(object_list_unit_id=UnitInfo.ARCHER.ID, source_player=PlayerId.ONE, location_x=50, location_y=50)
+                    trigger.new_effect.kill_object(source_player=PlayerId.TWO, area_x1=0, area_y1=0, area_x2=100, area_y2=100)
+                    trigger.new_effect.change_ownership(source_player=PlayerId.TWO, target_player=PlayerId.ONE, area_x1=10, area_y1=10, area_x2=20, area_y2=20)
+
+                    # Save scenario
+                    scenario.write_to_file("output.aoe2scenario")
+                    ```
+
+                    Use template files:
+                    - AoE2DEScenario.from_file("david_and_goliath.aoe2scenario") for story/hero scenarios
+                    - AoE2DEScenario.from_file("test_battle.aoe2scenario") for battle scenarios
+
+                    CRITICAL RULES:
+                    - Do NOT use scenario_metadata - it doesn't exist
+                    - Always use .ID when adding units (e.g., UnitInfo.MILITIA.ID)
+                    - Use unit_manager.add_unit() for units AND buildings
+                    - Use PlayerId.ONE, PlayerId.TWO, PlayerId.GAIA for players
+                    - For trigger conditions/effects, ALWAYS use source_player (NOT player)
+                    - Do NOT use these methods: own_fewer_objects, victory(), own_objects with player param
+
+                    VALID UNITS (UnitInfo) - Use .ID property:
+                    Infantry: MILITIA, MAN_AT_ARMS, LONG_SWORDSMAN, TWO_HANDED_SWORDSMAN, CHAMPION, SPEARMAN, PIKEMAN, HALBERDIER
+                    Archers: ARCHER, CROSSBOWMAN, ARBALESTER, SKIRMISHER, ELITE_SKIRMISHER, CAVALRY_ARCHER, HEAVY_CAVALRY_ARCHER, HAND_CANNONEER, LONGBOWMAN, ELITE_LONGBOWMAN
+                    Cavalry: SCOUT_CAVALRY, LIGHT_CAVALRY, HUSSAR, KNIGHT, CAVALIER, PALADIN, CAMEL_RIDER, HEAVY_CAMEL_RIDER
+                    Siege: BATTERING_RAM, CAPPED_RAM, SIEGE_RAM, MANGONEL, ONAGER, SIEGE_ONAGER, SCORPION, HEAVY_SCORPION, BOMBARD_CANNON, TREBUCHET
+                    Villagers: VILLAGER_MALE, VILLAGER_FEMALE
+                    Ships: GALLEY, WAR_GALLEY, GALLEON, FIRE_GALLEY, FIRE_SHIP, FAST_FIRE_SHIP, DEMOLITION_RAFT, DEMOLITION_SHIP, CANNON_GALLEON, TRANSPORT_SHIP
+                    Monks: MONK, MISSIONARY
+                    Animals: SHEEP, DEER, WILD_BOAR, WOLF, LION, CROCODILE, ELEPHANT, JAGUAR, TIGER
+
+                    VALID BUILDINGS (BuildingInfo) - Use .ID property:
+                    Military: BARRACKS, ARCHERY_RANGE, STABLE, SIEGE_WORKSHOP, CASTLE, DOCK, KREPOST, DONJON
+                    Economy: TOWN_CENTER, HOUSE, MILL, LUMBER_CAMP, MINING_CAMP, MARKET, FARM, FISH_TRAP, FEITORIA
+                    Defense: OUTPOST, WATCH_TOWER, GUARD_TOWER, KEEP, BOMBARD_TOWER, PALISADE_WALL, STONE_WALL, FORTIFIED_WALL, GATE_NORTH_TO_SOUTH, GATE_WEST_TO_EAST
+                    Other: BLACKSMITH, UNIVERSITY, MONASTERY, WONDER
+
+                    VALID HEROES (HeroInfo) - Use .ID property:
+                    JOAN_OF_ARC, WILLIAM_WALLACE, GENGHIS_KHAN, EL_CID, BARBAROSSA, FREDERICK_BARBAROSSA, ATTILA_THE_HUN, CHARLES_MARTEL, ROLAND, BELISARIUS, RICHARD_THE_LIONHEART, THE_BLACK_PRINCE, SALADIN, ALEXANDER_NEVSKI, ROBIN_HOOD, VLAD_DRACULA, TAMERLANE, HENRY_V, WILLIAM_THE_CONQUEROR, KING_ARTHUR, LANCELOT, ERIK_THE_RED, LEIF_ERIKSON, HARALD_HARDRADA, KHOSRAU, THEODORIC_THE_GOTH
+
+                    VALID GAIA/OTHER (OtherInfo) - Use .ID property:
+                    Resources: GOLD_MINE, STONE_MINE, FORAGE_BUSH, FRUIT_BUSH
+                    Trees: TREE_A, TREE_B, TREE_C, TREE_OAK, TREE_OAK_FOREST, TREE_PINE_FOREST, TREE_PALM_FOREST, TREE_JUNGLE, TREE_BAMBOO_FOREST, TREE_BIRCH, TREE_CYPRESS, TREE_DEAD, TREE_SNOW_PINE, TREE_DRAGON, TREE_BAOBAB, TREE_ACACIA, TREE_ITALIAN_PINE, TREE_RAINFOREST, TREE_MANGROVE
+                    Decorations: RUINS, FLAG_A, FLAG_B, FLAG_C, FLAG_D, FLAG_E, STATUE, ROMAN_RUINS, FLOWERS_1, FLOWERS_2, FLOWERS_3, FLOWERS_4, BONFIRE, TORCH, GRAVE
+                    Cliffs: CLIFF_1, CLIFF_2, CLIFF_3, CLIFF_4, CLIFF_5, CLIFF_6, CLIFF_7, CLIFF_8, CLIFF_9, CLIFF_10
+
                     Return ONLY the Python code, no explanations or markdown formatting."""
                 },
                 {
@@ -263,7 +342,7 @@ class ScenarioGenerator:
                     return False
             
             # Check for basic structure
-            if "AoE2DEScenario.from_default()" not in code:
+            if "AoE2DEScenario.from_default()" not in code and "AoE2DEScenario.from_file(" not in code:
                 logger.warning("Missing scenario object creation")
                 return False
             
