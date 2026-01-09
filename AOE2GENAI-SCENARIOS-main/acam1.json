@@ -1,0 +1,702 @@
+{
+	"Scenarios": [
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/1/intro/%d.png",
+							"Sound": "PLAY_BER1S1",
+							"Slides": [
+								{
+									"Duration" : 5.5,
+									"TextFadeDuration" : 4.9,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217101,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 730,
+										"height": 1017
+									}
+								},
+								{
+									"Duration" : 15.5,
+									"TextFadeDuration" : 14.3,
+									"String" : 217102,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 1017
+									}
+								},
+								{
+									"Duration" : 13.3,
+									"TextFadeDuration" : 12.9,
+									"String" : 217103,
+									"TextRect": {
+										"x": 2108,
+										"y": 632,
+										"width": 663,
+										"height": 1044
+									}
+								},
+								{
+									"Duration" : 20.2,
+									"FadeOutTime" : 0.0,
+									"TextFadeDuration" : 19.5,
+									"String" : 217104,
+									"TextRect": {
+										"x": 963,
+										"y": 730,
+										"width": 860,
+										"height": 1020
+									}
+								},
+								{
+									"Duration" : 22.0,
+									"FadeInTime" : 0.0,
+									"TextFadeDuration" : 20.65,
+									"String" : 217105,
+									"TextRect": {
+										"x": 963,
+										"y": 730,
+										"width": 860,
+										"height": 1020
+									}
+								},
+								{
+									"Duration" : 11.15,
+									"TextFadeDuration" : 8.15,
+									"String" : 217106,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 462
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/1/outro/%d.png",
+							"Sound": "PLAY_BER1S1END",
+							"Slides": [
+								{
+									"Duration" : 23.95,
+									"TextFadeDuration" : 22.7,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217151,
+									"TextRect": {
+										"x": 1977,
+										"y": 986,
+										"width": 804,
+										"height": 1209
+									}
+								},
+								{
+									"Duration" : 16.2,
+									"TextFadeDuration" : 13.2,
+									"String" : 217152,
+									"TextRect": {
+										"x": 1160,
+										"y": 599,
+										"width": 1611,
+										"height": 345
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/2/intro/%d.png",
+							"Sound": "PLAY_BER1S2",
+							"Slides": [
+								{
+									"Duration" : 5.0,
+									"TextFadeDuration" : 4.45,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217201,
+									"TextRect": {
+										"x": 1429,
+										"y": 1329,
+										"width": 1405,
+										"height": 549
+									}
+								},
+								{
+									"Duration" : 14.0,
+									"TextFadeDuration" : 13.3,
+									"String" : 217202,
+									"TextRect": {
+										"x": 1329,
+										"y": 1329,
+										"width": 1405,
+										"height": 549
+									}
+								},
+								{
+									"Duration" : 17.2,
+									"TextFadeDuration" : 15.8,
+									"String" : 217203,
+									"TextRect": {
+										"x": 1888,
+										"y": 668,
+										"width": 990,
+										"height": 804
+									}
+								},
+								{
+									"Duration" : 17.8,
+									"TextFadeDuration" : 16.2,
+									"String" : 217204,
+									"TextRect": {
+										"x": 1888,
+										"y": 668,
+										"width": 990,
+										"height": 804
+									}
+								},
+								{
+									"Duration" : 19.1,
+									"TextFadeDuration" : 16.1,
+									"String" : 217205,
+									"TextRect": {
+										"x": 1329,
+										"y": 1329,
+										"width": 1405,
+										"height": 549
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/2/outro/%d.png",
+							"Sound": "PLAY_BER1S2END",
+							"Slides": [
+								{
+									"Duration" : 7.0,
+									"TextFadeDuration" : 6.55,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217251,
+									"TextRect": {
+										"x": 1977,
+										"y": 986,
+										"width": 804,
+										"height": 426
+									}
+								},
+								{
+									"Duration" : 15.5,
+									"TextFadeDuration" : 15.05,
+									"String" : 217252,
+									"TextRect": {
+										"x": 1702,
+										"y": 548,
+										"width": 1217,
+										"height": 576
+									}
+								},
+								{
+									"Duration" : 16.7,
+									"TextFadeDuration" : 13.7,
+									"String" : 217253,
+									"TextRect": {
+										"x": 1329,
+										"y": 1329,
+										"width": 1405,
+										"height": 549
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/3/intro/%d.png",
+							"Sound": "PLAY_BER1S3",
+							"Slides": [
+								{
+									"Duration" : 6.0,
+									"TextFadeDuration" : 4.75,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217301,
+									"TextRect": {
+										"x": 1698,
+										"y": 668,
+										"width": 888,
+										"height": 813
+									}
+								},
+								{
+									"Duration" : 11.0,
+									"TextFadeDuration" : 9.85,
+									"String" : 217302,
+									"TextRect": {
+										"x": 998,
+										"y": 528,
+										"width": 1888,
+										"height": 813
+									}
+								},
+								{
+									"Duration" : 15.05,
+									"TextFadeDuration" : 14.3,
+									"String" : 217303,
+									"TextRect": {
+										"x": 1540,
+										"y": 571,
+										"width": 730,
+										"height": 813
+									}
+								},
+								{
+									"Duration" : 16.0,
+									"TextFadeDuration" : 13.55,
+									"String" : 217304,
+									"TextRect": {
+										"x": 1838,
+										"y": 668,
+										"width": 1030,
+										"height": 699
+									}
+								},
+								{
+									"Duration" : 19.95,
+									"TextFadeDuration" : 18.9,
+									"String" : 217305,
+									"TextRect": {
+										"x": 1100,
+										"y": 1369,
+										"width": 1610,
+										"height": 438
+									}
+								},
+								{
+									"Duration" : 10.75,
+									"TextFadeDuration" : 7.75,
+									"String" : 217306,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 789
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/3/outro/%d.png",
+							"Sound": "PLAY_BER1S3END",
+							"Slides": [
+								{
+									"Duration" : 18.0,
+									"TextFadeDuration" : 17.1,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217351,
+									"TextRect": {
+										"x": 1540,
+										"y": 531,
+										"width": 730,
+										"height": 913
+									}
+								},
+								{
+									"Duration" : 18.55,
+									"TextFadeDuration" : 15.55,
+									"String" : 217352,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 1122
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/4/intro/%d.png",
+							"Sound": "PLAY_BER1S4",
+							"Slides": [
+								{
+									"Duration" : 6.0,
+									"TextFadeDuration" : 5.4,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217401,
+									"TextRect": {
+										"x": 1256,
+										"y": 613,
+										"width": 1030,
+										"height": 915
+									}
+								},
+								{
+									"Duration" : 16.95,
+									"TextFadeDuration" : 16.4,
+									"String" : 217402,
+									"TextRect": {
+										"x": 996,
+										"y": 613,
+										"width": 1030,
+										"height": 915
+									}
+								},
+								{
+									"Duration" : 17.05,
+									"TextFadeDuration" : 16.0,
+									"String" : 217403,
+									"TextRect": {
+										"x": 996,
+										"y": 613,
+										"width": 1030,
+										"height": 795
+									}
+								},
+								{
+									"Duration" : 12.5,
+									"TextFadeDuration" : 11.7,
+									"String" : 217404,
+									"TextRect": {
+										"x": 1082,
+										"y": 1369,
+										"width": 1661,
+										"height": 360
+									}
+								},
+								{
+									"Duration" : 11.2,
+									"TextFadeDuration" : 10.25,
+									"String" : 217405,
+									"TextRect": {
+										"x": 1082,
+										"y": 1369,
+										"width": 1661,
+										"height": 360
+									}
+								},
+								{
+									"Duration" : 10.9,
+									"TextFadeDuration" : 7.9,
+									"String" : 217406,
+									"TextRect": {
+										"x": 2014,
+										"y": 716,
+										"width": 664,
+										"height": 687
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/4/outro/%d.png",
+							"Sound": "PLAY_BER1S4END",
+							"Slides": [
+								{
+									"Duration" : 19.25,
+									"FadeOutTime" : 0.0,
+									"TextFadeDuration" : 18.3,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217451,
+									"TextRect": {
+										"x": 1854,
+										"y": 547,
+										"width": 996,
+										"height": 798
+									}
+								},
+								{
+									"Duration" : 13.75,
+									"FadeInTime" : 0.0,
+									"TextFadeDuration" : 12.9,
+									"String" : 217452,
+									"TextRect": {
+										"x": 1854,
+										"y": 547,
+										"width": 996,
+										"height": 798
+									}
+								},
+								{
+									"Duration" : 9.2,
+									"TextFadeDuration" : 6.2,
+									"String" : 217453,
+									"TextRect": {
+										"x": 1082,
+										"y": 1369,
+										"width": 1661,
+										"height": 360
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/5/intro/%d.png",
+							"Sound": "PLAY_BER1S5",
+							"Slides": [
+								{
+									"Duration" : 9.45,
+									"TextFadeDuration" : 8.65,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217501,
+									"TextRect": {
+										"x": 1429,
+										"y": 1329,
+										"width": 1305,
+										"height": 438
+									}
+								},
+								{
+									"Duration" : 12.05,
+									"TextFadeDuration" : 11.1,
+									"String" : 217502,
+									"TextRect": {
+										"x": 1229,
+										"y": 1329,
+										"width": 1505,
+										"height": 438
+									}
+								},
+								{
+									"Duration" : 12.5,
+									"TextFadeDuration" : 11.35,
+									"String" : 217503,
+									"TextRect": {
+										"x": 1037,
+										"y": 678,
+										"width": 715,
+										"height": 918
+									}
+								},
+								{
+									"Duration" : 17.45,
+									"TextFadeDuration" : 16.25,
+									"String" : 217504,
+									"TextRect": {
+										"x": 956,
+										"y": 613,
+										"width": 990,
+										"height": 795
+									}
+								},
+								{
+									"Duration" : 18.05,
+									"TextFadeDuration" : 16.8,
+									"String" : 217505,
+									"TextRect": {
+										"x": 1888,
+										"y": 668,
+										"width": 970,
+										"height": 915
+									}
+								},
+								{
+									"Duration" : 9.75,
+									"TextFadeDuration" : 6.75,
+									"String" : 217506,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 576
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/acam1/tariq_background.dds",
+							"SlideImageSequence": "textures/campaign/acam1/5/outro/%d.png",
+							"Sound": "PLAY_BER1S5END",
+							"Slides": [
+								{
+									"Duration" : 17.0,
+									"TextFadeDuration" : 16.25,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 217551,
+									"TextRect": {
+										"x": 984,
+										"y": 600,
+										"width": 913,
+										"height": 1020
+									}
+								},
+								{
+									"Duration" : 17.25,
+									"TextFadeDuration" : 16.7,
+									"String" : 217552,
+									"TextRect": {
+										"x": 1987,
+										"y": 986,
+										"width": 804,
+										"height": 900
+									}
+								},
+								{
+									"Duration" : 15.75,
+									"TextFadeDuration" : 14.85,
+									"String" : 217553,
+									"TextRect": {
+										"x": 1037,
+										"y": 678,
+										"width": 715,
+										"height": 1128
+									}
+								},
+								{
+									"Duration" : 15.0,
+									"TextFadeDuration" : 14.1,
+									"String" : 217554,
+									"TextRect": {
+										"x": 1129,
+										"y": 1329,
+										"width": 1605,
+										"height": 558
+									}
+								},
+								{
+									"Duration" : 8.45,
+									"TextFadeDuration" : 5.45,
+									"String" : 217555,
+									"TextRect": {
+										"x": 2017,
+										"y": 716,
+										"width": 664,
+										"height": 456
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+}
