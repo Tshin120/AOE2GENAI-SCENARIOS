@@ -1,0 +1,674 @@
+{
+  "BackgroundMaterial": "CampaignBackground16TariqIbnZiyad",
+  "Widgets": [
+    {
+      "Widget": {
+        "Type": "Label",
+        "Name": "TitleLabel",
+        "ViewPort": {
+          "xorigin": 1920,
+          "yorigin": 110,
+          "width": 1000,
+          "height": 100,
+          "alignment": "CentreCentre"
+        },
+        "ZPlane": 2,
+        "StateMaterials": {
+          "StateNormal": {
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 70,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 57,
+                "g": 28,
+                "b": 27,
+                "a": 255
+              }
+            }
+          }
+        },
+
+        "Text": "IDS_CAMPAIGN_TARIQ",
+        "TextAnchor": "CentreCentre",
+        "ChildWidgets": []
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Button",
+        "Name": "ScenarioButton1",
+        "ViewPort": {
+          "xorigin": 1250,
+          "yorigin": 1090,
+          "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "Image": {
+          "xorigin": 0,
+          "yorigin": 0,
+          "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 1,
+         "StateMaterials": {
+            "StateDisabled": {
+               "Material": "CampaignIcon16TariqIbnZiyadDisabled",
+               "Font": {
+                  "FontIndex": 0,
+                  "PointSize": 34,
+                  "Style": "Normal",
+                  "TextColor": {
+                     "r": 42,
+                     "g": 10,
+                     "b": 82,
+                     "a": 128
+                  }
+               }
+            },
+            "StateNormal": {
+               "Material": "CampaignIcon16TariqIbnZiyadNormal",
+               "Font": {
+                  "FontIndex": 0,
+                  "PointSize": 34,
+                  "Style": "Normal",
+                  "TextColor": {
+                     "r": 42,
+                     "g": 10,
+                     "b": 82,
+                     "a": 255
+                  }
+               }
+            },
+            "StateHover": {
+               "Material": "CampaignIcon16TariqIbnZiyadHover",
+               "Font": {
+                  "FontIndex": 0,
+                  "PointSize": 34,
+                  "Style": "Normal",
+                  "TextColor": {
+                     "r": 42,
+                     "g": 10,
+                     "b": 82,
+                     "a": 255
+                  }
+               }
+            },
+            "StatePressed": {
+               "Material": "CampaignIcon16TariqIbnZiyadPressed",
+               "Font": {
+                  "FontIndex": 0,
+                  "PointSize": 34,
+                  "Style": "Normal",
+                  "TextColor": {
+                     "r": 42,
+                     "g": 10,
+                     "b": 82,
+                     "a": 255
+                  }
+               }
+            }
+         },
+        "ChildWidgets": [
+          {
+            "Widget": {
+              "Type": "CampaignTitle",
+              "Name": "CampaignButton1Label",
+              "ViewPort": {
+                "xorigin": 0,
+                "yorigin": 250,
+                "width": 700,
+                "height": 100,
+                "alignment": "TopLeft"
+              },
+              "ClippingOverride" :  "Background",
+              "ZPlane": 2,
+              "Level": 0,
+              "StateMaterials": {
+                "StateNormal": {
+                  "Font": {
+                    "FontIndex": 0,
+                    "PointSize": 45,
+                    "Style": "Normal",
+                    "TextColor": {
+                      "r": 255,
+                      "g": 255,
+                      "b": 255,
+                      "a": 255
+                    }
+                  }
+                }
+              },
+              "Text": "IDS_SCENARIO_TARIQ_1",
+              "TextAnchor": "TopLeft",
+              "ChildWidgets": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Button",
+        "Name": "ScenarioButton2",
+        "ViewPort": {
+          "xorigin": 1650,
+          "yorigin": 720,
+          "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 1,
+        "StateMaterials": {
+          "StateDisabled": {
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 128
+              }
+            }
+          },
+          "StateNormal": {
+            "Material": "CampaignIcon16TariqIbnZiyadNormal",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StateHover": {
+            "Material": "CampaignIcon16TariqIbnZiyadHover",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StatePressed": {
+            "Material": "CampaignIcon16TariqIbnZiyadPressed",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          }
+        },
+        "ChildWidgets": [
+          {
+            "Widget": {
+              "Type": "CampaignTitle",
+              "Name": "CampaignButton1Label",
+              "ViewPort": {
+                "xorigin": 0,
+                "yorigin": 250,
+                "width": 700,
+                "height": 100,
+                "alignment": "TopLeft"
+              },
+              "ClippingOverride" :  "Background",
+              "ZPlane": 2,
+              "Level": 0,
+              "StateMaterials": {
+                "StateNormal": {
+                  "Font": {
+                    "FontIndex": 0,
+                    "PointSize": 45,
+                    "Style": "Normal",
+                    "TextColor": {
+                      "r": 255,
+                      "g": 255,
+                      "b": 255,
+                      "a": 255
+                    }
+                  }
+                }
+              },
+              "Text": "IDS_SCENARIO_TARIQ_2",
+              "TextAnchor": "TopLeft",
+              "ChildWidgets": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Button",
+        "Name": "ScenarioButton3",
+        "ViewPort": {
+          "xorigin": 2300,
+          "yorigin": 750,
+         "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 1,
+        "StateMaterials": {
+          "StateDisabled": {
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 128
+              }
+            }
+          },
+          "StateNormal": {
+            "Material": "CampaignIcon16TariqIbnZiyadNormal",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StateHover": {
+            "Material": "CampaignIcon16TariqIbnZiyadHover",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StatePressed": {
+            "Material": "CampaignIcon16TariqIbnZiyadPressed",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          }
+        },
+        "ChildWidgets": [
+          {
+            "Widget": {
+              "Type": "CampaignTitle",
+              "Name": "CampaignButton1Label",
+              "ViewPort": {
+                "xorigin": 0,
+                "yorigin": 250,
+                "width": 700,
+                "height": 100,
+                "alignment": "TopLeft"
+              },
+              "ClippingOverride" :  "Background",
+              "ZPlane": 2,
+              "Level": 0,
+              "StateMaterials": {
+                "StateNormal": {
+                  "Font": {
+                    "FontIndex": 0,
+                    "PointSize": 45,
+                    "Style": "Normal",
+                    "TextColor": {
+                      "r": 255,
+                      "g": 255,
+                      "b": 255,
+                      "a": 255
+                    }
+                  }
+                }
+              },
+              "Text": "IDS_SCENARIO_TARIQ_3",
+              "TextAnchor": "TopLeft",
+              "ChildWidgets": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Button",
+        "Name": "ScenarioButton4",
+        "ViewPort": {
+          "xorigin": 2150,
+          "yorigin": 450,
+         "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 1,
+        "StateMaterials": {
+          "StateDisabled": {
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 128
+              }
+            }
+          },
+          "StateNormal": {
+            "Material": "CampaignIcon16TariqIbnZiyadNormal",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StateHover": {
+            "Material": "CampaignIcon16TariqIbnZiyadHover",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StatePressed": {
+            "Material": "CampaignIcon16TariqIbnZiyadPressed",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          }
+        },
+        "ChildWidgets": [
+          {
+            "Widget": {
+              "Type": "CampaignTitle",
+              "Name": "CampaignButton1Label",
+              "ViewPort": {
+                "xorigin": 0,
+                "yorigin": 250,
+                "width": 700,
+                "height": 100,
+                "alignment": "TopLeft"
+              },
+              "ClippingOverride" :  "Background",
+              "ZPlane": 2,
+              "Level": 0,
+              "StateMaterials": {
+                "StateNormal": {
+                  "Font": {
+                    "FontIndex": 0,
+                    "PointSize": 45,
+                    "Style": "Normal",
+                    "TextColor": {
+                      "r": 255,
+                      "g": 255,
+                      "b": 255,
+                      "a": 255
+                    }
+                  }
+                }
+              },
+              "Text": "IDS_SCENARIO_TARIQ_4",
+              "TextAnchor": "TopLeft",
+              "ChildWidgets": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Button",
+        "Name": "ScenarioButton5",
+        "ViewPort": {
+          "xorigin": 2440,
+          "yorigin": 320,
+          "width": 280,
+          "height": 280,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 1,
+        "StateMaterials": {
+          "StateDisabled": {
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 128
+              }
+            }
+          },
+          "StateNormal": {
+            "Material": "CampaignIcon16TariqIbnZiyadNormal",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StateHover": {
+            "Material": "CampaignIcon16TariqIbnZiyadHover",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          },
+          "StatePressed": {
+            "Material": "CampaignIcon16TariqIbnZiyadPressed",
+            "Font": {
+              "FontIndex": 0,
+              "PointSize": 34,
+              "Style": "Normal",
+              "TextColor": {
+                "r": 42,
+                "g": 10,
+                "b": 82,
+                "a": 255
+              }
+            }
+          }
+        },
+        "ChildWidgets": [
+          {
+            "Widget": {
+              "Type": "CampaignTitle",
+              "Name": "CampaignButton1Label",
+              "ViewPort": {
+                "xorigin": -60,
+                "yorigin": 250,
+                "width": 700,
+                "height": 100,
+                "alignment": "TopLeft"
+              },
+              "ClippingOverride" :  "Background",
+              "ZPlane": 2,
+              "Level": 0,
+              "StateMaterials": {
+                "StateNormal": {
+                  "Font": {
+                    "FontIndex": 0,
+                    "PointSize": 45,
+                    "Style": "Normal",
+                    "TextColor": {
+                      "r": 255,
+                      "g": 255,
+                      "b": 255,
+                      "a": 255
+                    }
+                  }
+                }
+              },
+              "Text": "IDS_SCENARIO_TARIQ_5",
+              "TextAnchor": "TopLeft",
+              "ChildWidgets": []
+            }
+          }
+        ]
+      }
+    },
+    {
+
+      "Widget": {
+        "Type": "Base",
+        "Name": "NextIndicator1",
+        "ViewPort": {
+          "xorigin": 2412,
+          "yorigin": 626,
+          "width": 277,
+          "height": 182,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 0,
+        "Wrap": {
+          "width": 0,
+          "height": 0
+        },
+        "StateMaterials": {
+          "StateNormal": {
+            "Material": "GenghisKhanIndicator1"
+          }
+        }
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Base",
+        "Name": "NextIndicator2",
+        "ViewPort": {
+          "xorigin": 2342,
+          "yorigin": 945,
+          "width": 245,
+          "height": 330,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 0,
+        "Wrap": {
+          "width": 0,
+          "height": 0
+        },
+        "StateMaterials": {
+          "StateNormal": {
+            "Material": "GenghisKhanIndicator2"
+          }
+        }
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Base",
+        "Name": "NextIndicator3",
+        "ViewPort": {
+          "xorigin": 2010,
+          "yorigin": 1095,
+          "width": 416,
+          "height": 314,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 0,
+        "Wrap": {
+          "width": 0,
+          "height": 0
+        },
+        "StateMaterials": {
+          "StateNormal": {
+            "Material": "GenghisKhanIndicator3"
+          }
+        }
+      }
+    },
+    {
+      "Widget": {
+        "Type": "Base",
+        "Name": "NextIndicator4",
+        "ViewPort": {
+          "xorigin": 1752,
+          "yorigin": 606,
+          "width": 317,
+          "height": 362,
+          "alignment": "TopLeft"
+        },
+        "ZPlane": 0,
+        "Wrap": {
+          "width": 0,
+          "height": 0
+        },
+        "StateMaterials": {
+          "StateNormal": {
+            "Material": "GenghisKhanIndicator4"
+          }
+        }
+      }
+    }
+  ]
+}
