@@ -22,13 +22,22 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ScenarioConfig:
-    """Configuration for scenario generation"""
+    """Configuration for scenario generation
+
+    Scenario types (based on real AoE2 campaign analysis):
+    - battle: Direct combat between armies (Saladin 6 pattern)
+    - escort: Protect hero/units traveling to destination (Joan 1, 5 pattern)
+    - diplomacy: Multiple factions to ally with through quests (Genghis 1 pattern)
+    - defense: Survive waves of attackers (Saladin 5 pattern)
+    - conquest: Capture enemy bases/objectives progressively (Genghis 3 pattern)
+    - story: Narrative-driven with multiple acts (combined patterns)
+    """
     title: str
     description: str
     map_size: int = 120
     players: int = 2
     difficulty: str = "medium"
-    scenario_type: str = "story"
+    scenario_type: str = "story"  # battle, escort, diplomacy, defense, conquest, story
     output_path: str = "generated_scenario.aoe2scenario"
 
 class OpenRouterAPI:
@@ -199,71 +208,317 @@ class ScenarioGenerator:
         self.scenario_templates = self._load_templates()
     
     def _load_templates(self) -> Dict[str, str]:
-        """Load scenario generation templates"""
+        """Load scenario generation templates based on real AoE2 campaign patterns"""
         return {
-            "battle": """Create an Age of Empires 2 scenario with the following requirements:
+            "battle": """Create an Age of Empires 2 BATTLE scenario based on Saladin Campaign patterns:
             - Title: {title}
             - Description: {description}
             - Map size: {map_size}x{map_size}
             - Players: {players}
             - Difficulty: {difficulty}
-            - Type: Battle scenario
-            
-            The scenario should include:
-            - Strategic unit placement for both sides
-            - Resource distribution (gold, stone, wood, food)
-            - Multiple triggers for victory conditions
-            - Defensive structures and military units
-            - Balanced gameplay for the specified difficulty
-            - Clear objectives and win conditions""",
-            
-            "story": """Create an Age of Empires 2 scenario with the following requirements:
+
+            TRIGGER STRUCTURE (follow this pattern from real campaigns):
+            1. --- Setup --- section:
+               - "Techs" trigger: Grant starting technologies
+               - "Set Scene" trigger: Initial camera and unit positioning
+               - Difficulty triggers: "Easy Difficulty", "Hard Difficulty" with unit adjustments
+
+            2. --- Plot --- section (dialogue triggers):
+               - "[D1] Intro" - Opening message
+               - "[D1] Enemy taunt" - Enemy dialogue when units spotted
+               - "[D1] Battle scene" - Combat dialogue
+
+            3. --- Victory/Defeat --- section:
+               - "Win" trigger: conditions for victory (destroy enemy, capture location)
+               - "Loss" trigger: conditions for defeat (hero dies, timer expires)
+               - "DEFEAT" trigger: backup defeat condition
+
+            4. --- Objectives --- section:
+               - "[O] Main Objectives" - Primary goal display
+               - "[Obj] Objective 1" - Specific objective triggers
+
+            PLAYER SETUP:
+            - Player ONE: Human player with military forces and a base
+            - Player TWO+: Enemy AI with defensive positions, towers, walls
+            - GAIA: Trees, gold mines, stone mines, decorations
+
+            UNIT PLACEMENT:
+            - Military units in formation groups (infantry front, archers behind)
+            - Guard towers protecting key positions
+            - Walls and gates around enemy bases
+            - Hero unit with bodyguards for player
+
+            Include triggers for:
+            - Victory when enemy Town Center/Castle destroyed
+            - Defeat when player hero dies
+            - Enemy taunts when player approaches
+            - Difficulty scaling (more/fewer enemy units)""",
+
+            "escort": """Create an Age of Empires 2 ESCORT scenario based on Joan of Arc Campaign patterns:
             - Title: {title}
             - Description: {description}
             - Map size: {map_size}x{map_size}
             - Players: {players}
             - Difficulty: {difficulty}
-            - Type: Story-driven scenario
-            
-            The scenario should include:
-            - Narrative elements and story progression
-            - Character units with specific roles
-            - Multiple objectives and quests
+
+            TRIGGER STRUCTURE (from Joan 1 "An Unlikely Messiah" and Joan 5 patterns):
+            1. --- Setup --- section:
+               - "Techs" trigger: Grant starting technologies
+               - Initial unit positioning
+
+            2. --- Plot --- section:
+               - "[D0] Intro" - Opening narration with display_instructions
+               - "[D1] Scout Chat" - NPC provides information about path ahead
+               - "[D2] Get Swordsmen" - Recruit units along the way
+               - "[D3] Ambush" - Enemy ambush trigger when entering area
+               - "[D4] Bridge is Out" - Obstacle requiring alternate route
+               - "[D5] Friendly Camp" - Allied reinforcements
+               - "[D6] Destination Reached" - Arrival at goal
+
+            3. --- Victory/Defeat --- section:
+               - "Win" trigger: Hero reaches destination area
+               - "[D_] Hero Dies" - Defeat if main character dies
+               - "Fight Over" - Backup defeat condition
+
+            4. --- Objectives --- section:
+               - "[O] Escort [Hero]" - Main escort objective
+               - "[O] [Hero] Must Survive" - Survival objective
+               - "[O] Reach [Destination]" - Destination objective
+
+            PLAYER SETUP:
+            - Player ONE: Hero unit + small escort (2-3 bodyguards)
+            - Player TWO-FOUR: Enemy patrols, ambush forces, garrison troops
+            - Player FIVE+: Friendly NPCs who can join the escort
+            - GAIA: Terrain, neutral buildings, path markers (FLAG_A, FLAG_B)
+
+            MAP DESIGN:
+            - Linear path from start to destination
+            - Branching routes (main road vs hidden path)
+            - Chokepoints with enemy ambushes
+            - Safe camps/towns for dialogue and reinforcements
+            - Bridge/river crossings as obstacles
+
+            KEY TRIGGERS:
+            - bring_object_to_area for destination victory
+            - destroy_object condition for hero death
+            - Area-based triggers for ambush spawns
+            - Dialogue triggers for story progression
+            - change_ownership for recruiting allies""",
+
+            "diplomacy": """Create an Age of Empires 2 DIPLOMACY scenario based on Genghis Khan Campaign patterns:
+            - Title: {title}
+            - Description: {description}
+            - Map size: {map_size}x{map_size}
+            - Players: {players} (recommend 6-8 for diplomacy)
+            - Difficulty: {difficulty}
+
+            TRIGGER STRUCTURE (from Genghis 1 "Crucible" patterns):
+            1. --- Setup --- section:
+               - Initial diplomacy settings (neutral players)
+               - Starting unit placement
+               - Outpost/visibility setup
+
+            2. --- Faction Request --- triggers:
+               - "[D1] Player 4 request" - Faction asks for something
+                 Condition: bring_object_to_area (player visits their camp)
+                 Effect: display_instructions with their demand
+               - "[D1] Player 5 request" - Another faction's demand
+               - "[D1] Player 6 request" - Third faction's demand
+
+            3. --- Faction Joins --- triggers:
+               - "[Obj] [D1] Player 4 joins" - When condition met
+                 Conditions: accumulate_attribute (tribute) OR destroy_object (defeat enemy)
+                 Effects: change_ownership (transfer units), diplomacy change, display message
+               - Similar for each faction
+
+            4. --- Victory/Defeat --- section:
+               - "VC" / "VC2" / "VC3" - Victory when X factions allied
+               - "Lose" - Defeat if hero dies
+
+            5. --- Objectives --- section:
+               - "[Obj] First objective" - Initial goal
+               - "[O] Main Obj. Header" - Objective category
+
+            PLAYER SETUP:
+            - Player ONE: Small starting force with hero
+            - Player TWO: Main enemy faction
+            - Players THREE-SEVEN: Neutral tribes/factions with camps
+               Each has: Yurts/tents, military units, unique unit types
+            - Player EIGHT: Optional secondary neutral
+
+            FACTION CAMP DESIGN (per neutral player):
+            - Central pavilion/yurt cluster
+            - Torch decorations (TORCH_A)
+            - Flag markers (FLAG_B, FLAG_D)
+            - Military units (cavalry, archers)
+            - Archery range or stable
+            - Monks for special requests
+
+            DIPLOMACY MECHANICS:
+            - Tribute requests: "Bring us 100 food" (accumulate_attribute)
+            - Combat requests: "Defeat our enemy" (destroy_object on enemy player)
+            - Fetch quests: "Kill the great wolf" (destroy specific GAIA unit)
+            - All use change_ownership to transfer faction units to player""",
+
+            "defense": """Create an Age of Empires 2 DEFENSE scenario based on campaign defense patterns:
+            - Title: {title}
+            - Description: {description}
+            - Map size: {map_size}x{map_size}
+            - Players: {players}
+            - Difficulty: {difficulty}
+
+            TRIGGER STRUCTURE (from Saladin 5 and siege defense patterns):
+            1. --- Setup --- section:
+               - "Techs" trigger: Grant defensive technologies
+               - "Walls" trigger: Remove/place wall sections
+               - Initial resource grants
+
+            2. --- Wave Spawns --- section:
+               - "First attack" - Timer-based first wave
+               - "Second wave" - Triggered after first wave defeated
+               - "Burgundy attacks!" - Named attack waves
+               - Use timer conditions + create_object effects
+
+            3. --- Tribute/Resource --- section:
+               - "[D1] p4 asks for tribute" - Ally requests resources
+               - "No More Wood" - Resource depletion events
+               - Cheating triggers for AI resource bonuses
+
+            4. --- Victory/Defeat --- section:
+               - Victory: Survive timer OR destroy all attackers
+               - Defeat: Key building destroyed OR hero dies
+
+            5. --- Objectives --- section:
+               - "[Obj] Objective" - "Survive for 30 minutes" type
+               - "[Obj] Sec. Obj. Tribute" - Secondary objectives
+
+            PLAYER SETUP:
+            - Player ONE: Defender with fortified base
+               - Castle or Keep as central defense
+               - Walls with gates
+               - Guard towers at key positions
+               - Villagers for repairs
+            - Player TWO-FOUR: Attacking waves
+               - Spawn points outside map edge
+               - Progressive unit upgrades per wave
+            - GAIA: Siege equipment for attackers to capture
+
+            WAVE DESIGN:
+            Wave 1 (Timer: 60 seconds): Infantry + archers
+            Wave 2 (Timer: 180 seconds): Add cavalry
+            Wave 3 (Timer: 300 seconds): Add siege weapons
+            Wave 4 (Timer: 480 seconds): Elite units + hero
+
+            Each wave trigger:
+            - timer condition (seconds from start)
+            - Multiple create_object effects for units
+            - task_object to send units to attack""",
+
+            "conquest": """Create an Age of Empires 2 CONQUEST scenario based on campaign conquest patterns:
+            - Title: {title}
+            - Description: {description}
+            - Map size: {map_size}x{map_size}
+            - Players: {players}
+            - Difficulty: {difficulty}
+
+            TRIGGER STRUCTURE (from Genghis 3 "Into China" and Joan conquest patterns):
+            1. --- Setup --- section:
+               - Starting technologies
+               - Initial unit grants
+               - Map revealer placement
+
+            2. --- Discovery --- triggers:
+               - "[D1] The Great Wall" - Discover major obstacle
+               - "[D1] Find transport" - Discover key units/buildings
+               - "[D1] Enemy chat" - Enemy taunts when spotted
+
+            3. --- Capture --- triggers:
+               - "Bombards Captured" - Capture siege weapons
+               - "Siege Captured" - Capture enemy equipment
+               - Use change_ownership effect
+
+            4. --- Progressive Victory --- section:
+               - "V/1" through "V/4" - Stage-based victories
+               - Each destroys part of enemy or captures objective
+               - Final "Victory" trigger combines all conditions
+
+            5. --- Objectives --- section:
+               - "[Obj] Objectives" - Main conquest goals
+               - Progressive objective updates
+
+            PLAYER SETUP:
+            - Player ONE: Attacking force with siege capability
+            - Player TWO: Main enemy with fortified positions
+               - Great Wall or fortress line
+               - Towers and castles
+               - Garrison troops
+            - Player THREE+: Secondary enemies or neutral obstacles
+            - GAIA: Capturable siege weapons, transport ships
+
+            MAP DESIGN:
+            - Enemy fortress/wall blocking path
+            - Multiple breach points with different difficulty
+            - Capturable siege weapons near walls
+            - Progressive zones (outer defenses -> inner keep)
+
+            CONQUEST MECHANICS:
+            - Capture triggers: bring_object_to_area near enemy equipment
+            - Breach triggers: destroy specific wall sections
+            - Zone control: objects_in_area for territory
+            - Progressive difficulty: harder enemies deeper in""",
+
+            "story": """Create an Age of Empires 2 STORY scenario combining narrative elements:
+            - Title: {title}
+            - Description: {description}
+            - Map size: {map_size}x{map_size}
+            - Players: {players}
+            - Difficulty: {difficulty}
+
+            TRIGGER STRUCTURE (comprehensive story-driven pattern):
+            1. --- Setup --- section:
+               - Opening cinematic area
+               - Starting unit positioning
+               - Technology grants
+
+            2. --- Act 1: Introduction --- section:
+               - "[D0] Intro" - Narrator sets the scene
+               - "[D1] Meet [Character]" - Introduce key NPCs
+               - "[D2] First Quest" - Initial objective given
+
+            3. --- Act 2: Rising Action --- section:
+               - "[D3] Discovery" - Find important information
+               - "[D4] Betrayal/Twist" - Story complication
+               - "[D5] New Allies" - Gain reinforcements
+
+            4. --- Act 3: Climax --- section:
+               - "[D6] Final Battle" - Climactic confrontation
+               - "[D7] Resolution" - Story conclusion
+
+            5. --- Victory/Defeat --- section:
+               - Multiple victory paths possible
+               - Defeat conditions tied to story (hero death, ally death)
+
+            6. --- Objectives --- section:
+               - Story-driven objectives that update
+               - Optional side objectives for exploration
+
+            STORYTELLING ELEMENTS:
+            - Use display_instructions for dialogue (10-15 second display)
+            - Color-code speakers: <BLUE> for allies, <RED> for enemies
+            - Include character names in messages
+            - Space out dialogue triggers (don't overwhelm player)
+
+            PLAYER ROLES:
+            - Player ONE: Protagonist with hero unit
+            - Player TWO: Main antagonist
+            - Player THREE+: Supporting characters (allies/enemies)
+            - GAIA: Decorative elements, neutral buildings, story props
+
+            NARRATIVE TECHNIQUES:
+            - Flags and markers for story locations
+            - Ruins/skeletons to show past events
             - Environmental storytelling through map design
-            - Trigger-based story events
-            - Immersive gameplay experience""",
-            
-            "defense": """Create an Age of Empires 2 scenario with the following requirements:
-            - Title: {title}
-            - Description: {description}
-            - Map size: {map_size}x{map_size}
-            - Players: {players}
-            - Difficulty: {difficulty}
-            - Type: Defense scenario
-            
-            The scenario should include:
-            - Defensive structures and fortifications
-            - Wave-based enemy attacks
-            - Resource management for defense
-            - Strategic positioning of units
-            - Multiple defense objectives
-            - Escalating difficulty levels""",
-            
-            "conquest": """Create an Age of Empires 2 scenario with the following requirements:
-            - Title: {title}
-            - Description: {description}
-            - Map size: {map_size}x{map_size}
-            - Players: {players}
-            - Difficulty: {difficulty}
-            - Type: Conquest scenario
-            
-            The scenario should include:
-            - Multiple enemy bases to conquer
-            - Strategic resource control points
-            - Progressive difficulty as you advance
-            - Different unit types and strategies
-            - Victory conditions based on territory control
-            - Balanced progression system"""
+            - Optional exploration rewards (relics, hidden units)"""
         }
     
     def generate_scenario(self, config: ScenarioConfig) -> str:
@@ -368,28 +623,67 @@ def main():
     # Initialize the generator
     generator = ScenarioGenerator(api_key)
     
-    # Example scenario configurations
+    # Example scenario configurations showcasing all scenario types
     scenarios = [
+        # ESCORT scenario (Joan of Arc style)
+        ScenarioConfig(
+            title="The Road to Orleans",
+            description="Escort Joan of Arc through enemy territory to reach the besieged city of Orleans",
+            scenario_type="escort",
+            map_size=144,
+            players=5,
+            difficulty="medium",
+            output_path="road_to_orleans.aoe2scenario"
+        ),
+        # DIPLOMACY scenario (Genghis Khan style)
+        ScenarioConfig(
+            title="Uniting the Clans",
+            description="Travel across the steppes to unite the scattered Mongol tribes under your banner",
+            scenario_type="diplomacy",
+            map_size=168,
+            players=7,
+            difficulty="medium",
+            output_path="uniting_the_clans.aoe2scenario"
+        ),
+        # DEFENSE scenario (Siege defense style)
         ScenarioConfig(
             title="The Siege of Constantinople",
-            description="Defend the great city of Constantinople against the Ottoman invaders",
+            description="Defend the great city of Constantinople against waves of Ottoman invaders",
             scenario_type="defense",
+            map_size=120,
+            players=4,
             difficulty="hard",
             output_path="constantinople_siege.aoe2scenario"
         ),
+        # CONQUEST scenario (Genghis Khan style)
+        ScenarioConfig(
+            title="Breaking the Great Wall",
+            description="Lead your forces to breach the mighty fortifications and conquer the Jin Empire",
+            scenario_type="conquest",
+            map_size=200,
+            players=4,
+            difficulty="hard",
+            output_path="breaking_the_wall.aoe2scenario"
+        ),
+        # BATTLE scenario (Direct combat)
         ScenarioConfig(
             title="The Battle of Hastings",
-            description="Relive the famous battle between William the Conqueror and Harold Godwinson",
+            description="Command the Norman forces against Harold's Saxon army for control of England",
             scenario_type="battle",
+            map_size=120,
+            players=2,
             difficulty="medium",
             output_path="battle_of_hastings.aoe2scenario"
         ),
+        # STORY scenario (Narrative-driven)
         ScenarioConfig(
-            title="The Rise of Rome",
-            description="Guide Rome from a small settlement to a mighty empire",
+            title="The Rise of Saladin",
+            description="Follow Saladin's journey from young warrior to Sultan, uniting Egypt and facing the Crusaders",
             scenario_type="story",
+            map_size=144,
+            players=4,
             difficulty="easy",
-            output_path="rise_of_rome.aoe2scenario"
+            output_path="rise_of_saladin.aoe2scenario"
         )
     ]
     
