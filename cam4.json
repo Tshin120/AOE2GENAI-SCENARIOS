@@ -1,0 +1,894 @@
+{
+	"Scenarios": [
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/1/intro/%d.png",
+							"Sound": "PLAY_C3S1",
+							"Slides": [
+								{
+									"Duration" : 12.02,
+									"TextFadeDuration" : 10.86,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204101,
+									"TextRect": {
+										"x": 1050,
+										"y": 1390,
+										"width": 1750,
+										"height": 420
+									}
+								},
+								{
+									"Duration" : 13.54,
+									"TextFadeDuration" : 12.08,
+									"String" : 204102,
+									"TextRect": {
+										"x": 1050,
+										"y": 640,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.98,
+									"TextFadeDuration" : 15.84,
+									"String" : 204103,
+									"TextRect": {
+										"x": 1075,
+										"y": 1300,
+										"width": 1725,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.99,
+									"TextFadeDuration" : 15.94,
+									"String" : 204104,
+									"TextRect": {
+										"x": 2000,
+										"y": 590,
+										"width": 770,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 6.51,
+									"TextFadeDuration" : 5.21,
+									"String" : 204105,
+									"TextRect": {
+										"x": 1150,
+										"y": 590,
+										"width": 1550,
+										"height": 360
+									}
+								},
+								{
+									"Duration" : 9.99,
+									"TextFadeDuration" : 8.58,
+									"String" : 204106,
+									"TextRect": {
+										"x": 1100,
+										"y": 620,
+										"width": 1650,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 8.0,
+									"TextFadeDuration" : 6.2,
+									"String" : 204107,
+									"TextRect": {
+										"x": 1100,
+										"y": 680,
+										"width": 840,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 11.02,
+									"TextFadeDuration" : 9.19,
+									"String" : 204108,
+									"TextRect": {
+										"x": 2040,
+										"y": 750,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 12.55,
+									"TextFadeDuration" : 9.55,
+									"String" : 204109,
+									"TextRect": {
+										"x": 1080,
+										"y": 640,
+										"width": 900,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/1/outro/%d.png",
+							"Sound": "PLAY_C3S1END",
+							"Slides": [
+								{
+									"Duration" : 11.02,
+									"TextFadeDuration" : 9.27,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204151,
+									"TextRect": {
+										"x": 1050,
+										"y": 600,
+										"width": 1750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 14.53,
+									"TextFadeDuration" : 11.33,
+									"String" : 204152,
+									"TextRect": {
+										"x": 1850,
+										"y": 600,
+										"width": 950,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 20.1,
+									"TextFadeDuration" : 17.1,
+									"String" : 204153,
+									"TextRect": {
+										"x": 1040,
+										"y": 625,
+										"width": 780,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/2/intro/%d.png",
+							"Sound": "PLAY_C3S2",
+							"Slides": [
+								{
+									"Duration" : 14.5,
+									"TextFadeDuration" : 12.75,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204201,
+									"TextRect": {
+										"x": 1060,
+										"y": 1270,
+										"width": 1720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 18.57,
+									"TextFadeDuration" : 17.06,
+									"String" : 204202,
+									"TextRect": {
+										"x": 2010,
+										"y": 810,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 15.16,
+									"TextFadeDuration" : 12.16,
+									"String" : 204203,
+									"TextRect": {
+										"x": 1120,
+										"y": 1400,
+										"width": 1600,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/2/outro/%d.png",
+							"Sound": "PLAY_C3S2END",
+							"Slides": [
+								{
+									"Duration" : 14.05,
+									"TextFadeDuration" : 12.39,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204251,
+									"TextRect": {
+										"x": 1050,
+										"y": 580,
+										"width": 900,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 14.97,
+									"TextFadeDuration" : 13.46,
+									"String" : 204252,
+									"TextRect": {
+										"x": 1100,
+										"y": 580,
+										"width": 1650,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 9.8,
+									"TextFadeDuration" : 6.8,
+									"String" : 204253,
+									"TextRect": {
+										"x": 2000,
+										"y": 650,
+										"width": 750,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/3/intro/%d.png",
+							"Sound": "PLAY_C3S3",
+							"Slides": [
+								{
+									"Duration" : 17.51,
+									"TextFadeDuration" : 15.9,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204301,
+									"TextRect": {
+										"x": 1550,
+										"y": 580,
+										"width": 1200,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 5.03,
+									"TextFadeDuration" : 3.23,
+									"String" : 204302,
+									"TextRect": {
+										"x": 1300,
+										"y": 1500,
+										"width": 1400,
+										"height": 200
+									}
+								},
+								{
+									"Duration" : 9.49,
+									"TextFadeDuration" : 8.41,
+									"String" : 204303,
+									"TextRect": {
+										"x": 2000,
+										"y": 570,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 8.01,
+									"TextFadeDuration" : 6.42,
+									"String" : 204304,
+									"TextRect": {
+										"x": 2050,
+										"y": 720,
+										"width": 700,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 13.77,
+									"TextFadeDuration" : 10.77,
+									"String" : 204305,
+									"TextRect": {
+										"x": 1100,
+										"y": 625,
+										"width": 1650,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/3/outro/%d.png",
+							"Sound": "PLAY_C3S3END",
+							"Slides": [
+								{
+									"Duration" : 10.8,
+									"TextFadeDuration" : 10.08,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204351,
+									"TextRect": {
+										"x": 1200,
+										"y": 700,
+										"width": 1500,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.99,
+									"TextFadeDuration" : 10.34,
+									"String" : 204352,
+									"TextRect": {
+										"x": 1800,
+										"y": 1250,
+										"width": 930,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 5.75,
+									"TextFadeDuration" : 5.16,
+									"String" : 204353,
+									"TextRect": {
+										"x": 1100,
+										"y": 600,
+										"width": 1600,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 17.04,
+									"TextFadeDuration" : 13.04,
+									"String" : 204354,
+									"TextRect": {
+										"x": 1100,
+										"y": 680,
+										"width": 800,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/4/intro/%d.png",
+							"Sound": "PLAY_C3S4",
+							"Slides": [
+								{
+									"Duration" : 11.53,
+									"TextFadeDuration" : 10.09,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204401,
+									"TextRect": {
+										"x": 1100,
+										"y": 1425,
+										"width": 1680,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 6.52,
+									"TextFadeDuration" : 5.25,
+									"String" : 204402,
+									"TextRect": {
+										"x": 2050,
+										"y": 600,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 6.98,
+									"TextFadeDuration" : 5.73,
+									"String" : 204403,
+									"TextRect": {
+										"x": 1100,
+										"y": 600,
+										"width": 700,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 3.98,
+									"TextFadeDuration" : 2.89,
+									"String" : 204404,
+									"TextRect": {
+										"x": 1100,
+										"y": 700,
+										"width": 1200,
+										"height": 200
+									}
+								},
+								{
+									"Duration" : 10.5,
+									"TextFadeDuration" : 9.06,
+									"String" : 204405,
+									"TextRect": {
+										"x": 1100,
+										"y": 750,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.38,
+									"TextFadeDuration" : 13.38,
+									"String" : 204406,
+									"TextRect": {
+										"x": 1950,
+										"y": 750,
+										"width": 770,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/4/outro/%d.png",
+							"Sound": "PLAY_C3S4END",
+							"Slides": [
+								{
+									"Duration" : 15.58,
+									"TextFadeDuration" : 13.95,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204451,
+									"TextRect": {
+										"x": 1070,
+										"y": 1180,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 15.46,
+									"TextFadeDuration" : 13.65,
+									"String" : 204452,
+									"TextRect": {
+										"x": 1050,
+										"y": 1400,
+										"width": 1680,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.5,
+									"TextFadeDuration" : 14.92,
+									"String" : 204453,
+									"TextRect": {
+										"x": 1080,
+										"y": 570,
+										"width": 1670,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 14.97,
+									"TextFadeDuration" : 11.97,
+									"String" : 204454,
+									"TextRect": {
+										"x": 2000,
+										"y": 1250,
+										"width": 800,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/5/intro/%d.png",
+							"Sound": "PLAY_C3S5",
+							"Slides": [
+								{
+									"Duration" : 14.52,
+									"TextFadeDuration" : 13.47,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204501,
+									"TextRect": {
+										"x": 1100,
+										"y": 700,
+										"width": 1600,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 7.0,
+									"TextFadeDuration" : 5.66,
+									"String" : 204502,
+									"TextRect": {
+										"x": 1100,
+										"y": 1450,
+										"width": 1600,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 19.0,
+									"TextFadeDuration" : 17.58,
+									"String" : 204503,
+									"TextRect": {
+										"x": 1870,
+										"y": 700,
+										"width": 900,
+										"height": 500
+									}
+								},
+								{
+									"Duration" : 7.0,
+									"TextFadeDuration" : 5.47,
+									"String" : 204504,
+									"TextRect": {
+										"x": 1920,
+										"y": 700,
+										"width": 760,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 6.02,
+									"TextFadeDuration" : 4.28,
+									"String" : 204505,
+									"TextRect": {
+										"x": 2050,
+										"y": 700,
+										"width": 730,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 7.5,
+									"TextFadeDuration" : 5.83,
+									"String" : 204506,
+									"TextRect": {
+										"x": 1100,
+										"y": 1420,
+										"width": 1650,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 10.5,
+									"TextFadeDuration" : 8.75,
+									"String" : 204507,
+									"TextRect": {
+										"x": 1950,
+										"y": 650,
+										"width": 800,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 9.4,
+									"TextFadeDuration" : 6.4,
+									"String" : 204508,
+									"TextRect": {
+										"x": 1100,
+										"y": 750,
+										"width": 1670,
+										"height": 300
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/5/outro/%d.png",
+							"Sound": "PLAY_C3S5END",
+							"Slides": [
+								{
+									"Duration" : 14.51,
+									"TextFadeDuration" : 12.48,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204551,
+									"TextRect": {
+										"x": 2000,
+										"y": 600,
+										"width": 770,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.52,
+									"TextFadeDuration" : 8.54,
+									"String" : 204552,
+									"TextRect": {
+										"x": 2070,
+										"y": 1100,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 11.53,
+									"TextFadeDuration" : 9.46,
+									"String" : 204553,
+									"TextRect": {
+										"x": 2080,
+										"y": 635,
+										"width": 660,
+										"height": 930
+									}
+								},
+								{
+									"Duration" : 9.85,
+									"TextFadeDuration" : 6.85,
+									"String" : 204554,
+									"TextRect": {
+										"x": 1120,
+										"y": 1340,
+										"width": 1690,
+										"height": 972
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/6/intro/%d.png",
+							"Sound": "PLAY_C3S6",
+							"Slides": [
+								{
+									"Duration" : 18.5,
+									"TextFadeDuration" : 17.0,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204601,
+									"TextRect": {
+										"x": 2150,
+										"y": 700,
+										"width": 620,
+										"height": 600
+									}
+								},
+								{
+									"Duration" : 12.53,
+									"TextFadeDuration" : 11.0,
+									"String" : 204602,
+									"TextRect": {
+										"x": 1060,
+										"y": 650,
+										"width": 570,
+										"height": 600
+									}
+								},
+								{
+									"Duration" : 12.01,
+									"TextFadeDuration" : 10.43,
+									"String" : 204603,
+									"TextRect": {
+										"x": 1660,
+										"y": 600,
+										"width": 1120,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.02,
+									"TextFadeDuration" : 8.66,
+									"String" : 204604,
+									"TextRect": {
+										"x": 1100,
+										"y": 1450,
+										"width": 1670,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 17.7,
+									"TextFadeDuration" : 14.7,
+									"String" : 204605,
+									"TextRect": {
+										"x": 1100,
+										"y": 680,
+										"width": 1670,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam4/genghis_khan_background.dds",
+							"SlideImageSequence": "textures/campaign/cam4/6/outro/%d.png",
+							"Sound": "PLAY_C3S6END",
+							"Slides": [
+								{
+									"Duration" : 12.98,
+									"TextFadeDuration" : 10.78,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 204651,
+									"TextRect": {
+										"x": 2150,
+										"y": 600,
+										"width": 620,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 14.55,
+									"TextFadeDuration" : 12.53,
+									"String" : 204652,
+									"TextRect": {
+										"x": 1100,
+										"y": 580,
+										"width": 1670,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 21.52,
+									"TextFadeDuration" : 19.59,
+									"String" : 204653,
+									"TextRect": {
+										"x": 1100,
+										"y": 580,
+										"width": 1670,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.1,
+									"TextFadeDuration" : 7.1,
+									"String" : 204654,
+									"TextRect": {
+										"x": 1100,
+										"y": 1450,
+										"width": 1670,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+}
