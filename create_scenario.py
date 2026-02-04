@@ -13,12 +13,14 @@ if not api_key:
 generator = ScenarioGenerator(api_key)
 
 config = ScenarioConfig(
-    title="The Battle of Agincourt",
-    description="English longbowmen face the French cavalry in 1415",
-    scenario_type="battle",  # Options: "battle", "story", "defense", "conquest"
-    difficulty="hard",       # Options: "easy", "medium", "hard"
-    output_path="agincourt.aoe2scenario"
-)
+    title="The Flight to Chinon",
+    description="Joan must escape English territory and reach the Dauphin. Enemy cavalry pursue relentlessly.",
+    scenario_type="escort",
+    map_size=120,
+    players=4,
+    difficulty="medium",
+    output_path="flight_to_chinon.aoe2scenario"
+)  
 
 print(f"Generating scenario: {config.title}")
 code = generator.generate_scenario(config)

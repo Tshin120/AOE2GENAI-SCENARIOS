@@ -8,7 +8,14 @@
       "WebFetch(domain:ksneijders.github.io)",
       "Bash(git init:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nClean up repo structure and add campaign tools\n\n- Remove nested AOE2GENAI-SCENARIOS-main folder \\(flatten structure\\)\n- Add extract_campaign.py for extracting scenarios from .aoe2campaign files\n- Update view_scenario.py to accept command-line arguments\n- Add campaign files: Joan of Arc, Saladin, Genghis Khan\n- Add campaign JSON metadata files\n- Update CLAUDE.md with campaign tool documentation\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(set:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd campaign-based scenario templates to generator\n\nAnalyzed 18 scenarios from Joan of Arc, Saladin, and Genghis Khan\ncampaigns to identify scenario types and trigger patterns.\n\nNew scenario types:\n- escort: Hero escort/journey \\(Joan 1, 5 pattern\\)\n- diplomacy: Multi-faction alliance building \\(Genghis 1 pattern\\)\n- conquest: Progressive base capture \\(Genghis 3 pattern\\)\n- defense: Wave-based survival \\(Saladin 5 pattern\\)\n- battle: Direct army combat \\(Saladin 6 pattern\\)\n- story: Narrative-driven with acts \\(combined patterns\\)\n\nEach template includes:\n- Detailed trigger structure \\(Setup, Plot, Victory/Defeat, Objectives\\)\n- Player role assignments\n- Map design guidance\n- Key trigger mechanics from real campaigns\n\nUpdated example configurations to showcase all scenario types.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(find:*)"
     ]
   }
 }
