@@ -1,0 +1,878 @@
+{
+	"Scenarios": [
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/1/intro/%d.png",
+							"Sound": "PLAY_C2S1",
+							"Slides": [
+								{
+									"Duration" : 5.52,
+									"TextFadeDuration" : 4.62,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203101,
+									"TextRect": {
+										"x": 1388,
+										"y": 653,
+										"width": 1300,
+										"height": 171
+									}
+								},
+								{
+									"Duration" : 5.01,
+									"TextFadeDuration" : 3.78,
+									"String" : 203102,
+									"TextRect": {
+										"x": 1388,
+										"y": 653,
+										"width": 1263,
+										"height": 171
+									}
+								},
+								{
+									"Duration" : 14.35,
+									"TextFadeDuration" : 13.32,
+									"String" : 203103,
+									"TextRect": {
+										"x": 1060,
+										"y": 695,
+										"width": 801,
+										"height": 900
+									}
+								},
+								{
+									"Duration" : 20.14,
+									"TextFadeDuration" : 19.34,
+									"String" : 203104,
+									"TextRect": {
+										"x": 980,
+										"y": 550,
+										"width": 1750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 6.02,
+									"TextFadeDuration" : 5.13,
+									"String" : 203105,
+									"TextRect": {
+										"x": 1200,
+										"y": 1460,
+										"width": 1570,
+										"height": 246
+									}
+								},
+								{
+									"Duration" : 27.46,
+									"TextFadeDuration" : 25.9,
+									"String" : 203106,
+									"TextRect": {
+										"x": 1000,
+										"y": 698,
+										"width": 820,
+										"height": 800
+									}
+								},
+								{
+									"Duration" : 10.02,
+									"TextFadeDuration" : 8.88,
+									"String" : 203107,
+									"TextRect": {
+										"x": 1742,
+										"y": 560,
+										"width": 1110,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 17.99,
+									"TextFadeDuration" : 16.79,
+									"String" : 203108,
+									"TextRect": {
+										"x": 980,
+										"y": 671,
+										"width": 1750,
+										"height": 500
+									}
+								},
+								{
+									"Duration" : 16.53,
+									"TextFadeDuration" : 13.53,
+									"String" : 203109,
+									"TextRect": {
+										"x": 980,
+										"y": 704,
+										"width": 930,
+										"height": 500
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/1/outro/%d.png",
+							"Sound": "PLAY_C2S1END",
+							"Slides": [
+								{
+									"Duration" : 20.330,
+									"TextFadeDuration" : 19.85,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203151,
+									"TextRect": {
+										"x": 960,
+										"y": 560,
+										"width": 1770,
+										"height": 600
+									}
+								},
+								{
+									"Duration" : 24.15,
+									"TextFadeDuration" : 21.15,
+									"String" : 203152,
+									"TextRect": {
+										"x": 1700,
+										"y": 550,
+										"width": 1170,
+										"height": 600
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/2/intro/%d.png",
+							"Sound": "PLAY_C2S2",
+							"Slides": [
+								{
+									"Duration" : 6.25,
+									"TextFadeDuration" : 5.19,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203201,
+									"TextRect": {
+										"x": 1300,
+										"y": 752,
+										"width": 1300,
+										"height": 200
+									}
+								},
+								{
+									"Duration" : 10.75,
+									"TextFadeDuration" : 9.68,
+									"String" : 203202,
+									"TextRect": {
+										"x": 1080,
+										"y": 752,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.5,
+									"TextFadeDuration" : 9.55,
+									"String" : 203203,
+									"TextRect": {
+										"x": 980,
+										"y": 700,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.5,
+									"TextFadeDuration" : 9.5,
+									"String" : 203204,
+									"TextRect": {
+										"x": 980,
+										"y": 700,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 11.25,
+									"TextFadeDuration" : 10.12,
+									"String" : 203205,
+									"TextRect": {
+										"x": 980,
+										"y": 700,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 12.74,
+									"TextFadeDuration" : 11.76,
+									"String" : 203206,
+									"TextRect": {
+										"x": 2000,
+										"y": 649,
+										"width": 700,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 14.66,
+									"TextFadeDuration" : 11.66,
+									"String" : 203207,
+									"TextRect": {
+										"x": 2080,
+										"y": 720,
+										"width": 650,
+										"height": 500
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/2/outro/%d.png",
+							"Sound": "PLAY_C2S2END",
+							"Slides": [
+								{
+									"Duration" : 14.51,
+									"TextFadeDuration" : 13.38,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203251,
+									"TextRect": {
+										"x": 980,
+										"y": 580,
+										"width": 1750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 13.03,
+									"TextFadeDuration" : 11.88,
+									"String" : 203252,
+									"TextRect": {
+										"x": 1100,
+										"y": 1379,
+										"width": 1680,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 18.62,
+									"TextFadeDuration" : 15.62,
+									"String" : 203253,
+									"TextRect": {
+										"x": 970,
+										"y": 580,
+										"width": 850,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {							
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/3/intro/%d.png",
+							"Sound": "PLAY_C2S3",
+							"Slides": [
+								{
+									"Duration" : 3.63,
+									"TextFadeDuration" : 3.12,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203301,
+									"TextRect": {
+										"x": 1280,
+										"y": 652,
+										"width": 1009,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 12.8,
+									"TextFadeDuration" : 12.1,
+									"String" : 203302,
+									"TextRect": {
+										"x": 1100,
+										"y": 600,
+										"width": 1600,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.44,
+									"TextFadeDuration" : 15.93,
+									"String" : 203303,
+									"TextRect": {
+										"x": 980,
+										"y": 584,
+										"width": 1246,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 11.39,
+									"TextFadeDuration" : 10.92,
+									"String" : 203304,
+									"TextRect": {
+										"x": 1100,
+										"y": 680,
+										"width": 927,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 12.99,
+									"TextFadeDuration" : 12.22,
+									"String" : 203305,
+									"TextRect": {
+										"x": 1100,
+										"y": 1350,
+										"width": 1600,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.06,
+									"TextFadeDuration" : 13.06,
+									"String" : 203306,
+									"TextRect": {
+										"x": 2020,
+										"y": 605,
+										"width": 750,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/3/outro/%d.png",
+							"Sound": "PLAY_C2S3END",
+							"Slides": [
+								{
+									"Duration" : 8.34,
+									"TextFadeDuration" : 7.78,
+									"ImageRect": {
+										"x": 910,
+										"y": 680,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203351,
+									"TextRect": {
+										"x": 1341,
+										"y": 550,
+										"width": 620,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 16.64,
+									"TextFadeDuration" : 16.0,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203352,
+									"TextRect": {
+										"x": 1100,
+										"y": 1400,
+										"width": 1620,
+										"height": 456
+									}
+								},
+								{
+									"Duration" : 22.89,
+									"TextFadeDuration" : 19.89,
+									"String" : 203353,
+									"TextRect": {
+										"x": 1974,
+										"y": 580,
+										"width": 811,
+										"height": 600
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/4/intro/%d.png",
+							"Sound": "PLAY_C2S4",
+							"Slides": [
+								{
+									"Duration" : 5.48,
+									"TextFadeDuration" : 4.84,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203401,
+									"TextRect": {
+										"x": 1250,
+										"y": 658,
+										"width": 1537,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 17.52,
+									"TextFadeDuration" : 16.82,
+									"String" : 203402,
+									"TextRect": {
+										"x": 1100,
+										"y": 600,
+										"width": 1640,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 16.07,
+									"TextFadeDuration" : 13.07,
+									"String" : 203403,
+									"TextRect": {
+										"x": 1905,
+										"y": 580,
+										"width": 870,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/4/outro/%d.png",
+							"Sound": "PLAY_C2S4END",
+							"Slides": [
+								{
+									"Duration" : 21.5,
+									"TextFadeDuration" : 20.54,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203451,
+									"TextRect": {
+										"x": 1000,
+										"y": 600,
+										"width": 1110,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 15.0,
+									"TextFadeDuration" : 12.0,
+									"String" : 203452,
+									"TextRect": {
+										"x": 2000,
+										"y": 600,
+										"width": 760,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/5/intro/%d.png",
+							"Sound": "PLAY_C2S5",
+							"Slides": [
+								{
+									"Duration" : 5.37,
+									"TextFadeDuration" : 4.47,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203501,
+									"TextRect": {
+										"x": 1250,
+										"y": 633,
+										"width": 1500,
+										"height": 200
+									}
+								},
+								{
+									"Duration" : 7.7,
+									"TextFadeDuration" : 7.33,
+									"String" : 203502,
+									"TextRect": {
+										"x": 1980,
+										"y": 600,
+										"width": 800,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 9.92,
+									"TextFadeDuration" : 9.57,
+									"String" : 203503,
+									"TextRect": {
+										"x": 980,
+										"y": 600,
+										"width": 920,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 15.5,
+									"TextFadeDuration" : 14.99,
+									"String" : 203504,
+									"TextRect": {
+										"x": 2100,
+										"y": 810,
+										"width": 700,
+										"height": 600
+									}
+								},
+								{
+									"Duration" : 18.37,
+									"TextFadeDuration" : 15.37,
+									"String" : 203505,
+									"TextRect": {
+										"x": 1000,
+										"y": 570,
+										"width": 1800,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/5/outro/%d.png",
+							"Sound": "PLAY_C2S5END",
+							"Slides": [
+								{
+									"Duration" : 18.51,
+									"TextFadeDuration" : 17.29,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203551,
+									"TextRect": {
+										"x": 1100,
+										"y": 1381,
+										"width": 1600,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 22.5,
+									"TextFadeDuration" : 21.43,
+									"String" : 203552,
+									"TextRect": {
+										"x": 1900,
+										"y": 1270,
+										"width": 925,
+										"height": 500
+									}
+								},
+								{
+									"Duration" : 12.83,
+									"TextFadeDuration" : 9.83,
+									"String" : 203553,
+									"TextRect": {
+										"x": 1100,
+										"y": 600,
+										"width": 1640,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"IntroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/6/intro/%d.png",
+							"Sound": "PLAY_C2S6",
+							"Slides": [
+								{
+									"Duration" : 7.49,
+									"TextFadeDuration" : 6.53,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203601,
+									"TextRect": {
+										"x": 1268,
+										"y": 622,
+										"width": 1500,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 15.4,
+									"TextFadeDuration" : 14.82,
+									"String" : 203602,
+									"TextRect": {
+										"x": 1000,
+										"y": 600,
+										"width": 800,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 10.48,
+									"TextFadeDuration" : 10.03,
+									"String" : 203603,
+									"TextRect": {
+										"x": 1970,
+										"y": 750,
+										"width": 780,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 7.13,
+									"TextFadeDuration" : 6.52,
+									"String" : 203604,
+									"TextRect": {
+										"x": 2033,
+										"y": 600,
+										"width": 775,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 14.88,
+									"TextFadeDuration" : 14.37,
+									"String" : 203605,
+									"TextRect": {
+										"x": 940,
+										"y": 550,
+										"width": 750,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 12.16,
+									"TextFadeDuration" : 11.19,
+									"String" : 203606,
+									"TextRect": {
+										"x": 1750,
+										"y": 1380,
+										"width": 970,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 15.64,
+									"TextFadeDuration" : 12.64,
+									"String" : 203607,
+									"TextRect": {
+										"x": 1750,
+										"y": 1380,
+										"width": 970,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"OutroSequence": {
+				"SequenceItems": [
+					{
+						"Type": "SlideShow",
+						"Data": {
+							"SlideBackgroundImage": "textures/campaign/cam3/saladin_background.dds",
+							"SlideImageSequence": "textures/campaign/cam3/6/outro/%d.png",
+							"Sound": "PLAY_C2S6END",
+							"Slides": [
+								{
+									"Duration" : 4.0,
+									"TextFadeDuration" : 3.03,
+									"ImageRect": {
+										"x": 910,
+										"y": 550,
+										"width": 2000,
+										"height": 1048
+									},
+									"String" : 203651,
+									"TextRect": {
+										"x": 1300,
+										"y": 1038,
+										"width": 1500,
+										"height": 300
+									}
+								},
+								{
+									"Duration" : 11.5,
+									"TextFadeDuration" : 10.39,
+									"String" : 203652,
+									"TextRect": {
+										"x": 1000,
+										"y": 900,
+										"width": 720,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 20.49,
+									"TextFadeDuration" : 19.86,
+									"String" : 203653,
+									"TextRect": {
+										"x": 2120,
+										"y": 740,
+										"width": 660,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 20.51,
+									"TextFadeDuration" : 19.77,
+									"String" : 203654,
+									"TextRect": {
+										"x": 970,
+										"y": 600,
+										"width": 860,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 22.48,
+									"TextFadeDuration" : 21.85,
+									"String" : 203655,
+									"TextRect": {
+										"x": 1000,
+										"y": 590,
+										"width": 1800,
+										"height": 400
+									}
+								},
+								{
+									"Duration" : 19.0,
+									"TextFadeDuration" : 16.0,
+									"String" : 203656,
+									"TextRect": {
+										"x": 1100,
+										"y": 1300,
+										"width": 1700,
+										"height": 400
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+}
