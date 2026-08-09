@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""
+Factorial experiment driver.
+
+Runs the episode set through every cell of a prompt-condition factorial, one
+`create_scenario.py` process per (episode, cell), with a bounded worker pool.
+Each cell gets its own output directory so scenario filenames never collide and
+every artefact is attributable to exactly one arm.
+
+    python tools/run_factorial.py --episodes output/_episodes.json --workers 8
+
+Cells (2x2): reachability_prompting {on, off} x prompt_style {templated, freeform}.
+Every run is temperature 0.0 by default so the comparison is a prompt ablation
+rather than a sampling-noise measurement.
+
+Results stream into one JSONL per cell under <root>/<cell>/results.jsonl; the
+arm is recoverable from the logged `reachability_prompting` / `prompt_style`
+fields as well as from the path.
+"""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def slug(text):
+    keep = [c.lower() if c.isalnum() else "_" for c in text]
+    out = "".join(keep)
+    while "__" in out:
+        out = out.replace("__", "_")
+    return out.strip("_")
+
+
+def build_jobs(episodes, cells, root, temperature, model, max_repair, introspection):
+    jobs = []
+    for cell in cells:
+        cell_dir = os.path.join(root, cell["name"])
+        for ep in episodes:
+            out = os.path.join(cell_dir, slug(ep["title"]) + ".aoe2scenario")
+            cmd = [
+                sys.executable, os.path.join(REPO_ROOT, "create_scenario.py"),
+                "--title", ep["title"],
+                "--description", ep.get("description", ""),
+                "--scenario-type", ep.get("scenario_type", "story"),
+                "--difficulty", ep.get("difficulty", "medium"),
+                "--map-size", str(ep.get("map_size", 120)),
+                "--players", str(ep.get("players", 2)),
+                "--temperature", str(temperature),
+                "--max-repair-attempts", str(max_repair),
+                "--prompt-style", cell["prompt_style"],
+                "--reachability" if cell["reachability"] else "--no-reachability",
+                "--introspection" if introspection else "--no-introspection",
+                "--output", out,
+                "--results-log", os.path.join(cell_dir, "results.jsonl"),
+            ]
+            for flag, key in (("--region", "region"), ("--player-civ", "player_civ"),
+                              ("--enemy-civ", "enemy_civ"), ("--wikipedia-url", "wikipedia_url")):
+                if ep.get(key):
+                    cmd += [flag, ep[key]]
+            if model:
+                cmd += ["--model", model]
+            jobs.append({"cell": cell["name"], "title": ep["title"], "cmd": cmd, "out": out})
+    return jobs
+
+
+def run_job(job, timeout):
+    t0 = time.time()
+    try:
+        p = subprocess.run(job["cmd"], capture_output=True, text=True,
+                           timeout=timeout, cwd=REPO_ROOT)
+        rc, tail = p.returncode, (p.stdout or "")[-400:]
+    except subprocess.TimeoutExpired:
+        rc, tail = -1, "TIMEOUT"
+    return {**job, "rc": rc, "secs": round(time.time() - t0, 1), "tail": tail}
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Run the prompt-condition factorial.")
+    ap.add_argument("--episodes", default="output/_episodes.json")
+    ap.add_argument("--root", default="output/factorial")
+    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--model", default=None)
+    ap.add_argument("--max-repair-attempts", type=int, default=3, dest="max_repair")
+    ap.add_argument("--no-introspection", dest="introspection", action="store_false",
+                    help="Run every cell with introspection-guided repair disabled")
+    ap.add_argument("--cells", default="all",
+                    help="'all' (2x2), 'reach' (reachability only, templated), "
+                         "or 'style' (prompt style only, reachability on)")
+    ap.add_argument("--timeout", type=int, default=2400)
+    ap.set_defaults(introspection=True)
+    args = ap.parse_args()
+
+    all_cells = [
+        {"name": "reach_on__templated", "reachability": True, "prompt_style": "templated"},
+        {"name": "reach_off__templated", "reachability": False, "prompt_style": "templated"},
+        {"name": "reach_on__freeform", "reachability": True, "prompt_style": "freeform"},
+        {"name": "reach_off__freeform", "reachability": False, "prompt_style": "freeform"},
+    ]
+    if args.cells == "reach":
+        cells = [c for c in all_cells if c["prompt_style"] == "templated"]
+    elif args.cells == "style":
+        cells = [c for c in all_cells if c["reachability"]]
+    else:
+        cells = all_cells
+
+    with open(args.episodes, encoding="utf-8") as f:
+        episodes = json.load(f)
+
+    jobs = build_jobs(episodes, cells, args.root, args.temperature, args.model,
+                      args.max_repair, args.introspection)
+    for c in cells:
+        os.makedirs(os.path.join(args.root, c["name"]), exist_ok=True)
+
+    print(f"{len(jobs)} runs = {len(episodes)} episodes x {len(cells)} cells, "
+          f"{args.workers} workers, temperature={args.temperature}, "
+          f"introspection={'on' if args.introspection else 'off'}", flush=True)
+
+    done = 0
+    t0 = time.time()
+    with ThreadPoolExecutor(max_workers=args.workers) as ex:
+        futs = [ex.submit(run_job, j, args.timeout) for j in jobs]
+        for fut in as_completed(futs):
+            r = fut.result()
+            done += 1
+            status = "ok " if r["rc"] == 0 else f"FAIL({r['rc']})"
+            print(f"[{done}/{len(jobs)}] {status} {r['secs']:>6.1f}s  "
+                  f"{r['cell']:<22} {r['title']}", flush=True)
+
+    print(f"\nAll {len(jobs)} runs finished in {(time.time()-t0)/60:.1f} min")
+
+
+if __name__ == "__main__":
+    main()

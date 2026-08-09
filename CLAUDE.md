@@ -16,8 +16,8 @@ pip install -r requirements.txt
 set OPENROUTER_API_KEY=your_key_here    # Windows
 export OPENROUTER_API_KEY=your_key_here # Linux/Mac
 
-# Run the David & Goliath scenario (pre-built example)
-python "david&goliath_scenario1.py"
+# Run the David & Goliath scenario (pre-built example, writes to output/)
+python "examples/david&goliath_scenario1.py"
 
 # Generate scenarios using the API (thin CLI over ScenarioGenerator.generate())
 python create_scenario.py       # Single scenario (no args = default "Flight to Chinon" escort)
@@ -25,13 +25,13 @@ python create_scenario.py --model opus-4.8 --scenario-type battle \
     --title "Tours" --description "Franks vs Umayyads, 732"
 python create_scenario.py --no-reachability --best-of-n 3  # baseline prompt, keep first of 3 that builds
 python create_scenario.py --dry-run                        # preview resolved config, no API call
-python create_scenario.py --batch specs.jsonl             # many scenarios from a JSONL file (see below)
-python create_scenario.py --batch specs.jsonl --yes       # skip the batch confirmation prompt (scripting)
+python create_scenario.py --batch batches/batch_ablation.jsonl        # many scenarios from a JSONL file (see below)
+python create_scenario.py --batch batches/batch_ablation.jsonl --yes  # skip the batch confirmation prompt (scripting)
 # Every run writes a .meta.json sidecar next to each scenario and appends one line
 # per attempt to output/results.jsonl. Exit code is 0 only if ALL requested scenarios
 # succeeded (2 for a malformed batch file), so it composes in scripts.
-python example_usage.py         # Multiple example scenarios
-python generator.py             # Main generator with examples (runs all 6 scenario types)
+python examples/example_usage.py   # Multiple example scenarios via the library API
+python generator.py                # Main generator with examples (runs all 6 scenario types)
 
 # Run the control vs treatment experiment (both arms share one merged generator)
 python run_experiment.py                              # default model, control + treatment
@@ -40,13 +40,13 @@ python run_experiment.py --arms treatment --best-of 3 # treatment only, best-of-
 # Outcomes are appended to output/results.jsonl; a .meta.json sidecar sits next to each scenario.
 
 # Test API connection
-python test_api.py
+python tools/test_api.py
 
 # View scenario contents
-python view_scenario.py <scenario_file>    # View any .aoe2scenario file
+python tools/view_scenario.py <scenario_file>    # View any .aoe2scenario file
 
 # Extract scenarios from campaign files
-python extract_campaign.py <campaign_file>  # Extracts .aoe2scenario files from .aoe2campaign
+python tools/extract_campaign.py <campaign_file>  # Extracts .aoe2scenario files from .aoe2campaign
 ```
 
 ### `create_scenario.py` batch mode
@@ -60,7 +60,8 @@ line (bad JSON / not an object / unknown field / missing title) is reported with
 aborts the whole batch before any API call (exit 2). Before the first API call, batch mode prints the
 scenario count and resolved model(s) and asks for confirmation unless `--yes` is passed.
 
-Example `specs.jsonl`:
+Batch spec files live in `batches/` (`batch_ablation.jsonl` = the 8-episode x 2-prompt-style
+ablation; `batch_retry.jsonl` = the two defense episodes on their own). Example spec file:
 
 ```jsonl
 # battles use the CLI-level model; defense overrides best_of; conquest overrides model + difficulty
@@ -93,6 +94,36 @@ Aggregate over 4 scenario(s):
 ```
 
 ## Architecture
+
+### Repository Layout
+
+Only the five root-level modules are importable; everything else is a script or data. Scripts in
+`tools/` and `examples/` are meant to be run from the repo root (`python tools/view_scenario.py ...`);
+`examples/example_usage.py` inserts the repo root on `sys.path` so `from generator import ...` works,
+and both example scripts write into the repo-root `output/` dir regardless of the working directory.
+
+```
+generator.py           Core: prompts, validation, subprocess build, self-repair, best-of-N
+api_config.py          Model registry + defaults
+provenance.py          Sidecar + JSONL results-log writers (stdlib only)
+create_scenario.py     CLI: single scenario or JSONL batch
+run_experiment.py      Control vs treatment runner
+
+scenario_inspect.py    Built .aoe2scenario -> structured summary / LLM digest (shared reader)
+reachability_audit.py  Static unwinnability audit of built scenarios (deterministic, no API)
+fidelity_judge.py      LLM rubric scoring of historical fidelity (blind to the arm)
+
+tools/                 view_scenario.py, extract_campaign.py, test_api.py,
+                       run_factorial.py (factorial experiment driver),
+                       analyze.py (joins the 3 evidence streams -> tables + LaTeX)
+examples/              david&goliath_scenario1.py (hand-written), example_usage.py (library API)
+batches/               JSONL batch specs
+campaigns/             Official .aoe2campaign files + campaign JSON (reference material)
+samples/               Checked-in .aoe2scenario artifacts (gitignore-exempted)
+docs/                  Analysis notes (reference_analysis_cba_survival.md)
+reachability_research/ FROZEN pre-merge generators — do not edit
+output/                Generated scenarios (gitignored), .meta.json sidecars, results.jsonl
+```
 
 ### Core Flow
 
@@ -187,7 +218,14 @@ A raw slug not in the registry is passed through unchanged, so any OpenRouter mo
 
 The run's terminal outcome for a `(run_id, candidate)` is its highest `attempt` line. Outcomes: `success` (built), `validation_failure` (failed `validate_scenario_code_detailed`, not executed), `execution_error` (subprocess returncode ≠ 0, `stderr` captured), `api_error` (model call raised; not code-repairable).
 
-> **Note:** validation checks **playability preconditions only** (syntax, structure, ≥1 trigger, ≥1 `declare_victory`). It does **not** simulate the game. **Historical fidelity** — the paper's core contribution — is assessed separately by human annotation and is out of scope for this codebase.
+> **Note:** in-pipeline validation checks **playability preconditions only** (syntax, structure, ≥1 trigger, ≥1 `declare_victory`). It does **not** simulate the game.
+
+Two **post-hoc** analyses run over the built artefacts, outside the generation loop:
+
+- **`reachability_audit.py`** — static, deterministic, no API. Inspects the trigger graph of a built `.aoe2scenario` for structural unwinnability: missing victory/defeat path, `OBJECTS_IN_AREA(quantity<=0)` victory gating (fragile), timer-only victory (degenerate auto-win), and orphan triggers (shipped disabled, never activated). This is the machine-checked measure of what reachability prompting targets.
+- **`fidelity_judge.py`** — **historical fidelity**, the paper's core contribution, scored by an LLM against a fixed 5-dimension rubric (`combatants`, `material`, `events`, `anachronism`, `pedagogy`, each 1–5). The judge sees only a content digest of the built scenario — never the code, model, or prompt condition — so scores cannot be biased by knowing the arm. It supports `--repeats` (self-consistency) and `--mismatch-control` (discriminant validity: score a scenario against the *wrong* brief; a valid judge scores these far lower). Scores append to `output/fidelity.jsonl` and, with `--update-sidecars`, merge into each `.meta.json` under a `fidelity` key.
+
+Human expert annotation remains the gold standard the judge is validated *against*; it is not a prerequisite for running the evaluation.
 
 ### Scenario Types (Templates in generator.py)
 
@@ -343,7 +381,7 @@ trigger.new_effect.patrol(object_list_unit_id=UnitInfo.KNIGHT.ID, source_player=
 
 ### Monkey Patch
 
-`david&goliath_scenario1.py` includes a monkey patch for `int_to_bytes` to handle enum-to-int conversion. Apply this pattern if encountering `TypeError` with enum values:
+`examples/david&goliath_scenario1.py` includes a monkey patch for `int_to_bytes` to handle enum-to-int conversion. Apply this pattern if encountering `TypeError` with enum values:
 
 ```python
 import AoE2ScenarioParser.helper.bytes_conversions
@@ -364,21 +402,22 @@ C:\Users\<USERNAME>\Games\Age of Empires 2 DE\<STEAM_ID>\resources\_common\scena
 
 ## Campaign Tools
 
-### extract_campaign.py
+### tools/extract_campaign.py
 Extracts individual `.aoe2scenario` files from `.aoe2campaign` container files.
 
 ```bash
-python extract_campaign.py cam3.aoe2campaign
-# Creates cam3_scenarios/ folder with all scenario files
+python tools/extract_campaign.py campaigns/cam3.aoe2campaign
+# Creates campaigns/cam3_scenarios/ folder with all scenario files (gitignored)
 ```
 
 Supports AoE2 DE campaign format (version 2.00).
 
-### view_scenario.py
+### tools/view_scenario.py
 Displays scenario contents including map size, units by player, and triggers.
 
 ```bash
-python view_scenario.py cam3_scenarios/3_Saladin_1.aoe2scenario
+python tools/view_scenario.py campaigns/cam3_scenarios/3_Saladin_1.aoe2scenario
+python tools/view_scenario.py samples/siege_of_constantinople_1453.aoe2scenario
 ```
 
 **Note:** Encrypted `.gpv` campaign files (DLC campaigns) require decryption keys. Unencrypted `.aoe2campaign` files can be extracted directly.
@@ -387,6 +426,9 @@ python view_scenario.py cam3_scenarios/3_Saladin_1.aoe2scenario
 
 | File | Campaign | Scenarios |
 |------|----------|-----------|
-| cam2.aoe2campaign | Joan of Arc | 6 |
-| cam3.aoe2campaign | Saladin | 6 |
-| cam4.aoe2campaign | Genghis Khan | 6 |
+| campaigns/cam2.aoe2campaign | Joan of Arc | 6 |
+| campaigns/cam3.aoe2campaign | Saladin | 6 |
+| campaigns/cam4.aoe2campaign | Genghis Khan | 6 |
+
+Campaign JSON metadata (`campaigns/cam3.json`, `cam3_layout.json`, `cam4.json`, `cam4_layout.json`)
+holds the official intro/outro slideshow and menu-layout definitions, kept as reference material.
