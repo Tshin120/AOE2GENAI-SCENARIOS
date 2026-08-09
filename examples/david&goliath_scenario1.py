@@ -26,8 +26,11 @@ from AoE2ScenarioParser.datasets.other import OtherInfo
 from AoE2ScenarioParser.datasets.techs import TechInfo
 from AoE2ScenarioParser.datasets.heroes import HeroInfo
 
-# File path
-output_path = "david_and_goliath.aoe2scenario"
+# File path — always the repo-root output/ dir, whatever the working directory is
+import os
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.makedirs(os.path.join(_REPO_ROOT, "output"), exist_ok=True)
+output_path = os.path.join(_REPO_ROOT, "output", "david_and_goliath.aoe2scenario")
 
 # Load scenario object
 scenario = AoE2DEScenario.from_default()

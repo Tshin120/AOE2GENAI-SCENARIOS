@@ -1,7 +1,7 @@
 # AoE2-Bench prompt-style ablation batch — 8 episodes x 2 styles = 16 scenarios
 # Pairs are adjacent: templated first (CLI default), freeform override second.
-# Run: python create_scenario.py --batch batch_ablation.jsonl --dry-run   (verify)
-#      python create_scenario.py --batch batch_ablation.jsonl             (live)
+# Run: python create_scenario.py --batch batches/batch_ablation.jsonl --dry-run   (verify)
+#      python create_scenario.py --batch batches/batch_ablation.jsonl             (live)
 
 # --- BATTLE (2 episodes) ---
 {"title": "The Battle of Hastings", "description": "October 1066. William of Normandy's invasion army faces King Harold's Anglo-Saxon shield wall on Senlac Hill. The player commands the Norman force and must break the shield wall through feigned retreats and combined cavalry-archer assaults before nightfall ends the battle.", "scenario_type": "battle", "difficulty": "medium", "map_size": 120, "players": 2, "region": "northern_europe", "player_civ": "western_european", "enemy_civ": "western_european", "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Hastings"}

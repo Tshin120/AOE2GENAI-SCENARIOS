@@ -142,8 +142,8 @@ def main():
     if api_test and scenario_test:
         print("\n🎉 All tests passed! Your API key is working correctly.")
         print("📝 You can now run:")
-        print("   python example_usage.py")
-        print("   python generator.py")
+        print("   python create_scenario.py")
+        print("   python examples/example_usage.py")
     elif api_test:
         print("\n⚠️  API connection works, but scenario generation failed.")
         print("📝 Check the error messages above for details.")

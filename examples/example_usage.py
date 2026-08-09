@@ -5,7 +5,19 @@ This script demonstrates how to use the generator with different configurations.
 """
 
 import os
+import sys
+
+# Run from anywhere: the core modules live at the repo root, one level up.
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _REPO_ROOT)
+
 from generator import ScenarioGenerator, ScenarioConfig
+
+def _out(filename):
+    """Resolve a scenario filename into the repo-root output/ dir."""
+    out_dir = os.path.join(_REPO_ROOT, "output")
+    os.makedirs(out_dir, exist_ok=True)
+    return os.path.join(out_dir, filename)
 
 def main():
     """Demonstrate the scenario generator with various configurations"""
@@ -31,7 +43,7 @@ def main():
         difficulty="hard",
         map_size=120,
         players=2,
-        output_path="scenarios/constantinople_siege.aoe2scenario"
+        output_path=_out("constantinople_siege.aoe2scenario")
     )
     
     try:
@@ -56,7 +68,7 @@ def main():
         difficulty="medium",
         map_size=100,
         players=2,
-        output_path="scenarios/battle_of_hastings.aoe2scenario"
+        output_path=_out("battle_of_hastings.aoe2scenario")
     )
     
     try:
@@ -81,7 +93,7 @@ def main():
         difficulty="easy",
         map_size=140,
         players=1,
-        output_path="scenarios/rise_of_rome.aoe2scenario"
+        output_path=_out("rise_of_rome.aoe2scenario")
     )
     
     try:
@@ -106,7 +118,7 @@ def main():
         difficulty="hard",
         map_size=160,
         players=2,
-        output_path="scenarios/mongol_conquest.aoe2scenario"
+        output_path=_out("mongol_conquest.aoe2scenario")
     )
     
     try:
@@ -123,7 +135,7 @@ def main():
         print(f"❌ Error generating conquest scenario: {e}")
     
     print("\n🎉 Scenario generation complete!")
-    print("📁 Check the 'scenarios' folder for your generated scenarios")
+    print("📁 Check the 'output' folder for your generated scenarios")
     print("🎮 Load them in Age of Empires 2 Definitive Edition to play!")
 
 if __name__ == "__main__":

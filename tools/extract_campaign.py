@@ -102,10 +102,10 @@ def extract_campaign(campaign_path, output_dir=None):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python extract_campaign.py <campaign_file> [output_dir]")
+        print("Usage: python tools/extract_campaign.py <campaign_file> [output_dir]")
         print("\nExample:")
-        print("  python extract_campaign.py cam2.aoe2campaign")
-        print("  python extract_campaign.py cam2.aoe2campaign ./extracted")
+        print("  python tools/extract_campaign.py campaigns/cam2.aoe2campaign")
+        print("  python tools/extract_campaign.py campaigns/cam2.aoe2campaign ./extracted")
         sys.exit(1)
 
     campaign_file = sys.argv[1]

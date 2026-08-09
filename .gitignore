@@ -8,14 +8,25 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Generated scenarios
+# Generated scenarios (output/ keeps only the .meta.json sidecars + results.jsonl)
 *.aoe2scenario
 scenarios/
 temp_scenario_generator.py
+
+# ...except the checked-in reference artifacts
+!samples/*.aoe2scenario
+
+# Campaign extraction output (tools/extract_campaign.py)
+campaigns/*_scenarios/
+
+# Pre-dedupe backup written by tools/dedupe_fidelity.py. Local safety copy only:
+# every successful judgement survives into the deduped log, so this holds just
+# duplicate rows and failed API attempts.
+*.jsonl.raw
 
 # Logs
 *.log
 
 # IDE
 .vscode/
-.idea/ nul
+.idea/
