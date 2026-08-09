@@ -1,3 +1,17 @@
+# ===========================================================================
+# FROZEN - SUPERSEDED BY THE TOP-LEVEL generator.py
+#
+# This is the original "treatment" (reachability-analysis) generator used by
+# earlier experiment runs. Its reachability guidance has been merged into the
+# top-level generator.py as REACHABILITY_ANALYSIS_BLOCK, enabled by
+# ScenarioConfig(reachability_prompting=True) (the default). The merged version
+# also adds explicit destroy_object-over-objects_in_area trigger guidance.
+# run_experiment.py no longer imports this module.
+#
+# It is retained UNCHANGED for reproducibility of previously-generated results
+# and their provenance records. Do not edit; make changes in the top-level
+# generator.py instead.
+# ===========================================================================
 import os
 import json
 import requests

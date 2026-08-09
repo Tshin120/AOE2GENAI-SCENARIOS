@@ -1,3 +1,15 @@
+# ===========================================================================
+# FROZEN - SUPERSEDED BY THE TOP-LEVEL generator.py
+#
+# This is the original "control" (baseline) generator used by earlier
+# experiment runs. It has been merged into the top-level generator.py, where
+# the baseline behavior is reproduced by ScenarioConfig(reachability_prompting=
+# False). run_experiment.py no longer imports this module.
+#
+# It is retained UNCHANGED for reproducibility of previously-generated results
+# and their provenance records. Do not edit; make changes in the top-level
+# generator.py instead.
+# ===========================================================================
 import os
 import json
 import requests

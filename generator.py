@@ -1,10 +1,21 @@
 import os
+import re
+import ast
+import sys
 import json
+import uuid
+import inspect
+import difflib
+import importlib
+import subprocess
 import requests
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import logging
 from pathlib import Path
+
+import api_config
+from provenance import write_sidecar, append_result, new_run_id, utc_now_iso
 
 # AoE2ScenarioParser imports
 from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
@@ -19,6 +30,135 @@ from AoE2ScenarioParser.datasets.heroes import HeroInfo
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Reachability-analysis guidance (the "treatment" prompt).
+#
+# Appended to the system prompt when ScenarioConfig.reachability_prompting is
+# True (the default). Set the flag False to reproduce the original "control"
+# prompt. This block is the merged form of reachability_research/
+# generator_reachability.py's added guidance PLUS the explicit
+# destroy_object-over-objects_in_area trigger guidance (decision D1-B): a
+# win/lose condition built on objects_in_area(quantity=0) is a classic source
+# of permanently-unwinnable scenarios, so it is called out directly here.
+# ---------------------------------------------------------------------------
+REACHABILITY_ANALYSIS_BLOCK = """
+
+                    REACHABILITY ANALYSIS - CRITICAL FOR SCENARIO QUALITY:
+
+                    Before finalizing your scenario, verify reachability - that both
+                    victory and defeat are achievable from every reachable game state.
+
+                    A scenario is BROKEN if:
+                    1. The player cannot win (no path to victory exists)
+                    2. The player cannot lose (no challenge, no defeat path)
+                    3. The player can reach a state where victory becomes permanently
+                       impossible, regardless of skill
+
+                    THE FOUR WAYS SCENARIOS BREAK:
+
+                    1. RESOURCE DEAD END: The total resources on the map (mines + starting
+                       stockpile) are insufficient to accomplish the victory condition, and
+                       no alternative income sources (market, trade route, relics) are
+                       provided. Ensure the player has enough total resources to build the
+                       units and structures needed to win.
+
+                    2. COMPOSITION IMBALANCE: The enemy has a unit composition that the
+                       player has no effective counter for, given the units and buildings
+                       available to them. For example, giving the enemy massed bombard
+                       cannons but only providing the player with infantry and no siege
+                       workshop or ranged units. Ensure the player has access to units or
+                       buildings that can counter every enemy unit type present.
+
+                    3. POSITIONAL TRAP: The player cannot physically reach objectives or
+                       enemies. For example, objectives placed across water with no dock
+                       or transport ship provided, or enemies behind terrain barriers with
+                       no siege units available. Ensure physical paths exist or provide the
+                       tools to create them.
+
+                    4. TIMING COLLAPSE: The gap between the first enemy threat and the
+                       player's first possible military response is too large, and the
+                       player's existing assets cannot survive that gap. The enemy destroys
+                       win-critical assets (town center, hero unit, key buildings) before
+                       the player can mount any defense. Ensure the player has enough
+                       starting units or defenses to survive until they can respond.
+
+                    TRIGGER CONDITIONS FOR WIN/LOSE - PREFER destroy_object OVER objects_in_area:
+                    - For any VICTORY or DEFEAT condition, prefer destroy_object on a stored
+                      unit reference (enemy leader, castle, hero, or a key building) over
+                      objects_in_area(quantity=0, ...).
+                    - objects_in_area(quantity=0) is a FRAGILE win/lose check: a single enemy
+                      unit that garrisons inside a building, gets converted, flees to an
+                      unreachable corner, or spawns outside the checked area leaves the count
+                      above 0 forever - making victory permanently unreachable (failure mode
+                      3, POSITIONAL TRAP). destroy_object targets one specific object by its
+                      reference_id and fires deterministically when that object dies.
+                    - CORRECT (deterministic): store the reference and destroy it -
+                        enemy_leader = unit_manager.add_unit(PlayerId.TWO, unit_const=HeroInfo.XXX.ID, ...)
+                        vc = trigger_manager.add_trigger("VC")
+                        vc.new_condition.destroy_object(unit_object=enemy_leader.reference_id)
+                        vc.new_effect.declare_victory(source_player=PlayerId.ONE, enabled=1)
+                    - Reserve objects_in_area for NON-TERMINAL detection (is the player near a
+                      zone, has a wave been thinned) - not as the sole path to victory. If you
+                      must gate victory on clearing an area, ALSO provide a destroy_object
+                      victory path on the enemy leader/castle so the scenario is still winnable.
+                    - Every scenario MUST contain at least one declare_victory effect reachable
+                      through a destroy_object (or bring_object_to_area) condition.
+
+                    REACHABILITY CHECKLIST (verify before generating code):
+                    - [ ] Victory trigger exists and is reachable through player actions
+                    - [ ] Victory is driven by destroy_object / bring_object_to_area, not by a
+                          lone objects_in_area(quantity=0) check
+                    - [ ] Defeat is possible (enemy can actually threaten the player)
+                    - [ ] Total resources on the map are sufficient to reach the victory
+                          condition
+                    - [ ] Player has access to units that can counter the enemy composition
+                    - [ ] Player can physically reach all objectives on the map
+                    - [ ] If timed waves exist, the player has enough starting
+                          units/buildings to survive the first wave
+                    - [ ] No trigger deadlocks (triggers that disable each other creating
+                          an unwinnable state)
+
+                    After verifying, add a comment block at the top of your generated code:
+                    # REACHABILITY ANALYSIS:
+                    # Victory path: [brief description]
+                    # Defeat path: [brief description]
+                    # Resource sufficiency: [yes/no + why]
+                    # Counter availability: [yes/no + why]
+                    # Physical access: [yes/no + why]
+                    # Timing viability: [yes/no + why]
+"""
+
+# --- Prompt-style ablation --------------------------------------------------
+# The scenario-type templates in ScenarioGenerator._load_templates() prescribe a
+# rigid trigger count and per-section structure. prompt_style="freeform" skips
+# that template and sends a short generic instruction instead, letting the model
+# choose its own trigger structure/count for the episode. Everything else - the
+# system prompt (base + reachability block), the region/civ templates and every
+# parser-usage rule - is identical across modes, so the ablation isolates the
+# scenario-type template only.
+TEMPLATED_MIN_TRIGGERS = 20   # soft warning floor for the templated (default) prompt
+FREEFORM_MIN_TRIGGERS = 4     # soft floor for freeform: setup + narrative + objectives + win/loss
+
+FREEFORM_PROMPT_TEMPLATE = """Create a complete, playable Age of Empires 2 scenario for this historical episode:
+- Title: {title}
+- Description: {description}
+- Map size: {map_size}x{map_size}
+- Players: {players}
+- Difficulty: {difficulty}
+
+Build a COMPLETE, PLAYABLE scenario:
+- Set up the map, the players, and their starting units and buildings, then express the game logic as triggers.
+- Tell the story of this episode through in-game dialogue, using the color convention <YELLOW> for the narrator, <BLUE> for allies, and <RED> for enemies.
+- Give the player clear objectives, displayed in-game.
+- Provide BOTH a reachable victory condition AND a reachable defeat condition: the player must be able to actually win, and to actually lose.
+
+YOU decide the trigger structure and the number of triggers that best fit THIS
+episode - there is NO fixed or required trigger count. As a soft minimum, create
+enough triggers to cover: initial setup, the narrative/dialogue beats, the
+objectives, and the win/loss conditions. Choose whatever design makes the
+scenario the most historically faithful and the most playable for this episode."""
+
 
 @dataclass
 class ScenarioConfig:
@@ -60,6 +200,313 @@ class ScenarioConfig:
     player_civ: str = None  # Player civilization style: western_european, eastern_european, middle_eastern, central_asian, east_asian
     enemy_civ: str = None  # Enemy civilization style
 
+    # --- Generation parameters (per-run, recorded into the metadata sidecar) ---
+    model: str = None  # MODEL_REGISTRY key or raw OpenRouter slug; None -> api_config.DEFAULT_MODEL
+    temperature: float = 0.7  # sampling temperature (default unchanged)
+    max_tokens: int = 32000  # completion cap (raised default so large scenarios are not truncated)
+
+    # --- Quality levers ---
+    reachability_prompting: bool = True  # append the reachability-analysis guidance to the system prompt
+    best_of: int = 1  # generate N candidates, keep the first that builds successfully (>=1)
+    max_repair_attempts: int = 3  # self-repair retries after a validation_failure / execution_error
+
+    # --- Ablation lever ---
+    prompt_style: str = "templated"  # "templated" (per-type template, default) | "freeform" (generic instruction)
+
+# Bumped when the generation pipeline changes in a way that affects outputs.
+GENERATOR_VERSION = "2.0"
+
+
+@dataclass
+class ExecutionOutcome:
+    """Structured result of executing generated scenario code as a subprocess."""
+    ok: bool
+    returncode: int
+    stdout: str
+    stderr: str
+
+
+@dataclass
+class GenerationResult:
+    """Terminal result of one generate() call.
+
+    outcome is exactly one of: success | validation_failure | execution_error |
+    api_error. For best-of-N this is the first successful candidate, else the
+    last candidate's terminal attempt.
+    """
+    outcome: str
+    title: str
+    scenario_type: str
+    model: str
+    temperature: float
+    max_tokens: int
+    reachability_prompting: bool
+    output_path: str
+    run_id: str = ""
+    candidate: int = 1
+    attempts: int = 0
+    trigger_count: int = 0
+    code: str = ""
+    stderr: str = ""
+    validation_detail: str = ""
+    error: str = ""
+    prompt_style: str = "templated"
+    # Which introspection fired to produce this attempt's code (importerror |
+    # attributeerror | typeerror | nameerror), else None. Lets us later query how
+    # often introspection-augmented repairs fired and whether they converge
+    # faster than plain stderr-echo repairs.
+    introspection: Optional[str] = None
+
+    @property
+    def success(self) -> bool:
+        return self.outcome == "success"
+
+
+def _extract_python_code(text: str) -> str:
+    """Extract Python source from a model response, stripping markdown fences."""
+    if "```python" in text:
+        start = text.find("```python") + len("```python")
+        end = text.find("```", start)
+        return text[start:end].strip() if end != -1 else text[start:].strip()
+    if "```" in text:
+        start = text.find("```") + 3
+        end = text.find("```", start)
+        return text[start:end].strip() if end != -1 else text[start:].strip()
+    return text.strip()
+
+
+# ---------------------------------------------------------------------------
+# Repair introspection.
+#
+# When a generated program fails on a parser API call, the repair loop otherwise
+# sees only the traceback text and tends to *guess* another wrong name (we saw
+# defense scenarios burn all 4 attempts cycling ResourceId -> Resource ->
+# modify_attribute(attribute=...), none of which exist). These helpers pull the
+# GROUND TRUTH out of the INSTALLED AoE2ScenarioParser - the real importable
+# names, the real object attributes, the real call signatures - and hand it to
+# the repair model so "guess again" becomes "pick a valid option".
+#
+# Everything here is best-effort and defensive: _introspect_error never raises
+# into the generation pipeline, and any library-shape change simply yields no
+# block instead of a crash. Output is hard-capped at _MAX_INTROSPECTION_LINES.
+# ---------------------------------------------------------------------------
+_MAX_INTROSPECTION_LINES = 30
+
+# Dataset modules the generated code imports via `from ...datasets.X import *`.
+_DATASET_MODULES = [
+    "AoE2ScenarioParser.datasets.trigger_lists",
+    "AoE2ScenarioParser.datasets.players",
+    "AoE2ScenarioParser.datasets.units",
+    "AoE2ScenarioParser.datasets.buildings",
+    "AoE2ScenarioParser.datasets.techs",
+    "AoE2ScenarioParser.datasets.heroes",
+    "AoE2ScenarioParser.datasets.other",
+    "AoE2ScenarioParser.datasets.terrains",
+]
+
+
+def _public_names(obj, limit=60):
+    return [n for n in dir(obj) if not n.startswith("_")][:limit]
+
+
+def _closest(target, candidates, n=5):
+    """Best-effort 'did you mean' over a name list (fuzzy, then substring)."""
+    close = difflib.get_close_matches(target, candidates, n=n, cutoff=0.6)
+    if not close:
+        low = target.lower()
+        close = [c for c in candidates if low in c.lower() or c.lower() in low][:n]
+    return close
+
+
+def _clean_sig(func) -> str:
+    """inspect.signature() as a string with the bound 'self' dropped."""
+    s = str(inspect.signature(func))
+    return s.replace("(self, ", "(").replace("(self)", "()")
+
+
+def _effect_condition_classes():
+    """The NewEffectSupport / NewConditionSupport classes (importable without a
+    scenario instance, so no from_default() parse / no emoji-print). (None, None)
+    if the library moved them."""
+    try:
+        from AoE2ScenarioParser.objects.support.new_effect import NewEffectSupport
+        from AoE2ScenarioParser.objects.support.new_condition import NewConditionSupport
+        return NewEffectSupport, NewConditionSupport
+    except Exception:
+        return None, None
+
+
+def _introspect_callable(func):
+    """TypeError on a call: show the real signature of the effect/condition
+    method, plus the sibling modify_* when a resource/attribute mix-up is
+    likely (e.g. modify_attribute(attribute=...) instead of modify_resource)."""
+    eff, con = _effect_condition_classes()
+    out = []
+    for cls, label in ((eff, "new_effect"), (con, "new_condition")):
+        if cls is not None and hasattr(cls, func):
+            try:
+                out.append(f"{label}.{func}{_clean_sig(getattr(cls, func))}")
+            except (TypeError, ValueError):
+                pass
+    if func in ("modify_attribute", "modify_resource") and eff is not None:
+        sibling = "modify_resource" if func == "modify_attribute" else "modify_attribute"
+        if hasattr(eff, sibling):
+            try:
+                out.append(f"new_effect.{sibling}{_clean_sig(getattr(eff, sibling))}")
+            except (TypeError, ValueError):
+                pass
+        out.append("For PLAYER resources (food/wood/stone/gold) use modify_resource with "
+                   "tribute_list=Attribute.GOLD_STORAGE (or FOOD_/WOOD_/STONE_STORAGE) and "
+                   "operation=Operation.SET/ADD/SUBTRACT - NOT modify_attribute.")
+    if not out and eff is not None:
+        close = _closest(func, _public_names(eff, limit=200))
+        if close:
+            out.append(f"No new_effect/new_condition method named '{func}'. "
+                       f"Closest: {', '.join(close)}")
+    return out
+
+
+def _resolve_owner(owner):
+    """Resolve the object named in an AttributeError to a module or class."""
+    try:
+        return importlib.import_module(owner)
+    except Exception:
+        pass
+    simple = owner.split(".")[-1]
+    eff, con = _effect_condition_classes()
+    for cls in (eff, con):
+        if cls is not None and cls.__name__ == simple:
+            return cls
+    for modname in _DATASET_MODULES:
+        try:
+            m = importlib.import_module(modname)
+        except Exception:
+            continue
+        cand = getattr(m, simple, None)
+        if isinstance(cand, type):
+            return cand
+    return None
+
+
+def _introspect_attribute(owner, missing):
+    """AttributeError: list the real public attributes/methods of the object."""
+    obj = _resolve_owner(owner)
+    if obj is None:
+        return []
+    names = _public_names(obj, limit=60)
+    out = [f"'{owner}' has no attribute '{missing}'. Valid attributes/methods:"]
+    close = _closest(missing, names)
+    if close:
+        out.append("  closest: " + ", ".join(close))
+    out.append("  " + ", ".join(names[:40]))
+    return out
+
+
+def _introspect_import(name, module):
+    """ImportError 'cannot import name': list what the module really exports."""
+    try:
+        m = importlib.import_module(module)
+    except Exception:
+        return []
+    public = _public_names(m, limit=200)
+    classes = [n for n in public if isinstance(getattr(m, n, None), type)]
+    out = [f"Cannot import '{name}' from {module} - it does not exist."]
+    close = _closest(name, public)
+    if close:
+        out.append("  closest names: " + ", ".join(close))
+    if classes:
+        out.append("  importable classes: " + ", ".join(classes[:25]))
+    if "trigger_lists" in module and any(k in name.lower()
+                                         for k in ("resource", "tribute", "attribute")):
+        out.append("  For player resources use enum 'Attribute' (FOOD_STORAGE, WOOD_STORAGE, "
+                   "STONE_STORAGE, GOLD_STORAGE) with 'Operation' (SET/ADD/SUBTRACT) via "
+                   "new_effect.modify_resource(...).")
+    return out
+
+
+def _introspect_missing_module(module):
+    """ModuleNotFoundError: point at the real dataset module list."""
+    return [f"No module named '{module}'. Valid dataset modules are:",
+            "  " + ", ".join(_DATASET_MODULES)]
+
+
+def _introspect_name(name):
+    """NameError: a bare undefined symbol - say where it actually lives (the
+    datasets use `import *`), or the closest real name if it doesn't exist."""
+    found_in = []
+    for modname in _DATASET_MODULES:
+        try:
+            m = importlib.import_module(modname)
+        except Exception:
+            continue
+        if hasattr(m, name):
+            found_in.append(modname.split(".")[-1])
+    if found_in:
+        return [f"'{name}' is not defined here but exists in datasets: "
+                f"{', '.join(found_in)} (imported via `import *`) - just use it directly."]
+    out = [f"'{name}' is not defined and does not exist in the datasets."]
+    try:
+        tl = importlib.import_module("AoE2ScenarioParser.datasets.trigger_lists")
+        close = _closest(name, _public_names(tl, limit=200))
+    except Exception:
+        close = []
+    if close:
+        out.append("  did you mean: " + ", ".join(close))
+    if any(k in name.lower() for k in ("resource", "tribute")):
+        out.append("  For player resources: new_effect.modify_resource(quantity=..., "
+                   "tribute_list=Attribute.GOLD_STORAGE, source_player=PlayerId.ONE, "
+                   "operation=Operation.SET).")
+    return out
+
+
+def _introspect_error(error_text):
+    """Return (ground_truth_block, kind) for a failing program's error text.
+
+    kind is one of 'importerror' | 'attributeerror' | 'typeerror' | 'nameerror'
+    when a parser API error is recognized and ground truth was pulled from the
+    installed library, else ('', None). Scans the traceback bottom-up so the
+    actual raised exception (last line) wins over any chained context. Never
+    raises - introspection failures degrade to no block."""
+    try:
+        if not error_text:
+            return "", None
+        lines = [ln.rstrip() for ln in error_text.splitlines() if ln.strip()]
+        kind, body = None, []
+        for ln in reversed(lines):
+            m = re.search(r"TypeError:\s+(\w+)\(\)", ln)
+            if m and re.search(r"unexpected keyword argument|missing \d+ required|"
+                               r"takes \d+|positional argument", ln):
+                kind, body = "typeerror", _introspect_callable(m.group(1))
+                break
+            m = re.search(r"AttributeError:\s+(?:'([\w.]+)' object|module '([\w.]+)'|"
+                          r"type object '([\w.]+)') has no attribute '([^']+)'", ln)
+            if m:
+                owner = m.group(1) or m.group(2) or m.group(3)
+                kind, body = "attributeerror", _introspect_attribute(owner, m.group(4))
+                break
+            m = re.search(r"(?:ImportError|ModuleNotFoundError):\s+cannot import name "
+                          r"'([^']+)' from '([\w.]+)'", ln)
+            if m:
+                kind, body = "importerror", _introspect_import(m.group(1), m.group(2))
+                break
+            m = re.search(r"ModuleNotFoundError:\s+No module named '([\w.]+)'", ln)
+            if m:
+                kind, body = "importerror", _introspect_missing_module(m.group(1))
+                break
+            m = re.search(r"NameError:\s+name '([^']+)' is not defined", ln)
+            if m:
+                kind, body = "nameerror", _introspect_name(m.group(1))
+                break
+        if not kind or not body:
+            return "", None
+        header = ("=== GROUND TRUTH FROM INSTALLED AoE2ScenarioParser "
+                  "(use ONLY the names/signatures below; do not invent others) ===")
+        block_lines = ([header] + body)[:_MAX_INTROSPECTION_LINES]
+        return "\n\n" + "\n".join(block_lines) + "\n", kind
+    except Exception:
+        return "", None
+
+
 class OpenRouterAPI:
     """Handles communication with OpenRouter API"""
     
@@ -73,9 +520,21 @@ class OpenRouterAPI:
             "X-Title": "AoE2 Scenario Generator"
         }
     
-    def generate_scenario_code(self, prompt: str, model: str = "anthropic/claude-3.5-sonnet") -> str:
-        """Generate scenario code using OpenRouter API"""
-        
+    def generate_scenario_code(self, prompt: str, model: str = None,
+                               temperature: float = None, max_tokens: int = None,
+                               reachability_prompting: bool = True) -> str:
+        """Generate scenario code using OpenRouter API.
+
+        model / temperature / max_tokens fall back to the api_config defaults
+        when not supplied. reachability_prompting toggles the reachability
+        guidance appended to the system prompt (REACHABILITY_ANALYSIS_BLOCK).
+        """
+        model = api_config.resolve_model(model)
+        if temperature is None:
+            temperature = api_config.DEFAULT_TEMPERATURE
+        if max_tokens is None:
+            max_tokens = api_config.DEFAULT_MAX_TOKENS
+
         payload = {
             "model": model,
             "messages": [
@@ -115,6 +574,9 @@ class OpenRouterAPI:
 
                     # FIRST: Get map size - default is 120x120, use this for ALL coordinate calculations
                     map_size = map_manager.map_size  # Returns 120 for default map
+                    # To CHANGE the map size, ASSIGN the property (there is NO set_size / set_map_size method):
+                    #   map_manager.map_size = 100   # resizes to 100x100; re-read map_size afterward
+                    map_size = map_manager.map_size
 
                     # Calculate safe zones based on map_size (NEVER use hardcoded coordinates!)
                     center = map_size // 2
@@ -183,6 +645,14 @@ class OpenRouterAPI:
                     trigger.new_effect.change_ownership(source_player=PlayerId.TWO, target_player=PlayerId.ONE, area_x1=10, area_y1=10, area_x2=20, area_y2=20)
                     trigger.new_effect.research_technology(source_player=PlayerId.ONE, technology=TechInfo.FORGING.ID)
 
+                    # Grant/set PLAYER RESOURCES (food/wood/stone/gold) - use modify_resource (verified against the installed parser):
+                    trigger.new_effect.modify_resource(quantity=500, tribute_list=Attribute.GOLD_STORAGE, source_player=PlayerId.ONE, operation=Operation.ADD)   # +500 gold
+                    trigger.new_effect.modify_resource(quantity=1000, tribute_list=Attribute.FOOD_STORAGE, source_player=PlayerId.ONE, operation=Operation.SET)  # set food to 1000
+                    #   tribute_list must be: Attribute.FOOD_STORAGE / WOOD_STORAGE / STONE_STORAGE / GOLD_STORAGE
+                    #   operation must be:    Operation.SET / ADD / SUBTRACT / MULTIPLY / DIVIDE
+                    #   Attribute and Operation come from datasets.trigger_lists (already imported via `import *`).
+                    #   There is NO ResourceId and NO Resource class; do NOT use modify_attribute(attribute=...) for player resources.
+
                     # WALLS AND GATES - AI must own gates to pass through them!
                     # Enemy AI base with walls - AI owns its own gate so units can exit
                     enemy_base_x, enemy_base_y = three_quarter, three_quarter
@@ -223,6 +693,14 @@ class OpenRouterAPI:
                     - Use PlayerId.ONE, PlayerId.TWO, PlayerId.GAIA for players
                     - For trigger conditions/effects, ALWAYS use source_player (NOT player)
                     - Do NOT use these methods: own_fewer_objects, victory(), own_objects with player param
+                    - PLAYER RESOURCES: grant/set with new_effect.modify_resource(quantity=, tribute_list=Attribute.*_STORAGE, source_player=, operation=Operation.*). Do NOT use modify_attribute for this, and do NOT reference ResourceId/Resource - they do not exist in this parser.
+                    - VARIABLE NAMING - NEVER shadow Python builtins! These cause cryptic crashes:
+                      * NEVER use these as variable names: range, map, list, type, id, set, dict, min, max, sum, filter, input, open, print, len, int, str, float, bool, object, round, zip, next, iter, hash, tuple, bytes, super, enumerate, reversed, sorted, abs, pow
+                      * WRONG: range = unit_manager.add_unit(...)  # Overwrites Python's range() - crashes ALL subsequent for-loops!
+                      * WRONG: map = map_manager  # Overwrites Python's map() function!
+                      * RIGHT: archer_range_bld = unit_manager.add_unit(PlayerId.ONE, unit_const=BuildingInfo.ARCHERY_RANGE.ID, ...)
+                      * RIGHT: patrol_range = 20
+                      * Use descriptive names: firing_range, attack_range, bow_range, archer_range_bld, mountain_range_start
                     - TYPE ERRORS CAUSE CRASHES - Never pass strings where integers/enums are expected:
                       * WRONG: source_player="PlayerId.ONE" or source_player="1"
                       * RIGHT: source_player=PlayerId.ONE
@@ -232,6 +710,9 @@ class OpenRouterAPI:
                       * RIGHT: x=50, y=50 (integers, not strings!)
                       * All coordinates (x, y, area_x1, area_y1, etc.) must be integers
                       * All player references must be PlayerId enums, not strings
+                    - UNIT POSITION ACCESS: Units returned by add_unit() have .x and .y directly
+                      * RIGHT: unit.x, unit.y
+                      * WRONG: unit.position.x, unit.position.y (Unit has NO .position attribute!)
                     - CRITICAL: All units AND terrain tiles must be within map boundaries (0 to map_size-1)
                       * ALWAYS get map_size first: map_size = map_manager.map_size
                       * For a 120x120 map, valid coordinates are 0-119
@@ -335,10 +816,14 @@ class OpenRouterAPI:
                     - Use object_list_unit_id for effects, object_list for conditions
                     - All heroes use HeroInfo except: KING, QUEEN (UnitInfo), KHAN (both exist - use HeroInfo.KHAN for Genghis)
 
-                    ESSENTIAL DATASETS:
-                    UnitInfo: MILITIA, MAN_AT_ARMS, SPEARMAN, ARCHER, CROSSBOWMAN, KNIGHT, CAVALIER,
-                              SCOUT_CAVALRY, LIGHT_CAVALRY, BATTERING_RAM, MANGONEL, TREBUCHET,
+                    ESSENTIAL DATASETS - ONLY use names listed here! Inventing unit names causes AttributeError crashes:
+                    UnitInfo: MILITIA, MAN_AT_ARMS, SPEARMAN, PIKEMAN, ARCHER, CROSSBOWMAN, SKIRMISHER,
+                              KNIGHT, CAVALIER, SCOUT_CAVALRY, LIGHT_CAVALRY, CAVALRY_ARCHER, CAMEL_RIDER,
+                              CHAMPION, BERSERK, SAMURAI, IMMORTAL_MELEE, IMMORTAL_RANGED, WAR_ELEPHANT,
+                              BATTERING_RAM, MANGONEL, ONAGER, TREBUCHET, SCORPION, BOMBARD_CANNON,
                               VILLAGER_MALE, VILLAGER_FEMALE, SHEEP, DEER, WILD_BOAR, KING, QUEEN
+                    *** WARNING: UnitInfo.IMMORTAL does NOT exist! Use UnitInfo.IMMORTAL_MELEE or UnitInfo.IMMORTAL_RANGED ***
+                    *** WARNING: Do NOT invent unit names. If a unit is not listed above, it will crash! ***
                     BuildingInfo: TOWN_CENTER, BARRACKS, ARCHERY_RANGE, STABLE, CASTLE, SIEGE_WORKSHOP,
                                   HOUSE, MILL, MARKET, BLACKSMITH, MONASTERY, UNIVERSITY,
                                   PALISADE_WALL, STONE_WALL, GATE_NORTH_TO_SOUTH, GUARD_TOWER, KEEP
@@ -346,9 +831,9 @@ class OpenRouterAPI:
                               EL_CID, FREDERICK_BARBAROSSA, ATTILA_THE_HUN, ALEXANDER, LEONIDAS, DARIUS
                     OtherInfo: GOLD_MINE, STONE_MINE, FORAGE_BUSH, TREE_OAK, TREE_PALM_FOREST,
                                CLIFF_DEFAULT_2, CLIFF_DEFAULT_3, ROCK_FORMATION_1, FLAG_A, FLAG_B,
-                               RUINS, SKELETON, TORCH_A, BONFIRE
+                               ROMAN_RUINS, CASTLE_RUINS, TEMPLE_RUIN, SKELETON, TORCH_A, BONFIRE
                     TerrainId: WATER_DEEP, WATER_SHALLOW, BEACH, GRASS_1, GRASS_2, DIRT_1,
-                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)
+                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)""" + (REACHABILITY_ANALYSIS_BLOCK if reachability_prompting else "") + """
 
                     Return ONLY the Python code, no explanations or markdown formatting."""
                 },
@@ -357,8 +842,8 @@ class OpenRouterAPI:
                     "content": prompt
                 }
             ],
-            "temperature": 0.7,
-            "max_tokens": 16000
+            "temperature": temperature,
+            "max_tokens": max_tokens
         }
 
         try:
@@ -366,7 +851,7 @@ class OpenRouterAPI:
                 f"{self.base_url}/chat/completions",
                 headers=self.headers,
                 json=payload,
-                timeout=180
+                timeout=api_config.REQUEST_TIMEOUT
             )
             response.raise_for_status()
             
@@ -394,6 +879,74 @@ class OpenRouterAPI:
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
             raise
+
+    def repair_scenario_code(self, failing_code: str, error_detail: str,
+                             model: str = None, temperature: float = None,
+                             max_tokens: int = None,
+                             reachability_prompting: bool = True) -> str:
+        """Ask the model to fix code that failed validation or execution.
+
+        Sends the failing program plus the captured stderr / validation detail
+        back to the model and returns a corrected full program. Uses the same
+        model/temperature/max_tokens so the repaired attempt is comparable to
+        the original.
+        """
+        model = api_config.resolve_model(model)
+        if temperature is None:
+            temperature = api_config.DEFAULT_TEMPERATURE
+        if max_tokens is None:
+            max_tokens = api_config.DEFAULT_MAX_TOKENS
+
+        repair_system = (
+            "You are fixing a Python program that uses the AoE2ScenarioParser "
+            "library to build an Age of Empires 2 scenario. The program failed. "
+            "Return the COMPLETE corrected program and nothing else - no prose, "
+            "no markdown fences.\n"
+            "Hard rules you must keep:\n"
+            "- Start with the exact sys.stdout/sys.stderr UTF-8 wrapper header and "
+            "the AoE2ScenarioParser imports.\n"
+            "- Use AoE2DEScenario.from_default(); keep scenario.write_to_file(...) at the end.\n"
+            "- Use .ID on unit/building/hero constants; PlayerId enums (not strings); "
+            "integer coordinates within 0..map_size-1; source_player (not player).\n"
+            "- Do NOT invent unit/building names; do NOT shadow Python builtins "
+            "(range, map, list, id, ...).\n"
+            "- Preserve the existing scenario design: keep the same triggers, units, "
+            "objectives and victory/defeat conditions. Change ONLY what is needed to "
+            "fix the error."
+        )
+        if reachability_prompting:
+            repair_system += "\n" + REACHABILITY_ANALYSIS_BLOCK
+
+        user_msg = (
+            "The following AoE2 scenario program failed.\n\n"
+            "=== ERROR / FAILURE DETAIL ===\n"
+            f"{error_detail}\n\n"
+            "=== FAILING PROGRAM ===\n"
+            f"{failing_code}\n\n"
+            "Return the complete corrected program only."
+        )
+
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": repair_system},
+                {"role": "user", "content": user_msg},
+            ],
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+
+        response = requests.post(
+            f"{self.base_url}/chat/completions",
+            headers=self.headers,
+            json=payload,
+            timeout=api_config.REQUEST_TIMEOUT,
+        )
+        response.raise_for_status()
+        result = response.json()
+        generated_code = result["choices"][0]["message"]["content"]
+        return _extract_python_code(generated_code)
+
 
 class ScenarioGenerator:
     """Main class for generating AoE2 scenarios using AI"""
@@ -493,7 +1046,7 @@ class ScenarioGenerator:
             GAIA:
             - 500+ trees forming forests/boundaries
             - Resources near player start
-            - Decorations: RUINS, SKELETON, FLAG_A for atmosphere
+            - Decorations: ROMAN_RUINS, SKELETON, FLAG_A for atmosphere
 
             UNIT PLACEMENT:
             - Military units in formation groups (infantry front, archers behind)
@@ -522,7 +1075,7 @@ class ScenarioGenerator:
                - CLIFF_DEFAULT_2/3: Create ridges, hills, impassable terrain
                - ROCK_FORMATION_1/2: Rocky outcrops, defensive positions
                - Trees (TREE_OAK, TREE_A-F): Forest boundaries, flanking protection
-               - Decorations: FLAGS for objectives, RUINS for atmosphere
+               - Decorations: FLAGS for objectives, ROMAN_RUINS for atmosphere
 
             EXAMPLE - Battle of Hastings (1066):
                # Senlac Hill where Saxons defended
@@ -998,7 +1551,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             - Quest targets: WILD_BOAR, WOLF (for fetch quests) - store references!
             - Resources near player start and faction camps
             - Terrain features separating faction territories
-            - RUINS, RELIC for exploration rewards
+            - ROMAN_RUINS, RELIC for exploration rewards
 
             MAP DESIGN:
             - Player starts in center or corner
@@ -1071,7 +1624,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                  Effect: normal wave composition (no changes)
                - "Hard Difficulty": difficulty_level(quantity=3)
                  Effect: create_object to add extra enemies to each wave
-               - "Starting Resources": timer(1), modify_attribute to grant resources
+               - "Starting Resources": timer(1), modify_resource to grant starting resources (tribute_list=Attribute.*_STORAGE, operation=Operation.SET)
 
             2. --- Wave Spawn Section (CREATE ALL 16 triggers - 4 waves × 4 triggers each) ---
                Defense scenarios USE TIMERS - waves are time-based by design!
@@ -1308,7 +1861,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                - "Map Reveal": timer(1)
                  Effect: Create MAP_REVEALER units or use reveal_map effect for key areas
                - "Starting Grant": timer(1)
-                 Effect: modify_attribute for starting resources, create starting units
+                 Effect: modify_resource for starting resources (tribute_list=Attribute.*_STORAGE, operation=Operation.SET), create starting units
 
             2. --- Discovery Section (CREATE ALL 10 triggers) ---
                ALL discovery triggers use bring_object_to_area - player explores to find!
@@ -1824,7 +2377,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
 
             GAIA (Story Props):
             - FLAG_A-D: Mark story locations (bring_object_to_area targets)
-            - RUINS, ROMAN_RUINS: Past events, discoveries
+            - ROMAN_RUINS, CASTLE_RUINS: Past events, discoveries
             - SKELETON, GRAVE: Battlefield atmosphere
             - RELIC: Hidden rewards
             - TORCH_A, BONFIRE: Camp atmosphere
@@ -1868,7 +2421,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                - Space major beats with travel (bring_object_to_area)
 
             3. Environmental storytelling:
-               - RUINS show past battles
+               - ROMAN_RUINS show past battles
                - SKELETON marks dangerous areas
                - FLAGS mark objectives
                - Building styles indicate faction control
@@ -1885,14 +2438,34 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             ==============================================="""
         }
     
-    def generate_scenario(self, config: ScenarioConfig) -> str:
-        """Generate a scenario based on the provided configuration"""
+    def generate_scenario(self, config: ScenarioConfig, model: str = None,
+                          temperature: float = None, max_tokens: int = None,
+                          reachability_prompting: bool = None) -> str:
+        """Generate a scenario based on the provided configuration.
 
-        # Select appropriate template
-        template = self.scenario_templates.get(config.scenario_type, self.scenario_templates["story"])
+        The optional model/temperature/max_tokens/reachability_prompting
+        arguments override the values on `config` (used by the generate()
+        orchestrator so it can log the exact resolved parameters). Calling
+        generate_scenario(config) alone is unchanged - it uses config's values.
+        """
+        # Resolve effective parameters (explicit override > config value)
+        model = model if model is not None else config.model
+        temperature = temperature if temperature is not None else config.temperature
+        max_tokens = max_tokens if max_tokens is not None else config.max_tokens
+        reachability_prompting = (config.reachability_prompting
+                                  if reachability_prompting is None else reachability_prompting)
+
+        # Select the user-message prompt body. This is the ONLY thing the
+        # prompt_style ablation changes; the system prompt (base + reachability),
+        # the region/civ templates and all parser rules are identical in both modes.
+        if config.prompt_style == "freeform":
+            base_template = FREEFORM_PROMPT_TEMPLATE
+        else:
+            base_template = self.scenario_templates.get(
+                config.scenario_type, self.scenario_templates["story"])
 
         # Format the prompt
-        prompt = template.format(
+        prompt = base_template.format(
             title=config.title,
             description=config.description,
             map_size=config.map_size,
@@ -1936,7 +2509,13 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
 
         # Generate the scenario code
         logger.info(f"Generating scenario: {config.title}")
-        generated_code = self.api.generate_scenario_code(prompt)
+        generated_code = self.api.generate_scenario_code(
+            prompt,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            reachability_prompting=reachability_prompting,
+        )
 
         return generated_code
 
@@ -2175,83 +2754,327 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             result += f"\nENEMY BUILDING STYLE:\n{civ_styles[enemy_civ]}"
         return result if result else "# Use default building styles"
     
-    def save_scenario(self, code: str, output_path: str) -> bool:
-        """Save the generated scenario code to a file and execute it"""
+    def build_scenario(self, code: str, output_path: str) -> ExecutionOutcome:
+        """Execute generated scenario code and return a structured outcome.
+
+        The generated program's own write_to_file(...) path is rewritten to
+        output_path so the .aoe2scenario lands where the caller expects. Runs in
+        a subprocess with a unique temp filename (safe for concurrent
+        candidates/models). stdout and stderr are always captured.
+        """
         try:
-            # Create output directory if it doesn't exist
             output_dir = Path(output_path).parent
-            output_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Write the generated code to a temporary file
-            temp_file = "temp_scenario_generator.py"
+            if str(output_dir):
+                output_dir.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            return ExecutionOutcome(ok=False, returncode=-1, stdout="",
+                                    stderr=f"Could not create output dir: {e}")
+
+        # Force the generated program to write to the requested path. Use forward
+        # slashes so backslashes in a Windows path don't create invalid escapes
+        # inside the generated string literal.
+        safe_path = str(output_path).replace("\\", "/")
+        code = re.sub(r'write_to_file\(["\'].*?["\']\)',
+                      f'write_to_file("{safe_path}")', code)
+
+        temp_file = f"temp_scenario_{uuid.uuid4().hex}.py"
+        try:
             with open(temp_file, "w", encoding="utf-8") as f:
                 f.write(code)
-            
-            # Execute the generated code
-            logger.info(f"Executing generated scenario code...")
-            
-            # Import and execute the generated code
-            import subprocess
-            import sys
-            
-            result = subprocess.run([sys.executable, temp_file], 
-                                  capture_output=True, text=True, timeout=60)
-            
-            if result.returncode != 0:
-                logger.error(f"Scenario execution failed: {result.stderr}")
-                return False
-            
-            logger.info(f"Scenario generated successfully: {output_path}")
-            
-            # Clean up temporary file
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
-            
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to save/execute scenario: {e}")
-            return False
-    
-    def validate_scenario_code(self, code: str, min_triggers: int = 20) -> bool:
-        """Validate the generated scenario code for basic syntax and structure"""
-        try:
-            # Check for required imports
-            required_imports = [
-                "AoE2DEScenario",
-                "PlayerId",
-                "UnitInfo",
-                "BuildingInfo"
-            ]
-
-            for import_name in required_imports:
-                if import_name not in code:
-                    logger.warning(f"Missing required import: {import_name}")
-                    return False
-
-            # Check for basic structure
-            if "AoE2DEScenario.from_default()" not in code and "AoE2DEScenario.from_file(" not in code:
-                logger.warning("Missing scenario object creation")
-                return False
-
-            if "write_to_file" not in code:
-                logger.warning("Missing scenario save operation")
-                return False
-
-            # Check for minimum trigger count
-            trigger_count = code.count("add_trigger(")
-            if trigger_count < min_triggers:
-                logger.warning(f"Insufficient triggers: found {trigger_count}, expected at least {min_triggers}")
-                logger.warning("Generated scenario may be incomplete - consider regenerating")
-                # Return True but with warning - don't block execution, just warn
+            logger.info("Executing generated scenario code...")
+            # Force UTF-8 for the child's stdout/stderr and for our own decoding
+            # so non-ASCII output (emoji, accented names) can't crash the reader
+            # thread on non-UTF-8 system locales (e.g. Windows cp949/cp1252).
+            child_env = dict(os.environ, PYTHONIOENCODING="utf-8")
+            result = subprocess.run([sys.executable, temp_file],
+                                    capture_output=True, text=True, timeout=120,
+                                    encoding="utf-8", errors="replace",
+                                    env=child_env)
+            ok = result.returncode == 0
+            if ok:
+                logger.info(f"Scenario generated successfully: {output_path}")
             else:
-                logger.info(f"Trigger count validated: {trigger_count} triggers found")
+                logger.error(f"Scenario execution failed (rc={result.returncode})")
+            return ExecutionOutcome(ok=ok, returncode=result.returncode,
+                                    stdout=result.stdout or "",
+                                    stderr=result.stderr or "")
+        except subprocess.TimeoutExpired as e:
+            return ExecutionOutcome(ok=False, returncode=-1, stdout="",
+                                    stderr=f"Execution timed out after {e.timeout}s")
+        except Exception as e:
+            return ExecutionOutcome(ok=False, returncode=-1, stdout="",
+                                    stderr=f"Failed to execute scenario: {e}")
+        finally:
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except OSError:
+                    pass
 
-            return True
+    def save_scenario(self, code: str, output_path: str) -> bool:
+        """Save and execute the generated scenario code. Returns True on success.
 
+        Thin backward-compatible wrapper over build_scenario(); use
+        build_scenario() directly when you need the captured stderr/returncode.
+        """
+        return self.build_scenario(code, output_path).ok
+
+    def validate_scenario_code_detailed(self, code: str, min_triggers: int = 20):
+        """Validate playability PRECONDITIONS of generated code (no game sim).
+
+        Returns (ok, detail, trigger_count). Historical fidelity is out of scope
+        here - it is assessed separately by human annotation. Hard checks
+        (ok=False): the code parses, required imports are present, the scenario
+        is created and saved, at least one trigger is created, and at least one
+        declare_victory effect exists (the cheap "an objective / win-condition
+        is created" proxy - decision D3). The min_triggers count is a soft
+        warning only.
+        """
+        # Cheap syntax check - catches a whole class of would-be execution errors.
+        try:
+            ast.parse(code)
+        except SyntaxError as e:
+            return False, f"SyntaxError: {e}", 0
+
+        required_imports = ["AoE2DEScenario", "PlayerId", "UnitInfo", "BuildingInfo"]
+        for import_name in required_imports:
+            if import_name not in code:
+                return False, f"Missing required import: {import_name}", 0
+
+        if ("AoE2DEScenario.from_default()" not in code
+                and "AoE2DEScenario.from_file(" not in code):
+            return False, "Missing scenario creation (AoE2DEScenario.from_default())", 0
+
+        if "write_to_file" not in code:
+            return False, "Missing scenario save operation (write_to_file)", 0
+
+        trigger_count = code.count("add_trigger(")
+        if trigger_count < 1:
+            return False, "No triggers created (need at least one add_trigger)", trigger_count
+
+        if "declare_victory(" not in code:
+            return False, "No objective created (need at least one declare_victory effect)", trigger_count
+
+        # Soft warning only - low trigger counts are allowed through.
+        if trigger_count < min_triggers:
+            logger.warning(
+                f"Low trigger count: found {trigger_count}, expected >= {min_triggers}")
+        else:
+            logger.info(f"Trigger count validated: {trigger_count} triggers found")
+
+        return True, "ok", trigger_count
+
+    def validate_scenario_code(self, code: str, min_triggers: int = 20) -> bool:
+        """Validate playability preconditions of generated code. Returns bool.
+
+        Checks playability preconditions ONLY (syntax, structure, at least one
+        trigger and one victory condition) - NOT historical fidelity, which is
+        assessed separately by human annotation. Thin, backward-compatible
+        wrapper over validate_scenario_code_detailed().
+        """
+        try:
+            ok, detail, _ = self.validate_scenario_code_detailed(code, min_triggers)
+            if not ok:
+                logger.warning(f"Validation failed: {detail}")
+            return ok
         except Exception as e:
             logger.error(f"Code validation failed: {e}")
             return False
+
+    # -----------------------------------------------------------------------
+    # High-level orchestration: generate -> validate -> execute, with a
+    # self-repair loop and optional best-of-N. Produces exactly one terminal
+    # outcome per attempt, writes a metadata sidecar, and (optionally) appends
+    # one JSONL line per attempt to a per-run results log.
+    # -----------------------------------------------------------------------
+    def generate(self, config: ScenarioConfig, results_log: str = None,
+                 run_id: str = None) -> GenerationResult:
+        """Run the full pipeline for one ScenarioConfig and return the result.
+
+        For best_of > 1, generates candidates until one builds successfully (or
+        the budget is exhausted) and returns the first success, else the last
+        candidate's terminal result. Every attempt - including self-repair
+        retries - is logged to results_log (JSONL) when provided, and a metadata
+        sidecar is written next to the scenario for the chosen result.
+        """
+        run_id = run_id or new_run_id()
+        model = api_config.resolve_model(config.model)
+        temperature = config.temperature
+        max_tokens = config.max_tokens
+        reach = config.reachability_prompting
+        best_of = max(1, config.best_of)
+
+        chosen = None
+        for candidate in range(1, best_of + 1):
+            result = self._generate_one_candidate(
+                config, model, temperature, max_tokens, reach,
+                run_id, candidate, results_log)
+            chosen = result  # keep the latest; a success breaks below
+            if result.outcome == "success":
+                break
+
+        self._write_sidecar(config, chosen)
+        return chosen
+
+    def _generate_one_candidate(self, config, model, temperature, max_tokens,
+                                reachability_prompting, run_id, candidate,
+                                results_log) -> GenerationResult:
+        """One candidate: initial generation then up to max_repair_attempts
+        self-repair retries. Returns the candidate's terminal result."""
+        max_attempts = 1 + max(0, config.max_repair_attempts)
+        code = None
+        error_detail = None
+        result = None
+
+        for attempt in range(1, max_attempts + 1):
+            # introspection kind that produced THIS attempt's code (None for the
+            # initial generation and for repairs where no parser API error was
+            # recognized). Recorded on every result line for this attempt.
+            introspection = None
+            # 1) Produce code (initial generation, then repair).
+            try:
+                if attempt == 1:
+                    code = self.generate_scenario(
+                        config, model=model, temperature=temperature,
+                        max_tokens=max_tokens,
+                        reachability_prompting=reachability_prompting)
+                else:
+                    # Pull ground truth from the installed parser for the failure
+                    # so repair picks a valid name/signature instead of guessing.
+                    intro_block, introspection = _introspect_error(error_detail)
+                    repair_detail = (error_detail or "") + intro_block
+                    if introspection:
+                        logger.info(f"Introspection ({introspection}) added to repair prompt "
+                                    f"for '{config.title}' (candidate {candidate})")
+                    logger.info(
+                        f"Self-repair attempt {attempt - 1}/{config.max_repair_attempts} "
+                        f"for '{config.title}' (candidate {candidate})")
+                    code = self.api.repair_scenario_code(
+                        code, repair_detail, model=model, temperature=temperature,
+                        max_tokens=max_tokens,
+                        reachability_prompting=reachability_prompting)
+            except Exception as e:
+                # An API failure is not repairable by fixing code - record and stop.
+                result = self._mk_result(
+                    "api_error", config, model, temperature, max_tokens,
+                    reachability_prompting, run_id, candidate, attempt, error=str(e),
+                    introspection=introspection)
+                self._log_attempt(results_log, result)
+                break
+
+            # 2) Validate playability preconditions. The soft trigger-count floor
+            #    depends on prompt_style: freeform lets the model choose the count.
+            min_trig = (FREEFORM_MIN_TRIGGERS if config.prompt_style == "freeform"
+                        else TEMPLATED_MIN_TRIGGERS)
+            ok, detail, trig = self.validate_scenario_code_detailed(code, min_triggers=min_trig)
+            if not ok:
+                result = self._mk_result(
+                    "validation_failure", config, model, temperature, max_tokens,
+                    reachability_prompting, run_id, candidate, attempt,
+                    trigger_count=trig, code=code, validation_detail=detail,
+                    introspection=introspection)
+                self._log_attempt(results_log, result)
+                error_detail = "Validation failed: " + detail
+                continue
+
+            # Passed the hard gates. If it is below the soft floor, tag
+            # validation_detail (not just the log) so below-floor rates are
+            # queryable per prompt_style from the results log.
+            soft_note = (f"below soft trigger floor: {trig} < {min_trig} (validation passed)"
+                         if trig < min_trig else "")
+
+            # 3) Execute.
+            exe = self.build_scenario(code, config.output_path)
+            if exe.ok:
+                result = self._mk_result(
+                    "success", config, model, temperature, max_tokens,
+                    reachability_prompting, run_id, candidate, attempt,
+                    trigger_count=trig, code=code, validation_detail=soft_note,
+                    introspection=introspection)
+                self._log_attempt(results_log, result)
+                break
+            else:
+                result = self._mk_result(
+                    "execution_error", config, model, temperature, max_tokens,
+                    reachability_prompting, run_id, candidate, attempt,
+                    trigger_count=trig, code=code, stderr=exe.stderr,
+                    validation_detail=soft_note, introspection=introspection)
+                self._log_attempt(results_log, result)
+                error_detail = "Execution error (stderr):\n" + (exe.stderr or "").strip()
+                continue
+
+        return result
+
+    def _mk_result(self, outcome, config, model, temperature, max_tokens,
+                   reachability_prompting, run_id, candidate, attempt,
+                   trigger_count=0, code="", stderr="", validation_detail="",
+                   error="", introspection=None) -> GenerationResult:
+        return GenerationResult(
+            outcome=outcome, title=config.title, scenario_type=config.scenario_type,
+            model=model, temperature=temperature, max_tokens=max_tokens,
+            reachability_prompting=reachability_prompting,
+            output_path=config.output_path, run_id=run_id, candidate=candidate,
+            attempts=attempt, trigger_count=trigger_count, code=code,
+            stderr=stderr, validation_detail=validation_detail, error=error,
+            prompt_style=config.prompt_style, introspection=introspection)
+
+    def _log_attempt(self, results_log, result: GenerationResult):
+        if not results_log:
+            return
+        append_result(results_log, {
+            "run_id": result.run_id,
+            "candidate": result.candidate,
+            "attempt": result.attempts,
+            "outcome": result.outcome,
+            "title": result.title,
+            "scenario_type": result.scenario_type,
+            "model": result.model,
+            "temperature": result.temperature,
+            "max_tokens": result.max_tokens,
+            "reachability_prompting": result.reachability_prompting,
+            "prompt_style": result.prompt_style,
+            "trigger_count": result.trigger_count,
+            "output_path": result.output_path,
+            "validation_detail": result.validation_detail or None,
+            "stderr": result.stderr or None,
+            "error": result.error or None,
+            "introspection": result.introspection,
+        })
+
+    def _write_sidecar(self, config: ScenarioConfig, result: GenerationResult):
+        if result is None:
+            return
+        meta = {
+            "title": config.title,
+            "description": config.description,
+            "scenario_type": config.scenario_type,
+            "map_size": config.map_size,
+            "players": config.players,
+            "difficulty": config.difficulty,
+            "region": config.region,
+            "player_civ": config.player_civ,
+            "enemy_civ": config.enemy_civ,
+            "wikipedia_url": config.wikipedia_url,
+            "reachability_prompting": result.reachability_prompting,
+            "prompt_style": config.prompt_style,
+            "best_of": config.best_of,
+            "max_repair_attempts": config.max_repair_attempts,
+            "model": result.model,
+            "temperature": result.temperature,
+            "max_tokens": result.max_tokens,
+            "generator_version": GENERATOR_VERSION,
+            "outcome": result.outcome,
+            "run_id": result.run_id,
+            "candidate": result.candidate,
+            "attempts": result.attempts,
+            "trigger_count": result.trigger_count,
+            "output_path": config.output_path,
+        }
+        try:
+            write_sidecar(config.output_path, meta)
+        except Exception as e:
+            logger.warning(f"Could not write metadata sidecar: {e}")
+
 
 def main():
     """Main function to demonstrate the scenario generator"""
