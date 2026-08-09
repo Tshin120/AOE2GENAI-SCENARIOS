@@ -1,0 +1,98 @@
+[
+ {
+  "title": "The Battle of Hastings",
+  "description": "October 1066. William of Normandy's invasion army faces King Harold's Anglo-Saxon shield wall on Senlac Hill. The player commands the Norman force and must break the shield wall through feigned retreats and combined cavalry-archer assaults before nightfall ends the battle.",
+  "scenario_type": "battle",
+  "difficulty": "medium",
+  "map_size": 120,
+  "players": 2,
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Hastings"
+ },
+ {
+  "title": "The Battle of Tours",
+  "description": "October 732. Charles Martel's Frankish infantry must hold the wooded high ground between Tours and Poitiers against the Umayyad cavalry of Abd al-Rahman. A third force of Aquitanian allies under Duke Odo can be rallied to strike the enemy camp. Victory requires repelling the cavalry charges and forcing the invaders' withdrawal.",
+  "scenario_type": "battle",
+  "difficulty": "hard",
+  "map_size": 120,
+  "players": 3,
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Tours"
+ },
+ {
+  "title": "The Fall of Constantinople",
+  "description": "April-May 1453. The player commands the last defenders of Byzantium under Constantine XI. Hold the Theodosian Walls against Mehmed II's siege: repair breaches from bombard fire, guard the sea walls along the Golden Horn, and survive repeated assaults. Defeat comes if the Hagia Sophia district falls; victory means holding until the final assault is broken.",
+  "scenario_type": "defense",
+  "difficulty": "hard",
+  "map_size": 120,
+  "players": 2,
+  "region": "mediterranean",
+  "player_civ": "eastern_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Fall_of_Constantinople"
+ },
+ {
+  "title": "The Siege of Vienna",
+  "description": "September-October 1529. Suleiman the Magnificent's army arrives before Vienna's medieval walls. The player commands the garrison of German Landsknechts and Spanish arquebusiers under Niklas Graf Salm: countermine the Ottoman sappers, repel assaults on the Carinthian Gate, and hold until autumn rains and supply failure force the Ottoman withdrawal.",
+  "scenario_type": "defense",
+  "difficulty": "medium",
+  "map_size": 144,
+  "players": 2,
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Siege_of_Vienna_(1529)"
+ },
+ {
+  "title": "Marco Polo on the Silk Road",
+  "description": "1271-1275. Escort the young Marco Polo, his father Niccolo, and their trade caravan across the deserts and mountain passes of Central Asia to the court of Kublai Khan. Bandit raiders and harsh terrain threaten the route; the caravan's pack animals must survive. Victory requires bringing Marco alive to the Khan's summer palace at Shangdu.",
+  "scenario_type": "escort",
+  "difficulty": "medium",
+  "map_size": 120,
+  "players": 2,
+  "region": "desert",
+  "player_civ": "western_european",
+  "enemy_civ": "central_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Marco_Polo"
+ },
+ {
+  "title": "The Road to Reims",
+  "description": "June-July 1429. After the victory at Orleans, Joan of Arc must escort the Dauphin Charles through English-held territory to the cathedral at Reims for his coronation. English garrisons at Troyes and Chalons block the route and can be fought or persuaded to surrender. Victory requires the Dauphin reaching Reims cathedral alive; his death means defeat.",
+  "scenario_type": "escort",
+  "difficulty": "medium",
+  "map_size": 120,
+  "players": 2,
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Joan_of_Arc"
+ },
+ {
+  "title": "The Rise of Temujin",
+  "description": "1186-1206. Follow Temujin's unification of the Mongol tribes on the steppe: rescue his wife Borte from the Merkits, forge and then break the alliance with Jamukha, defeat the Naiman confederation, and be proclaimed Genghis Khan at the kurultai. The player begins with a small warband and must grow through raids, alliances, and decisive battles.",
+  "scenario_type": "story",
+  "difficulty": "medium",
+  "map_size": 120,
+  "players": 2,
+  "region": "steppe",
+  "player_civ": "central_asian",
+  "enemy_civ": "central_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Genghis_Khan"
+ },
+ {
+  "title": "The Exile of El Cid",
+  "description": "1081-1094. Banished from Castile by King Alfonso VI, Rodrigo Diaz de Vivar must survive as a mercenary captain: serve the Muslim king of Zaragoza against his rivals, win battles that restore his reputation, and finally conquer Valencia in his own name. The player's small retinue grows through victories; losing El Cid himself means defeat.",
+  "scenario_type": "story",
+  "difficulty": "medium",
+  "map_size": 100,
+  "players": 2,
+  "region": "mediterranean",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/El_Cid"
+ }
+]
