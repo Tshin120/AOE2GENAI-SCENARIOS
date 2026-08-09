@@ -97,12 +97,18 @@ def load(path):
         return AoE2DEScenario.from_file(path)
 
 
-def summarize(path):
+def summarize(path, include_map=False):
     """Return a structured dict describing a built scenario.
 
     Keys: path, map_size, players (unit rosters per player), triggers (name,
     enabled, conditions, effects, dialogue), plus rolled-up counts. Raises on an
     unparseable file so callers can record that as its own outcome.
+
+    include_map=True additionally returns the data the failure-mode detectors
+    need and the fidelity digest does not: ``terrain`` (a flat row-major grid of
+    terrain ids) and ``all_units`` (every object with its reference_id, owner and
+    tile, so a victory condition's unit_object can be resolved to a position).
+    It roughly triples parse cost on a 120x120 map, so it is opt-in.
     """
     from AoE2ScenarioParser.datasets.players import PlayerId
     from AoE2ScenarioParser.datasets.effects import EffectId
@@ -117,6 +123,7 @@ def summarize(path):
 
         names = _unit_names()
         players = {}
+        all_units = []
         for player_id in PlayerId:
             try:
                 units = unit_manager.get_player_units(player_id)
@@ -128,6 +135,17 @@ def summarize(path):
             for unit in units:
                 name, category = names.get(unit.unit_const,
                                            (f"UnknownID_{unit.unit_const}", "unknown"))
+                if include_map:
+                    all_units.append({
+                        "reference_id": int(getattr(unit, "reference_id", -1)),
+                        "player": player_id.name,
+                        "player_id": int(player_id.value),
+                        "unit_const": int(unit.unit_const),
+                        "name": name,
+                        "category": category,
+                        "x": int(unit.x),
+                        "y": int(unit.y),
+                    })
                 entry = roster.setdefault(name, {"count": 0, "category": category,
                                                  "positions": []})
                 entry["count"] += 1
@@ -164,11 +182,21 @@ def summarize(path):
                 "effects": effects,
             })
 
+        terrain = None
+        if include_map:
+            # Row-major grid indexed [y * map_size + x], built from each tile's
+            # own coordinates rather than trusting the parser's iteration order.
+            terrain = [0] * (map_size * map_size)
+            for tile in map_manager.terrain:
+                tx, ty = int(tile.x), int(tile.y)
+                if 0 <= tx < map_size and 0 <= ty < map_size:
+                    terrain[ty * map_size + tx] = int(tile.terrain_id)
+
     dialogue = [e["message"] for t in triggers for e in t["effects"]
                 if e["message"] and e["type"] in
                 ("DISPLAY_INSTRUCTIONS", "SEND_CHAT", "DISPLAY_TIMER")]
 
-    return {
+    summary = {
         "path": path,
         "filename": os.path.basename(path),
         "map_size": map_size,
@@ -178,6 +206,10 @@ def summarize(path):
         "unit_total": sum(e["count"] for r in players.values() for e in r.values()),
         "dialogue": dialogue,
     }
+    if include_map:
+        summary["all_units"] = all_units
+        summary["terrain"] = terrain
+    return summary
 
 
 def to_digest(summary, max_dialogue=28, max_triggers=40):

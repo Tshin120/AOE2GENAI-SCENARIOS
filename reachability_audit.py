@@ -50,6 +50,7 @@ import json
 import os
 import sys
 
+from failure_modes import detect_all
 from scenario_inspect import summarize
 
 HUMAN_PLAYER = 1
@@ -170,10 +171,21 @@ def _sidecar_scenario_type(path):
         return None
 
 
-def audit_path(path, scenario_type=None):
+def audit_path(path, scenario_type=None, failure_modes=True):
+    """Audit one scenario. failure_modes=True also runs the four taxonomy
+    detectors, which need the terrain grid and so cost more to parse."""
     try:
         stype = scenario_type or _sidecar_scenario_type(path)
-        return {"scenario": path, "ok": True, **audit(summarize(path), stype)}
+        summary = summarize(path, include_map=failure_modes)
+        row = {"scenario": path, "ok": True, **audit(summary, stype)}
+        if failure_modes:
+            modes = detect_all(summary)
+            row["failure_modes"] = {k: v for k, v in modes.items()
+                                    if isinstance(v, dict)}
+            row["any_failure_mode"] = modes["any_failure_mode"]
+            row["failure_modes_fired"] = modes["failure_modes_fired"]
+            row["n_failure_modes"] = modes["n_failure_modes"]
+        return row
     except Exception as e:
         return {"scenario": path, "ok": False, "error": str(e)}
 
@@ -196,6 +208,9 @@ def main():
     ap.add_argument("--quiet", action="store_true", help="Summary table only")
     ap.add_argument("--scenario-type", default=None,
                     help="Override the type (else read from each .meta.json sidecar)")
+    ap.add_argument("--no-failure-modes", dest="failure_modes", action="store_false",
+                    help="Skip the four taxonomy detectors (faster; no terrain parse)")
+    ap.set_defaults(failure_modes=True)
     args = ap.parse_args()
 
     paths = collect(args.target)
@@ -203,7 +218,7 @@ def main():
         print(f"No .aoe2scenario files under {args.target}", file=sys.stderr)
         return 1
 
-    rows = [audit_path(p, args.scenario_type) for p in paths]
+    rows = [audit_path(p, args.scenario_type, args.failure_modes) for p in paths]
     good = [r for r in rows if r["ok"]]
 
     if not args.quiet:
@@ -240,6 +255,22 @@ def main():
         print(f"  robust victory path:     {pct('robust_victory')}")
         print(f"  has orphan triggers:     {pct('n_orphan_triggers')}")
         print(f"  fully clean:             {pct('clean')}")
+
+        if args.failure_modes and any("failure_modes" in r for r in good):
+            print("\n  Failure-mode taxonomy (the four modes the prompt targets)")
+            for mode in ("resource_dead_end", "composition_imbalance",
+                         "positional_trap", "timing_collapse"):
+                c = sum(1 for r in good if r.get("failure_modes", {})
+                        .get(mode, {}).get("fired"))
+                print(f"    {mode:<23}{c}/{n} ({100.0 * c / n:.1f}%)")
+            c = sum(1 for r in good if r.get("any_failure_mode"))
+            print(f"    {'ANY of the four':<23}{c}/{n} ({100.0 * c / n:.1f}%)")
+            for r in good:
+                for mode, info in sorted(r.get("failure_modes", {}).items()):
+                    if info.get("fired"):
+                        label = os.path.basename(os.path.dirname(r["scenario"])) + "/" \
+                                + os.path.basename(r["scenario"]).replace(".aoe2scenario", "")
+                        print(f"      - {label[:46]:<48}{mode}: {info['detail'][:70]}")
 
     if args.json_out:
         os.makedirs(os.path.dirname(args.json_out) or ".", exist_ok=True)

@@ -192,6 +192,43 @@ def main():
               f"{fmt_pct(clean,n).split('%')[0].strip()+'%':>8}{paths:>7.2f}")
         t2.append((reach_arm, style, n, both, risk, frag, timer, clean, paths))
 
+    # The four modes the reachability block actually names. Measuring the
+    # treatment against its own taxonomy, rather than against victory-condition
+    # shape, is what makes the comparison fair to it.
+    MODES = ("resource_dead_end", "composition_imbalance",
+             "positional_trap", "timing_collapse")
+    has_modes = any("failure_modes" in r for rs in reach.values() for r in rs)
+    t2b = []
+    if has_modes:
+        print()
+        print("=" * 108)
+        print("TABLE 2b  Failure-mode taxonomy: the four modes the reachability block targets")
+        print("=" * 108)
+        print(f"{'reach':<7}{'style':<11}{'n':>3}" + "".join(f"{m[:13]:>15}" for m in MODES)
+              + f"{'ANY':>16}")
+        print("-" * 108)
+        for cell in cells:
+            rs = [reach[norm(u["output_path"])][0]
+                  for u in by_cell[cell]
+                  if u["outcome"] == "success" and reach.get(norm(u["output_path"]))]
+            rs = [r for r in rs if r.get("ok") and "failure_modes" in r]
+            if not rs:
+                continue
+            n = len(rs)
+            reach_arm, style = CELL_LABEL.get(cell, (cell, ""))
+            counts = [sum(1 for r in rs if r["failure_modes"][m]["fired"]) for m in MODES]
+            anyf = sum(1 for r in rs if r.get("any_failure_mode"))
+            print(f"{reach_arm:<7}{style:<11}{n:>3}" + "".join(f"{c:>15}" for c in counts)
+                  + f"{fmt_pct(anyf, n):>16}")
+            t2b.append((reach_arm, style, n, counts, anyf))
+        for arm in ("on", "off"):
+            rows = [r for r in t2b if r[0] == arm]
+            k = sum(r[4] for r in rows)
+            n = sum(r[2] for r in rows)
+            if n:
+                print(f"  reachability {arm:<4} pooled: {k}/{n} scenarios with >=1 "
+                      f"failure mode ({100*k/n:.1f}%)")
+
     print()
     print("=" * 108)
     print("TABLE 3  Historical fidelity, LLM judge (1-5 per dimension)")
@@ -299,11 +336,11 @@ def main():
 
     if args.latex:
         with open(args.latex, "w", encoding="utf-8") as f:
-            f.write(latex_tables(t1, t2, t3, m_all, x_all, spreads))
+            f.write(latex_tables(t1, t2, t3, m_all, x_all, spreads, t2b))
         print(f"\nwrote {args.latex}")
 
 
-def latex_tables(t1, t2, t3, m_all, x_all, spreads):
+def latex_tables(t1, t2, t3, m_all, x_all, spreads, t2b=()):
     def pct(k, n):
         return f"{100*k/n:.0f}" if n else "--"
     out = []
@@ -350,6 +387,26 @@ def latex_tables(t1, t2, t3, m_all, x_all, spreads):
     out.append(r"\end{tabular}")
     out.append(r"\end{table}")
     out.append("")
+
+    if t2b:
+        out.append(r"\begin{table}[t]")
+        out.append(r"\caption{The four failure modes named by the reachability block, "
+                   r"detected statically on the built scenarios. Counts are scenarios "
+                   r"out of $n$. Measuring the treatment against its own taxonomy "
+                   r"rather than against victory-condition shape.}")
+        out.append(r"\label{tab:modes}")
+        out.append(r"\footnotesize\centering")
+        out.append(r"\begin{tabular}{llrrrrrr}")
+        out.append(r"\toprule")
+        out.append(r"Reach & Style & $n$ & Resrc. & Comp. & Posn. & Timing & Any \\")
+        out.append(r"\midrule")
+        for reach_arm, style, n, counts, anyf in t2b:
+            cells_txt = " & ".join(str(c) for c in counts)
+            out.append(f"{reach_arm} & {style} & {n} & {cells_txt} & {anyf} \\\\")
+        out.append(r"\bottomrule")
+        out.append(r"\end{tabular}")
+        out.append(r"\end{table}")
+        out.append("")
 
     out.append(r"\begin{table}[t]")
     def num(v):
