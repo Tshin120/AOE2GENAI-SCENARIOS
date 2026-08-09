@@ -21,10 +21,14 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 # ---------------------------------------------------------------------------
 # Model registry
 #
-# Frontier entries are pinned to the exact dated snapshots served by
-# OpenRouter's live model list (https://openrouter.ai/api/v1/models),
-# captured 2026-07-17. The shorter undated alias (shown in each comment) is
-# available as a fallback if a dated slug ever 404s.
+# Frontier entries were originally pinned to dated snapshots captured
+# 2026-07-17. Re-verified against the live list on 2026-08-09: only the Sonnet
+# snapshot is still served; the dated Opus 4.8 and Fable 5 slugs now return
+# "not a valid model ID" (400). Those two are therefore pinned to the undated
+# aliases, which do resolve. Verify a slug before a run with:
+#
+#     curl -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+#          https://openrouter.ai/api/v1/models | grep anthropic
 #
 # Legacy entries are retained VERBATIM for reproducibility of earlier
 # experiment runs. OpenRouter no longer serves the 2024 snapshots, so these
@@ -32,10 +36,11 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 # still resolve to a human-readable model name, not for new runs.
 # ---------------------------------------------------------------------------
 MODEL_REGISTRY = {
-    # --- Current frontier (pinned dated snapshots, OpenRouter live list 2026-07-17) ---
-    "sonnet-5": "anthropic/claude-sonnet-5-20260630",   # alias: anthropic/claude-sonnet-5
-    "opus-4.8": "anthropic/claude-opus-4.8-20260528",   # alias: anthropic/claude-opus-4.8
-    "fable-5":  "anthropic/claude-fable-5-20260609",    # alias: anthropic/claude-fable-5
+    # --- Current frontier (verified against the live list 2026-08-09) ---
+    "sonnet-5": "anthropic/claude-sonnet-5-20260630",   # dated pin still served
+    "opus-5":   "anthropic/claude-opus-5",              # most capable; used as fidelity judge
+    "opus-4.8": "anthropic/claude-opus-4.8",            # dated pin retired by OpenRouter
+    "fable-5":  "anthropic/claude-fable-5",             # dated pin retired by OpenRouter
     # --- Legacy (retained for reproducibility; no longer served by OpenRouter) ---
     "claude-3.5-sonnet": "anthropic/claude-3.5-sonnet",
     "claude-3-opus":     "anthropic/claude-3-opus",

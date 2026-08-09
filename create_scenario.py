@@ -45,7 +45,7 @@ ALLOWED_SPEC_KEYS = {
     "title", "description", "scenario_type", "map_size", "players", "difficulty",
     "output_path", "wikipedia_url", "region", "player_civ", "enemy_civ",
     "model", "temperature", "max_tokens", "reachability_prompting",
-    "best_of", "max_repair_attempts", "prompt_style",
+    "best_of", "max_repair_attempts", "prompt_style", "use_introspection",
 }
 
 # Structural defaults for batch specs that omit a field. Deliberately the
@@ -125,6 +125,12 @@ def build_parser():
                    help="Generate N candidates; keep the first that builds (default: 1)")
     g.add_argument("--max-repair-attempts", type=int, default=3, dest="max_repair_attempts",
                    help="Self-repair retries after a validation/execution failure (default: 3)")
+    intro = g.add_mutually_exclusive_group()
+    intro.add_argument("--introspection", dest="use_introspection", action="store_true",
+                       help="Ground self-repair in the installed parser's real API surface (default)")
+    intro.add_argument("--no-introspection", dest="use_introspection", action="store_false",
+                       help="Repair from the raw error text only (introspection-ablation control)")
+    g.set_defaults(use_introspection=True)
     g.add_argument("--prompt-style", choices=["templated", "freeform"], default="templated",
                    dest="prompt_style",
                    help="Prompt-style ablation: 'templated' uses the per-scenario-type template "
@@ -189,6 +195,7 @@ def config_from_args(args):
         best_of=args.best_of,
         max_repair_attempts=args.max_repair_attempts,
         prompt_style=args.prompt_style,
+        use_introspection=args.use_introspection,
     )
 
 
@@ -251,6 +258,7 @@ def load_specs(path, args):
             best_of=spec.get("best_of", args.best_of),
             max_repair_attempts=spec.get("max_repair_attempts", args.max_repair_attempts),
             prompt_style=ps,
+            use_introspection=spec.get("use_introspection", args.use_introspection),
         ))
 
     if not configs and not errors:
@@ -269,6 +277,7 @@ def print_resolved_config(args, batch_mode):
     print(f"  max_tokens:          {args.max_tokens}")
     print(f"  reachability:        {'on' if args.reachability else 'off'}")
     print(f"  prompt_style:        {args.prompt_style}")
+    print(f"  introspection:       {'on' if args.use_introspection else 'off'}")
     print(f"  best_of_n:           {args.best_of}")
     print(f"  max_repair_attempts: {args.max_repair_attempts}")
     print(f"  output_dir:          {args.output_dir}")

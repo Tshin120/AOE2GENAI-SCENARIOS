@@ -210,11 +210,16 @@ class ScenarioConfig:
     best_of: int = 1  # generate N candidates, keep the first that builds successfully (>=1)
     max_repair_attempts: int = 3  # self-repair retries after a validation_failure / execution_error
 
-    # --- Ablation lever ---
+    # --- Ablation levers ---
     prompt_style: str = "templated"  # "templated" (per-type template, default) | "freeform" (generic instruction)
+    use_introspection: bool = True  # ground repair prompts in the installed parser's real API
+                                    # surface; False = plain error-text-only repair (ablation control)
 
 # Bumped when the generation pipeline changes in a way that affects outputs.
-GENERATOR_VERSION = "2.0"
+# 2.1: introspection matches dotted qualnames + manager classes + coordinate
+#      ValueError (previously silently inert on ~70% of execution errors), and
+#      introspection is independently switchable via use_introspection.
+GENERATOR_VERSION = "2.1"
 
 
 @dataclass
@@ -251,6 +256,8 @@ class GenerationResult:
     validation_detail: str = ""
     error: str = ""
     prompt_style: str = "templated"
+    # Whether introspection-guided repair was enabled for this run (ablation arm).
+    use_introspection: bool = True
     # Which introspection fired to produce this attempt's code (importerror |
     # attributeerror | typeerror | nameerror), else None. Lets us later query how
     # often introspection-augmented repairs fired and whether they converge
@@ -302,6 +309,19 @@ _DATASET_MODULES = [
     "AoE2ScenarioParser.datasets.heroes",
     "AoE2ScenarioParser.datasets.other",
     "AoE2ScenarioParser.datasets.terrains",
+]
+
+# Manager classes (scenario.map_manager, .unit_manager, ...). An AttributeError
+# names the class only ("'MapManager' object has no attribute 'set_size'"), which
+# is not importable under that bare name, so resolution needs this explicit map.
+_MANAGER_MODULES = [
+    "AoE2ScenarioParser.objects.managers.map_manager",
+    "AoE2ScenarioParser.objects.managers.unit_manager",
+    "AoE2ScenarioParser.objects.managers.trigger_manager",
+    "AoE2ScenarioParser.objects.managers.player_manager",
+    "AoE2ScenarioParser.objects.managers.message_manager",
+    "AoE2ScenarioParser.objects.managers.option_manager",
+    "AoE2ScenarioParser.objects.managers.xs_manager",
 ]
 
 
@@ -377,7 +397,7 @@ def _resolve_owner(owner):
     for cls in (eff, con):
         if cls is not None and cls.__name__ == simple:
             return cls
-    for modname in _DATASET_MODULES:
+    for modname in _DATASET_MODULES + _MANAGER_MODULES:
         try:
             m = importlib.import_module(modname)
         except Exception:
@@ -459,6 +479,25 @@ def _introspect_name(name):
     return out
 
 
+def _introspect_coordinates():
+    """ValueError from add_unit: state the real bound and the clamp pattern.
+
+    The bound is a property of the scenario instance (map_manager.map_size), not
+    a constant on the class, so the guidance tells the model to read it at
+    runtime rather than quoting a number that may not hold."""
+    return [
+        "Unit placed outside the map. Every x/y passed to unit_manager.add_unit "
+        "must satisfy 0 <= coord < map_manager.map_size (integers only).",
+        "Read the size first and derive every coordinate from it:",
+        "    map_size = scenario.map_manager.map_size",
+        "    center = map_size // 2",
+        "Clamp anything computed so no offset can escape the grid:",
+        "    def at(v): return max(0, min(map_size - 1, int(v)))",
+        "    unit_manager.add_unit(..., x=at(center + dx), y=at(center + dy))",
+        "Area coordinates (area_x1/y1/x2/y2) take the same bound.",
+    ]
+
+
 def _introspect_error(error_text):
     """Return (ground_truth_block, kind) for a failing program's error text.
 
@@ -473,7 +512,9 @@ def _introspect_error(error_text):
         lines = [ln.rstrip() for ln in error_text.splitlines() if ln.strip()]
         kind, body = None, []
         for ln in reversed(lines):
-            m = re.search(r"TypeError:\s+(\w+)\(\)", ln)
+            # Python >=3.10 reports the qualified name ("NewEffectSupport.patrol()"),
+            # so the leading "Class." is optional and not captured.
+            m = re.search(r"TypeError:\s+(?:[\w.]+\.)?(\w+)\(\)", ln)
             if m and re.search(r"unexpected keyword argument|missing \d+ required|"
                                r"takes \d+|positional argument", ln):
                 kind, body = "typeerror", _introspect_callable(m.group(1))
@@ -496,6 +537,12 @@ def _introspect_error(error_text):
             m = re.search(r"NameError:\s+name '([^']+)' is not defined", ln)
             if m:
                 kind, body = "nameerror", _introspect_name(m.group(1))
+                break
+            # Out-of-bounds unit placement. Not an API-name error, but it is the
+            # single most common execution failure and the parser states the real
+            # bound, so the same ground-truth channel carries the fix.
+            if re.search(r"ValueError:.*need to be:\s*0\s*<=\s*n\s*<\s*map_size", ln):
+                kind, body = "valueerror", _introspect_coordinates()
                 break
         if not kind or not body:
             return "", None
@@ -2941,7 +2988,12 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                 else:
                     # Pull ground truth from the installed parser for the failure
                     # so repair picks a valid name/signature instead of guessing.
-                    intro_block, introspection = _introspect_error(error_detail)
+                    # With use_introspection=False the model sees the raw error
+                    # only - the control arm for the introspection ablation.
+                    if config.use_introspection:
+                        intro_block, introspection = _introspect_error(error_detail)
+                    else:
+                        intro_block, introspection = "", None
                     repair_detail = (error_detail or "") + intro_block
                     if introspection:
                         logger.info(f"Introspection ({introspection}) added to repair prompt "
@@ -3016,7 +3068,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             output_path=config.output_path, run_id=run_id, candidate=candidate,
             attempts=attempt, trigger_count=trigger_count, code=code,
             stderr=stderr, validation_detail=validation_detail, error=error,
-            prompt_style=config.prompt_style, introspection=introspection)
+            prompt_style=config.prompt_style, introspection=introspection,
+            use_introspection=config.use_introspection)
 
     def _log_attempt(self, results_log, result: GenerationResult):
         if not results_log:
@@ -3033,6 +3086,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "max_tokens": result.max_tokens,
             "reachability_prompting": result.reachability_prompting,
             "prompt_style": result.prompt_style,
+            "use_introspection": result.use_introspection,
             "trigger_count": result.trigger_count,
             "output_path": result.output_path,
             "validation_detail": result.validation_detail or None,
@@ -3057,6 +3111,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "wikipedia_url": config.wikipedia_url,
             "reachability_prompting": result.reachability_prompting,
             "prompt_style": config.prompt_style,
+            "use_introspection": config.use_introspection,
             "best_of": config.best_of,
             "max_repair_attempts": config.max_repair_attempts,
             "model": result.model,
