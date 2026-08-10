@@ -33,6 +33,22 @@ off & freeform & 8 & 0\% & 0\% & 0\% & 100\% & 1.12 \\
 \end{table}
 
 \begin{table}[t]
+\caption{The four failure modes named by the reachability block, detected statically on the built scenarios. Counts are scenarios out of $n$. Measuring the treatment against its own taxonomy rather than against victory-condition shape.}
+\label{tab:modes}
+\footnotesize\centering
+\begin{tabular}{llrrrrrr}
+\toprule
+Reach & Style & $n$ & Resrc. & Comp. & Posn. & Timing & Any \\
+\midrule
+on & templated & 8 & 2 & 0 & 1 & 0 & 3 \\
+off & templated & 7 & 0 & 0 & 0 & 0 & 0 \\
+on & freeform & 8 & 1 & 0 & 0 & 0 & 1 \\
+off & freeform & 8 & 1 & 0 & 1 & 0 & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
 \caption{Historical fidelity scored by an LLM judge (Opus~5) against a fixed rubric, 1--5 per dimension. $n$ counts judgements, not scenarios (up to three independent scorings each).}
 \label{tab:fidelity}
 \footnotesize\centering
