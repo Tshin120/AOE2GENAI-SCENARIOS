@@ -129,6 +129,101 @@ REACHABILITY_ANALYSIS_BLOCK = """
                     # Timing viability: [yes/no + why]
 """
 
+# ---------------------------------------------------------------------------
+# Historical-fidelity guidance (the fidelity-rubric treatment).
+#
+# Appended to the system prompt when ScenarioConfig.fidelity_rubric is True
+# (default False, so this is opt-in and every prior run is unaffected). The five
+# headings are the five dimensions fidelity_judge.py scores - combatants,
+# material, events, anachronism, pedagogy - restated as generation instructions
+# rather than as scoring anchors: the model is told what to DO, never what earns
+# a 4 versus a 5. Kept deliberately close to REACHABILITY_ANALYSIS_BLOCK in
+# length (~85 lines / ~640 words) so an A/B against the no-rubric arm is not
+# confounded with prompt length.
+# ---------------------------------------------------------------------------
+FIDELITY_RUBRIC_BLOCK = """
+
+                    HISTORICAL FIDELITY - THE SCENARIO MUST DEPICT THE REAL EPISODE:
+
+                    You are dramatising a specific historical event, not producing a
+                    generic medieval battle with the event's name attached. A player who
+                    finishes this scenario should come away knowing things that are true
+                    about THIS episode. Work through the five requirements below before
+                    you write any code.
+
+                    1. COMBATANTS - THE RIGHT SIDES, UNDER THE RIGHT PEOPLE:
+                       - Identify who actually fought. Name both sides in the scenario
+                         text using the names used at the time or by historians, not
+                         approximations ("Umayyad Caliphate", not "the Muslims"; "Kingdom
+                         of the Franks", not "the Europeans").
+                       - The commanders present must be the commanders who were there.
+                         Charles Martel at Tours, Mehmed II at Constantinople, Harold
+                         Godwinson and William at Hastings. Do NOT substitute a famous
+                         hero from the wrong century or the wrong theatre because a
+                         HeroInfo constant with that name happens to exist.
+                       - If the parser has no hero constant for the real commander, use a
+                         plain unit of the right type and NAME it correctly in the trigger
+                         text and objectives. A correctly named generic unit is far better
+                         than a famous hero who was not present.
+                       - Player 1 should be the side the brief puts the player on, and the
+                         enemy player should be that side's actual opponent.
+
+                    2. MATERIAL - PLAUSIBLE FOR THIS PLACE AND THIS DECADE:
+                       - Choose units that side actually fielded. Steppe armies are horse
+                         archers and light cavalry, not massed halberdiers. Frankish armies
+                         are heavy infantry and cavalry, not elephants. Byzantine defence
+                         rests on walls and cataphracts.
+                       - Choose buildings and defences of the right kind and scale: a city
+                         under siege needs walls, towers and gates; a field battle needs
+                         camps, not castles.
+                       - Choose terrain that matches the real geography - rivers, coasts,
+                         mountains, desert, steppe - and place the armies on it the way
+                         they were really deployed (besiegers outside the walls, defenders
+                         within; the crossing on the correct bank).
+                       - Numbers should reflect the real balance of force. If one side was
+                         heavily outnumbered, show that in the unit counts.
+
+                    3. EVENTS - REPRODUCE THE REAL TURNING POINTS, INVENT NOTHING:
+                       - Build the scenario around what actually decided the episode: the
+                         breach of a specific wall, a feigned retreat, the arrival or
+                         failure of relief, a commander's death, a river crossing.
+                       - Sequence those beats in the order they really happened, and drive
+                         them with triggers so the player lives through them.
+                       - Do NOT invent dramatic events that did not occur, and do NOT
+                         relocate real events to this episode from another one.
+                       - Where the outcome is known, the winnable path should be the one
+                         that side really took. A counterfactual is acceptable ONLY if the
+                         scenario text says plainly that it is one.
+
+                    4. ANACHRONISM - NOTHING FROM THE WRONG PERIOD:
+                       - Every unit, building, technology and piece of text must be
+                         possible in the year of the episode. No gunpowder before it
+                         existed in that theatre; no bombard cannon at an 8th-century
+                         battle; no stone castles centuries before they were built there.
+                       - Titles, place names and forms of address must be the ones in use
+                         then - the city is Constantinople, not Istanbul, in 1453.
+                       - When you are unsure whether something existed yet, leave it out.
+
+                    5. PEDAGOGY - WHAT THE PLAYTHROUGH TEACHES MUST BE TRUE:
+                       - Use display_instructions text to state the date, the place, the
+                         stakes, and who the player is, in concrete terms.
+                       - Objectives should teach the real strategic problem that side
+                         faced, not a generic "destroy the enemy".
+                       - Dialogue and narration should carry specifics a curious player
+                         could check: years, titles, place names, the reason the campaign
+                         was fought.
+                       - Avoid empty colour. One accurate sentence about why this battle
+                         mattered beats a paragraph of invented speeches.
+
+                    After working through these, add a comment block at the top of your
+                    generated code:
+                    # HISTORICAL FIDELITY:
+                    # Date and place: [year, location]
+                    # Sides and commanders: [who fought, under whom]
+                    # Real turning points depicted: [brief list]
+                    # Anachronism check: [what you excluded and why]
+"""
+
 # --- Prompt-style ablation --------------------------------------------------
 # The scenario-type templates in ScenarioGenerator._load_templates() prescribe a
 # rigid trigger count and per-section structure. prompt_style="freeform" skips
@@ -207,6 +302,9 @@ class ScenarioConfig:
 
     # --- Quality levers ---
     reachability_prompting: bool = True  # append the reachability-analysis guidance to the system prompt
+    fidelity_rubric: bool = False  # append the historical-fidelity guidance (FIDELITY_RUBRIC_BLOCK)
+                                   # to the system prompt. Default False: opt-in treatment arm, so
+                                   # every run predating it is reproducible unchanged.
     best_of: int = 1  # generate N candidates, keep the first that builds successfully (>=1)
     max_repair_attempts: int = 3  # self-repair retries after a validation_failure / execution_error
 
@@ -219,7 +317,10 @@ class ScenarioConfig:
 # 2.1: introspection matches dotted qualnames + manager classes + coordinate
 #      ValueError (previously silently inert on ~70% of execution errors), and
 #      introspection is independently switchable via use_introspection.
-GENERATOR_VERSION = "2.1"
+# 2.2: fidelity_rubric lever added. Off by default and the off path is
+#      byte-identical to 2.1's prompt, so 2.1 runs stay comparable; the version
+#      moves only so artefacts carrying the lever are identifiable.
+GENERATOR_VERSION = "2.2"
 
 
 @dataclass
@@ -256,6 +357,10 @@ class GenerationResult:
     validation_detail: str = ""
     error: str = ""
     prompt_style: str = "templated"
+    # Whether the historical-fidelity rubric was appended to the system prompt
+    # for this run (treatment arm). Recorded so the arm stays recoverable from
+    # the results log and the sidecar, not just from the output directory name.
+    fidelity_rubric: bool = False
     # Whether introspection-guided repair was enabled for this run (ablation arm).
     use_introspection: bool = True
     # Which introspection fired to produce this attempt's code (importerror |
@@ -569,12 +674,16 @@ class OpenRouterAPI:
     
     def generate_scenario_code(self, prompt: str, model: str = None,
                                temperature: float = None, max_tokens: int = None,
-                               reachability_prompting: bool = True) -> str:
+                               reachability_prompting: bool = True,
+                               fidelity_rubric: bool = False) -> str:
         """Generate scenario code using OpenRouter API.
 
         model / temperature / max_tokens fall back to the api_config defaults
         when not supplied. reachability_prompting toggles the reachability
-        guidance appended to the system prompt (REACHABILITY_ANALYSIS_BLOCK).
+        guidance appended to the system prompt (REACHABILITY_ANALYSIS_BLOCK);
+        fidelity_rubric toggles the historical-fidelity guidance
+        (FIDELITY_RUBRIC_BLOCK). The two are independent, so either, both or
+        neither can be appended.
         """
         model = api_config.resolve_model(model)
         if temperature is None:
@@ -880,7 +989,7 @@ class OpenRouterAPI:
                                CLIFF_DEFAULT_2, CLIFF_DEFAULT_3, ROCK_FORMATION_1, FLAG_A, FLAG_B,
                                ROMAN_RUINS, CASTLE_RUINS, TEMPLE_RUIN, SKELETON, TORCH_A, BONFIRE
                     TerrainId: WATER_DEEP, WATER_SHALLOW, BEACH, GRASS_1, GRASS_2, DIRT_1,
-                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)""" + (REACHABILITY_ANALYSIS_BLOCK if reachability_prompting else "") + """
+                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)""" + (REACHABILITY_ANALYSIS_BLOCK if reachability_prompting else "") + (FIDELITY_RUBRIC_BLOCK if fidelity_rubric else "") + """
 
                     Return ONLY the Python code, no explanations or markdown formatting."""
                 },
@@ -930,7 +1039,8 @@ class OpenRouterAPI:
     def repair_scenario_code(self, failing_code: str, error_detail: str,
                              model: str = None, temperature: float = None,
                              max_tokens: int = None,
-                             reachability_prompting: bool = True) -> str:
+                             reachability_prompting: bool = True,
+                             fidelity_rubric: bool = False) -> str:
         """Ask the model to fix code that failed validation or execution.
 
         Sends the failing program plus the captured stderr / validation detail
@@ -963,6 +1073,8 @@ class OpenRouterAPI:
         )
         if reachability_prompting:
             repair_system += "\n" + REACHABILITY_ANALYSIS_BLOCK
+        if fidelity_rubric:
+            repair_system += "\n" + FIDELITY_RUBRIC_BLOCK
 
         user_msg = (
             "The following AoE2 scenario program failed.\n\n"
@@ -2487,13 +2599,15 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
     
     def generate_scenario(self, config: ScenarioConfig, model: str = None,
                           temperature: float = None, max_tokens: int = None,
-                          reachability_prompting: bool = None) -> str:
+                          reachability_prompting: bool = None,
+                          fidelity_rubric: bool = None) -> str:
         """Generate a scenario based on the provided configuration.
 
-        The optional model/temperature/max_tokens/reachability_prompting
-        arguments override the values on `config` (used by the generate()
-        orchestrator so it can log the exact resolved parameters). Calling
-        generate_scenario(config) alone is unchanged - it uses config's values.
+        The optional model/temperature/max_tokens/reachability_prompting/
+        fidelity_rubric arguments override the values on `config` (used by the
+        generate() orchestrator so it can log the exact resolved parameters).
+        Calling generate_scenario(config) alone is unchanged - it uses config's
+        values.
         """
         # Resolve effective parameters (explicit override > config value)
         model = model if model is not None else config.model
@@ -2501,6 +2615,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
         max_tokens = max_tokens if max_tokens is not None else config.max_tokens
         reachability_prompting = (config.reachability_prompting
                                   if reachability_prompting is None else reachability_prompting)
+        fidelity_rubric = (config.fidelity_rubric
+                           if fidelity_rubric is None else fidelity_rubric)
 
         # Select the user-message prompt body. This is the ONLY thing the
         # prompt_style ablation changes; the system prompt (base + reachability),
@@ -2562,6 +2678,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             temperature=temperature,
             max_tokens=max_tokens,
             reachability_prompting=reachability_prompting,
+            fidelity_rubric=fidelity_rubric,
         )
 
         return generated_code
@@ -2984,7 +3101,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                     code = self.generate_scenario(
                         config, model=model, temperature=temperature,
                         max_tokens=max_tokens,
-                        reachability_prompting=reachability_prompting)
+                        reachability_prompting=reachability_prompting,
+                        fidelity_rubric=config.fidelity_rubric)
                 else:
                     # Pull ground truth from the installed parser for the failure
                     # so repair picks a valid name/signature instead of guessing.
@@ -3004,7 +3122,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                     code = self.api.repair_scenario_code(
                         code, repair_detail, model=model, temperature=temperature,
                         max_tokens=max_tokens,
-                        reachability_prompting=reachability_prompting)
+                        reachability_prompting=reachability_prompting,
+                        fidelity_rubric=config.fidelity_rubric)
             except Exception as e:
                 # An API failure is not repairable by fixing code - record and stop.
                 result = self._mk_result(
@@ -3069,6 +3188,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             attempts=attempt, trigger_count=trigger_count, code=code,
             stderr=stderr, validation_detail=validation_detail, error=error,
             prompt_style=config.prompt_style, introspection=introspection,
+            fidelity_rubric=config.fidelity_rubric,
             use_introspection=config.use_introspection)
 
     def _log_attempt(self, results_log, result: GenerationResult):
@@ -3085,6 +3205,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "temperature": result.temperature,
             "max_tokens": result.max_tokens,
             "reachability_prompting": result.reachability_prompting,
+            "fidelity_rubric": result.fidelity_rubric,
             "prompt_style": result.prompt_style,
             "use_introspection": result.use_introspection,
             "trigger_count": result.trigger_count,
@@ -3110,6 +3231,7 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "enemy_civ": config.enemy_civ,
             "wikipedia_url": config.wikipedia_url,
             "reachability_prompting": result.reachability_prompting,
+            "fidelity_rubric": result.fidelity_rubric,
             "prompt_style": config.prompt_style,
             "use_introspection": config.use_introspection,
             "best_of": config.best_of,

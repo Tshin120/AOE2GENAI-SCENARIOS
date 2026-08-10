@@ -45,7 +45,8 @@ ALLOWED_SPEC_KEYS = {
     "title", "description", "scenario_type", "map_size", "players", "difficulty",
     "output_path", "wikipedia_url", "region", "player_civ", "enemy_civ",
     "model", "temperature", "max_tokens", "reachability_prompting",
-    "best_of", "max_repair_attempts", "prompt_style", "use_introspection",
+    "fidelity_rubric", "best_of", "max_repair_attempts", "prompt_style",
+    "use_introspection",
 }
 
 # Structural defaults for batch specs that omit a field. Deliberately the
@@ -121,6 +122,13 @@ def build_parser():
     reach.add_argument("--no-reachability", dest="reachability", action="store_false",
                        help="Disable it (baseline/control prompt)")
     g.set_defaults(reachability=True)
+    rubric = g.add_mutually_exclusive_group()
+    rubric.add_argument("--fidelity-rubric", dest="fidelity_rubric", action="store_true",
+                        help="Append the historical-fidelity guidance to the system prompt "
+                             "(fidelity treatment arm)")
+    rubric.add_argument("--no-fidelity-rubric", dest="fidelity_rubric", action="store_false",
+                        help="Omit it (default; baseline prompt)")
+    g.set_defaults(fidelity_rubric=False)
     g.add_argument("--best-of-n", "--best-of", type=int, default=1, dest="best_of",
                    help="Generate N candidates; keep the first that builds (default: 1)")
     g.add_argument("--max-repair-attempts", type=int, default=3, dest="max_repair_attempts",
@@ -192,6 +200,7 @@ def config_from_args(args):
         temperature=args.temperature,
         max_tokens=args.max_tokens,
         reachability_prompting=args.reachability,
+        fidelity_rubric=args.fidelity_rubric,
         best_of=args.best_of,
         max_repair_attempts=args.max_repair_attempts,
         prompt_style=args.prompt_style,
@@ -255,6 +264,7 @@ def load_specs(path, args):
             temperature=spec.get("temperature", args.temperature),
             max_tokens=spec.get("max_tokens", args.max_tokens),
             reachability_prompting=spec.get("reachability_prompting", args.reachability),
+            fidelity_rubric=spec.get("fidelity_rubric", args.fidelity_rubric),
             best_of=spec.get("best_of", args.best_of),
             max_repair_attempts=spec.get("max_repair_attempts", args.max_repair_attempts),
             prompt_style=ps,
@@ -276,6 +286,7 @@ def print_resolved_config(args, batch_mode):
     print(f"  temperature:         {args.temperature}")
     print(f"  max_tokens:          {args.max_tokens}")
     print(f"  reachability:        {'on' if args.reachability else 'off'}")
+    print(f"  fidelity_rubric:     {'on' if args.fidelity_rubric else 'off'}")
     print(f"  prompt_style:        {args.prompt_style}")
     print(f"  introspection:       {'on' if args.use_introspection else 'off'}")
     print(f"  best_of_n:           {args.best_of}")
@@ -293,6 +304,7 @@ def print_spec_list(configs):
         print(f"  {i:>3}. {title:<32} [{c.scenario_type:<9}] "
               f"model={api_config.resolve_model(c.model)} best_of={c.best_of} "
               f"style={c.prompt_style} reach={'on' if c.reachability_prompting else 'off'} "
+              f"rubric={'on' if c.fidelity_rubric else 'off'} "
               f"-> {c.output_path}")
 
 
@@ -419,6 +431,7 @@ def main():
                 outcome="api_error", title=c.title, scenario_type=c.scenario_type,
                 model=api_config.resolve_model(c.model), temperature=c.temperature,
                 max_tokens=c.max_tokens, reachability_prompting=c.reachability_prompting,
+                fidelity_rubric=c.fidelity_rubric, prompt_style=c.prompt_style,
                 output_path=c.output_path, run_id=run_id, error=str(e))
         results.append(result)
         print_result_line(result, c, verbose)

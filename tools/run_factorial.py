@@ -13,9 +13,15 @@ Cells (2x2): reachability_prompting {on, off} x prompt_style {templated, freefor
 Every run is temperature 0.0 by default so the comparison is a prompt ablation
 rather than a sampling-noise measurement.
 
+`--cells rubric` runs a fifth cell instead: the historical-fidelity rubric on
+top of the reach-off/freeform prompt. It differs from reach_off__freeform in
+exactly one factor, so that cell is its baseline.
+
+    python tools/run_factorial.py --root output/rubric_arm --cells rubric --workers 4
+
 Results stream into one JSONL per cell under <root>/<cell>/results.jsonl; the
-arm is recoverable from the logged `reachability_prompting` / `prompt_style`
-fields as well as from the path.
+arm is recoverable from the logged `reachability_prompting` / `prompt_style` /
+`fidelity_rubric` fields as well as from the path.
 """
 
 import argparse
@@ -55,6 +61,7 @@ def build_jobs(episodes, cells, root, temperature, model, max_repair, introspect
                 "--max-repair-attempts", str(max_repair),
                 "--prompt-style", cell["prompt_style"],
                 "--reachability" if cell["reachability"] else "--no-reachability",
+                "--fidelity-rubric" if cell.get("fidelity_rubric") else "--no-fidelity-rubric",
                 "--introspection" if introspection else "--no-introspection",
                 "--output", out,
                 "--results-log", os.path.join(cell_dir, "results.jsonl"),
@@ -92,21 +99,36 @@ def main():
                     help="Run every cell with introspection-guided repair disabled")
     ap.add_argument("--cells", default="all",
                     help="'all' (2x2), 'reach' (reachability only, templated), "
-                         "or 'style' (prompt style only, reachability on)")
+                         "'style' (prompt style only, reachability on), or "
+                         "'rubric' (the fidelity-rubric arm alone; baseline is "
+                         "reach_off__freeform)")
     ap.add_argument("--timeout", type=int, default=2400)
     ap.set_defaults(introspection=True)
     args = ap.parse_args()
 
     all_cells = [
-        {"name": "reach_on__templated", "reachability": True, "prompt_style": "templated"},
-        {"name": "reach_off__templated", "reachability": False, "prompt_style": "templated"},
-        {"name": "reach_on__freeform", "reachability": True, "prompt_style": "freeform"},
-        {"name": "reach_off__freeform", "reachability": False, "prompt_style": "freeform"},
+        {"name": "reach_on__templated", "reachability": True, "prompt_style": "templated",
+         "fidelity_rubric": False},
+        {"name": "reach_off__templated", "reachability": False, "prompt_style": "templated",
+         "fidelity_rubric": False},
+        {"name": "reach_on__freeform", "reachability": True, "prompt_style": "freeform",
+         "fidelity_rubric": False},
+        {"name": "reach_off__freeform", "reachability": False, "prompt_style": "freeform",
+         "fidelity_rubric": False},
+    ]
+    # One-factor fidelity arm: identical to reach_off__freeform except that the
+    # historical-fidelity rubric is appended to the system prompt, so that cell
+    # is its baseline.
+    rubric_cells = [
+        {"name": "rubric_on__freeform", "reachability": False, "prompt_style": "freeform",
+         "fidelity_rubric": True},
     ]
     if args.cells == "reach":
         cells = [c for c in all_cells if c["prompt_style"] == "templated"]
     elif args.cells == "style":
         cells = [c for c in all_cells if c["reachability"]]
+    elif args.cells == "rubric":
+        cells = rubric_cells
     else:
         cells = all_cells
 
