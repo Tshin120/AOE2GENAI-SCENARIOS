@@ -49,17 +49,21 @@ run_experiment.py      Control vs. treatment runner (reachability-prompting abla
 
 scenario_inspect.py    Reads a built .aoe2scenario back into a structured summary
 reachability_audit.py  Static unwinnability audit of built scenarios (no API)
+failure_modes.py       Detectors for the four failure modes the reachability prompt names
 fidelity_judge.py      LLM rubric scoring of historical fidelity
 
 tools/                 view_scenario.py, extract_campaign.py, test_api.py,
-                       run_factorial.py (experiment driver), analyze.py (result tables)
+                       run_factorial.py (experiment driver), analyze.py (result tables),
+                       dedupe_fidelity.py (collapse duplicate judgements in a fidelity log)
 examples/              david&goliath_scenario1.py (hand-written), example_usage.py (library API)
 batches/               JSONL batch specs (batch_ablation.jsonl = 8 episodes x 2 prompt styles)
 campaigns/             Official .aoe2campaign files + campaign JSON, used as reference material
 samples/               A couple of checked-in .aoe2scenario artifacts for inspection
 docs/                  Analysis notes
 reachability_research/ FROZEN original control/treatment generators — do not edit
-output/                Generated scenarios, .meta.json sidecars, results.jsonl
+output/                Generated scenarios, .meta.json sidecars, results.jsonl,
+                       factorial/ (the committed experiment record), reachability.jsonl,
+                       fidelity.jsonl, tables.tex
 ```
 
 Everything at the root is importable; `tools/` and `examples/` hold scripts, run from the repo root.
@@ -218,6 +222,25 @@ timer-only victory (the player wins by waiting), and orphan triggers (shipped di
 activated). A scenario is `clean` when it has both a victory and a defeat path, its victory is
 neither fragile nor timer-only, and nothing is orphaned.
 
+### The four failure modes
+
+The audit above checks the *shape* of the victory conditions. `failure_modes.py` checks the taxonomy
+the reachability prompt block actually names, so the treatment is measured against its own claim
+rather than against a proxy. It runs as part of the audit by default (`--no-failure-modes` skips it,
+which also skips the terrain parse and is faster):
+
+| Mode | Fires when |
+|------|-----------|
+| `resource_dead_end` | the player is given an economy but the map lacks a resource class it needs |
+| `composition_imbalance` | an enemy force class has no counter available, in units or in production buildings |
+| `positional_trap` | the objective is unreachable on foot from the start (flood fill over terrain, buildings, and gates the player cannot open) |
+| `timing_collapse` | the first scripted hostile action lands before the player has anything to answer it |
+
+Every detector reads the built artefact offline and none simulate the game, so each is a screen, not
+a proof — they are tuned to fire on the clear-cut case and stay quiet when the evidence is
+ambiguous. Each row of `reachability.jsonl` carries `failure_modes`, `failure_modes_fired`, and
+`n_failure_modes`.
+
 ### LLM fidelity judge
 
 ```bash
@@ -239,6 +262,53 @@ each `.meta.json` under a `fidelity` key.
 
 `scenario_inspect.py` is the shared reader behind both (`python scenario_inspect.py <file>` prints
 the digest a judge would see).
+
+If two judging processes ever append rows for the same `(scenario, repeat, mode)` triple — a sweep
+that looked dead but was still buffering — those scenarios double-weight every cell mean. Collapse
+them before analysis:
+
+```bash
+python tools/dedupe_fidelity.py output/fidelity.jsonl --check   # report only
+python tools/dedupe_fidelity.py output/fidelity.jsonl           # rewrite, keeping <path>.raw
+```
+
+### Joining the three streams
+
+`tools/analyze.py` keys build outcomes, reachability rows, and fidelity scores on the scenario output
+path, so one row is one (episode, cell) pair and every metric lines up:
+
+```bash
+python tools/analyze.py --root output/factorial \
+    --reachability output/reachability.jsonl \
+    --fidelity output/fidelity.jsonl \
+    --latex output/tables.tex
+```
+
+It prints build outcomes by cell (Table 1), the reachability audit (2) and failure-mode taxonomy
+(2b), fidelity by cell (3) and on matched pairs only (3b), judge validation (4), and self-repair
+behaviour (5). `--latex` also writes the same tables as LaTeX.
+
+---
+
+## Experiment record
+
+`output/factorial/` holds the committed run: **8 episodes × 4 cells** (reachability on/off ×
+templated/freeform), 48 generation attempts, a reachability audit of every built scenario, and 124
+fidelity judgements. Reproduce the tables with the `tools/analyze.py` command above. Headline
+numbers from that record:
+
+- **Build**: 31/32 scenarios built (the one miss was `reach_off__templated`); 7 episodes needed at
+  least one repair and all 7 were rescued by it.
+- **Reachability**: no scenario had *every* victory path fragile. Fragile-but-redundant and
+  timer-only victories showed up only under the templated style (which emits ~35 triggers and 2+
+  victory paths); freeform cells were 100% clean at ~13 triggers and ~1 path.
+- **Fidelity**: freeform scored higher than templated on matched pairs — +0.39 with reachability on
+  (6/8 episodes), +0.60 with it off (6/7) — on the 1–5 rubric mean.
+- **Judge validation**: matched briefs mean 2.79 vs mismatched 1.04, a separation of +1.75; mean
+  within-scenario range across repeats was 0.21.
+
+The reachability arm did not separate cleanly on this n — prompt style is the larger effect in this
+record. Treat all of it as a pilot: 8 episodes per cell, one model, wide confidence intervals.
 
 ---
 
