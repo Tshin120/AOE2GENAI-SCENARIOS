@@ -62,6 +62,7 @@ trigger_count.
 """
 
 import argparse
+import collections
 import hashlib
 import json
 import os
@@ -332,6 +333,23 @@ def _module_hash():
         return None
 
 
+# Rubric versions whose text has never been revised, so a row written before
+# hash stamping existed is unambiguously attributable to the current text.
+# ONLY v1 qualifies, and only because it is frozen by policy - the v2 text was
+# revised in place, which is the whole reason the hash was introduced, so an
+# unstamped v2 row cannot be told apart from a pre-revision one.
+UNSTAMPED_IS_UNAMBIGUOUS = frozenset({"v1"})
+
+
+def rubric_matches(row, version, current_hash):
+    """Is `row` a judgement against the exact rubric text this run is using?"""
+    if row.get("rubric_version", "v1") != version:
+        return False
+    if row.get("rubric_hash") == current_hash:
+        return True
+    return row.get("rubric_hash") is None and version in UNSTAMPED_IS_UNAMBIGUOUS
+
+
 def _mean_for(version, scores):
     """Overall score under one instrument.
 
@@ -547,6 +565,30 @@ def find_scenarios(root):
     return found
 
 
+def read_log(path):
+    """Every successfully-judged row in a results log, skipping junk lines.
+
+    Both --resume and the sidecar aggregation read the log back rather than
+    relying on what the current invocation produced, since a sweep is normally
+    made of several passes.
+    """
+    rows = []
+    if not os.path.exists(path):
+        return rows
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                row = json.loads(line)
+            except Exception:
+                continue
+            if row.get("ok"):
+                rows.append(row)
+    return rows
+
+
 def update_sidecar(scenario_path, aggregate, key="fidelity"):
     """Merge fidelity scores into the scenario's existing metadata sidecar.
 
@@ -623,38 +665,27 @@ def main():
 
     current_hash = _sha(RUBRIC_VERSIONS[args.rubric]["rubric"])
 
-    # Already-successful (scenario, repeat, mode, rubric) tuples, so --resume can
-    # skip them instead of paying for the same judgement twice. The rubric
-    # version is part of the key: a v1 row does not satisfy a v2 request, and
-    # rows from both instruments can share one log.
+    # Already-successful (scenario, repeat, mode) tuples, so --resume can skip
+    # them instead of paying for the same judgement twice. Only rows graded
+    # against THIS run's exact rubric text get in, so a log holding several
+    # instruments resumes each of them independently.
     done = set()
-    if args.resume and os.path.exists(args.out):
-        with open(args.out, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    r = json.loads(line)
-                except Exception:
-                    continue
-                if r.get("ok"):
-                    # The rubric hash is part of the key: a row graded against
-                    # an older revision of the same version does NOT satisfy a
-                    # request under the current text, so --resume re-scores it
-                    # instead of silently keeping a stale judgement.
-                    done.add((os.path.normpath(r["scenario"]), r.get("repeat", 1),
-                              bool(r.get("mismatch_control")),
-                              r.get("rubric_version", "v1"),
-                              r.get("rubric_hash")))
+    if args.resume:
+        for r in read_log(args.out):
+            # The rubric hash is part of the key: a row graded against an older
+            # revision of the same version does NOT satisfy a request under the
+            # current text, so --resume re-scores it instead of silently keeping
+            # a stale judgement.
+            if rubric_matches(r, args.rubric, current_hash):
+                done.add((os.path.normpath(r["scenario"]), r.get("repeat", 1),
+                          bool(r.get("mismatch_control"))))
 
     # In mismatch mode each scenario is paired with the next distinct title's
     # brief, so every pairing is a genuine mismatch.
     jobs = []
     for i, (path, meta) in enumerate(targets):
         for rep in range(1, args.repeats + 1):
-            if (os.path.normpath(path), rep, bool(args.mismatch_control),
-                    args.rubric, current_hash) in done:
+            if (os.path.normpath(path), rep, bool(args.mismatch_control)) in done:
                 continue
             if args.mismatch_control:
                 others = [m for _p, m in targets if m.get("title") != meta.get("title")]
@@ -733,12 +764,26 @@ def main():
               f"{sett}/{n} pass")
 
     if args.update_sidecars and not args.mismatch_control:
-        by_path = {}
-        for r in good:
-            by_path.setdefault(r["scenario"], []).append(r)
+        # Aggregate from the whole log, not from what THIS invocation happened
+        # to score. A sweep is routinely run in several passes - one per
+        # directory, then a --resume top-up for the failures - and aggregating
+        # per-invocation made each pass overwrite the sidecar with only its own
+        # batch, so a scenario scored 3x ended up recorded as n_judgements: 1
+        # with the mean of whichever single repeat came last. Reading the log
+        # back makes the sidecar reflect every judgement under this exact
+        # rubric text, and makes `--update-sidecars --resume` with nothing left
+        # to score a cheap way to repair sidecars written by the old behaviour.
+        by_path = collections.defaultdict(list)
+        for r in read_log(args.out):
+            if (rubric_matches(r, args.rubric, current_hash)
+                    and not r.get("mismatch_control")):
+                by_path[r["scenario"]].append(r)
         for path, group in by_path.items():
+            # Deterministic despite append order, so re-running is a no-op.
+            group.sort(key=lambda r: (r.get("repeat", 1), r.get("timestamp_utc", "")))
             aggregate = {"judge_model": group[0]["judge_model"],
                          "rubric_version": args.rubric,
+                         "rubric_hash": current_hash,
                          "n_judgements": len(group)}
             for dim in dimensions + ["mean"]:
                 aggregate[dim] = round(sum(g[dim] for g in group) / len(group), 3)

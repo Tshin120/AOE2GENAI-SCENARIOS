@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:48:54Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 4.0,
     "material": 3.0,
@@ -35,31 +37,32 @@
     "pedagogy": 4.0,
     "mean": 3.8,
     "anachronisms_found": [
-      "PIKEMAN x16 on the Anglo-Saxon side: the pike square is a 14th-15th century development; the engine already offers SPEARMAN (used here for the fyrd), so massed pikemen for 1066 levies was avoidable",
-      "GUARD_TOWER x2 for the Saxons: Harold's host reached Senlac Hill only days before and fought behind a shield wall, not stone fortifications; a Palisade or nothing would have been truer",
-      "TOWN_CENTER x1 for each side on the battlefield itself, plus STABLE, ARCHERY_RANGE, BLACKSMITH and BARRACKS: a full economic/production base is out of place for an invasion army camped at Hastings and an Anglo-Saxon field host; only the PAVILION_A/TENT_A camps are appropriate",
-      "MONASTERY for Player Two on Senlac Hill: Battle Abbey was founded on the site only after 1070, so a monastery present during the battle is inverted chronology",
-      "CROSSBOWMAN x6: Norman crossbows at Hastings are only weakly attested and the AoE2 Crossbowman represents a later, heavier weapon; ARCHER alone would have been safer",
-      "4,480 TREE_OAK on a 120x120 map: Senlac was open downland with the ridge as the decisive terrain feature; blanketing the map in oak forest misrepresents the ground on which the cavalry charges and feigned retreats occurred"
+      "PIKEMAN x16 on the Anglo-Saxon side: the pike is a 14th-century Swiss/Flemish weapon; the fyrd fought with spears and the engine's SPEARMAN (already used, x25) or Militia-line units were the correct choice, so this was avoidable",
+      "CROSSBOWMAN x6 in the Norman force: crossbows at Hastings are attested only marginally and the Genoese-style crossbowman is a 12th-13th century figure; ARCHER alone would have been safer for 1066",
+      "GUARD_TOWER x2 in the Saxon position: Harold's army fought from an unfortified ridge with no masonry towers, and even a Watch Tower/Palisade would misrepresent the field",
+      "MONASTERY in the Saxon camp: Battle Abbey was founded after the battle as penance, not present on the day",
+      "TREE_OAK x4480 on a 120x120 map (~31% forest cover) contradicts the open slope and killing ground the scenario's own text describes ('cut down in the open field')"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,
-    "events": 5.0,
+    "events": 4.667,
     "objective": 5.0,
     "pedagogy": 5.0,
-    "mean": 4.0,
+    "mean": 3.917,
     "issues_found": [
-      "Both players are set to RANDOM civilization, so the Norman and Anglo-Saxon sides may render with Mesoamerican, East Asian or Middle Eastern architecture and unit skins — an avoidable error since Franks/Britons/Teutons were available and would give period-plausible European buildings.",
-      "Player 1 fields CROSSBOWMAN x6 alongside archers; the crossbow is essentially absent from the 1066 Norman host (the Bayeux Tapestry shows self-bows), and plain ARCHER units were already available for the whole contingent.",
-      "Player 2 has a MONASTERY and GUARD_TOWER x2 on Senlac Hill; Harold's army arrived after a forced march and fortified nothing there — no towers or religious houses stood on the ridge.",
-      "4,480 oak trees on a 120x120 map makes the field a near-continuous forest, whereas the decisive ground was an open ridge and slope; the Andredsweald lay behind the Saxon line, not across the battlefield.",
-      "Harold's KING unit is a bare generic king rather than a renamed stand-in identified as Harold Godwinson in the object list, so his identity rests entirely on dialogue rather than placement.",
-      "No Anglo-Saxon missile troops or thegn-quality axemen distinct from the fyrd beyond CHAMPION x6; the housecarl/fyrd distinction is thin, and the deaths of Gyrth and Leofwine are absent."
+      "Both players are set to RANDOM civilization, so Norman and Anglo-Saxon architecture, unit skins and bonuses are left to chance; Franks (or Britons/Teutons) for the Normans and Britons/Celts for the Anglo-Saxons were available and avoidable omissions.",
+      "GAIA places 4,480 TREE_OAK on a 120x120 map, turning Senlac Hill into dense forest; the 1066 battlefield was an open ridge with cleared slopes, and the feigned-retreat/cavalry-charge tactics the brief centres on require open ground.",
+      "Economic furniture inconsistent with a one-day pitched battle: 5 gold mines, 4 stone mines, forage bushes, sheep, deer, TOWN_CENTER for both sides, MONASTERY and 2 GUARD_TOWERs for Harold. There were no Saxon stone towers or monastic complex on Senlac Hill.",
+      "PIKEMAN x16 in the Saxon line is a late-medieval unit; SPEARMAN alone (or renamed champions/militia) would have represented the shield wall without introducing a 14th-century weapon system.",
+      "CROSSBOWMAN x6 in the Norman host overstates crossbow presence; the sources emphasise bowmen, and the engine already provides ARCHER.",
+      "Norman infantry is thin at MAN_AT_ARMS x6 against 14 knights; at Hastings foot soldiers roughly matched or exceeded the cavalry contingent.",
+      "Harold is represented by the KING unit, which is a non-combatant in the engine — an acceptable stand-in for a missing hero, but it means the king cannot fight in the shield wall he historically died defending."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -83,6 +86,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,

@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:50:53Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.0,
     "material": 3.0,
@@ -35,32 +37,35 @@
     "pedagogy": 3.0,
     "mean": 2.8,
     "anachronisms_found": [
-      "EL_CID as a member of the Polo caravan: Rodrigo Diaz de Vivar died in 1099, some 170 years before the journey, and was Castilian, not Venetian",
-      "FREDERICK_BARBAROSSA in the caravan: the Hohenstaufen emperor drowned in 1190 and never travelled the Silk Road; presumably stands in for Niccolo Polo, who is named in the text but never placed",
-      "Knights and Crossbowmen as caravan escort: the Polos travelled as a tiny merchant party with local guides and Mongol paiza-holders, not a Latin heavy-cavalry retinue; Trade Carts, camels or light foot would have been available in the engine",
-      "SHEEP used as the caravan's 'pack animals' when camels (Camel Rider / domesticated camel objects) and Trade Carts exist in the catalogue and are the iconic Silk Road transport",
-      "Shangdu represented by a plain European TOWN_CENTER plus two Gaia yurts; the Khan's summer palace could have been suggested with East Asian-style buildings, a Wonder, or Mongol/Chinese architecture set pieces",
-      "Kublai Khan himself is entirely absent from the objects despite the victory text describing Marco standing before him"
+      "EL_CID used as (presumably) Marco Polo — Rodrigo Diaz de Vivar died in 1099, nearly two centuries before 1271, and belongs to Iberia, not the Silk Road",
+      "FREDERICK_BARBAROSSA used as (presumably) Niccolo Polo — a Hohenstaufen Holy Roman Emperor who drowned in 1190; a Venetian merchant is neither an emperor nor a 12th-century figure",
+      "KNIGHT x2 and SPEARMAN x2 as caravan escort — the Polo party was a tiny merchant company travelling under Mongol safe-conduct, not a mounted Latin knightly escort",
+      "ARCHERY_RANGE x2 in the bandit camps — a permanent European-style military production building is out of place for nomadic desert raiders whose camps are otherwise yurts",
+      "SHEEP x3 standing in for the caravan's pack animals, when the engine offers Trade Carts and camel units far better suited to a Silk Road caravan",
+      "TOWN_CENTER x1 representing Kublai Khan's summer palace at Shangdu — a generic Western-looking Dark Age structure for the Yuan imperial residence",
+      "Kublai Khan himself is entirely absent from the roster despite being the destination and the narrative payoff"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
-    "combatants": 2.0,
-    "setting": 2.0,
-    "events": 4.0,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 1.667,
+    "setting": 2.333,
+    "events": 3.667,
     "objective": 5.0,
-    "pedagogy": 3.0,
-    "mean": 3.25,
+    "pedagogy": 4.0,
+    "mean": 3.167,
     "issues_found": [
-      "Marco Polo is represented by the EL_CID hero unit — a Castilian warlord who died in 1099, nearly two centuries before the journey; a renamed generic unit (or the Mongol/Persian civilian-style hero) would have avoided placing a different named historical figure on the map.",
-      "Niccolo Polo is represented by FREDERICK_BARBAROSSA, the 12th-century Holy Roman Emperor — again a wrong named figure where a renamed generic unit was available.",
-      "Kublai Khan, the destination and the second principal of the story, is never placed; Shangdu is only a Gaia TOWN_CENTER plus two yurts and flags, with no Khan figure or court at all.",
-      "Both active players are set to RANDOM civilization, so the Venetian party and the Central Asian bandits may render in any architecture set — Teutonic, Japanese, Mesoamerican — undoing the yurt/tent dressing.",
-      "The Polo escort is built as a feudal European war band (2 KNIGHT, 2 CROSSBOWMAN, 2 SPEARMAN); the historical party was a tiny merchant family group travelling with guides, not a mounted lance detachment.",
-      "Trade goods and pack animals are modelled as SHEEP when the engine ships TRADE_CART (and camels), which would represent a Silk Road caravan far more legibly — an avoidable choice.",
-      "The two bandit ambushes are generic invented set-pieces; the specific hazards the Polos recorded (the Karaunas raiders of Persia, the Gobi crossing, Niccolo's brother Maffeo's presence in the party) are absent, and Maffeo Polo is simply omitted."
+      "Marco Polo is represented by the EL_CID hero — an 11th-century Castilian mounted warlord, wrong culture and wrong century, and avoidable since the editor permits renaming a generic villager, trade cart or monk to stand in for a Venetian merchant.",
+      "Niccolo Polo is represented by FREDERICK_BARBAROSSA, a 12th-century Holy Roman Emperor; again an unrelated figure where a renamed generic unit was available.",
+      "Kublai Khan is never placed. The destination is only a GAIA TOWN_CENTER with two yurts and flags; the Khan whose court is the whole point of the journey has no representation at all (Genghis Khan hero or a renamed cavalry/monk unit could have served).",
+      "Both players are set to RANDOM civilization, so the caravan and the Central Asian raiders may render in any architecture (Teutonic, Japanese, Meso-American), undermining an explicitly Silk Road setting.",
+      "The escort force is a Western European retinue — knights, crossbowmen, spearmen — whereas the Polos travelled as a small merchant party with hired local guides and Mongol safe-conduct (paiza), not an armed column.",
+      "Maffeo Polo, Niccolo's brother and a member of the actual 1271 journey, is absent.",
+      "Palm forest as the dominant vegetation across a map that is supposed to include the Pamirs and Gobi is a poor fit for the high passes.",
+      "The two bandit ambushes are invented set pieces; the historical hazards on this leg were principally the Karaunas brigands in Persia, disease (Marco's long illness in Badakhshan) and altitude/desert attrition, none of which are modelled."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -88,6 +93,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 1.667,
     "setting": 2.333,

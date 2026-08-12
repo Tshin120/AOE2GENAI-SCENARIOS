@@ -30,7 +30,8 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
     "setting": 4.0,
     "events": 4.0,
@@ -38,12 +39,12 @@
     "pedagogy": 4.0,
     "mean": 4.25,
     "issues_found": [
-      "Marco Polo is represented by a KNIGHT and Niccolo/Maffeo by MAN_AT_ARMS — heavily armoured European military types for Venetian merchants; a Trade Cart, Villager, or even Monk-escorted civilian would have been a less misleading generic given the engine's catalogue (renaming is done correctly, however)",
-      "The caravan's 'pack animals' are SHEEP. The engine ships Trade Carts (and camel-riding units) that would represent a Silk Road pack train far better; sheep read as livestock, not freight, and the whole loss condition hangs on them",
-      "Shangdu is built as a GAIA CASTLE + TOWN_CENTER — a European donjon-and-town-centre silhouette for Kublai Khan's summer palace. A Mongol- or Chinese-owned set of buildings (Wonder, or Chinese/Mongol-architecture Town Center and walls) was available and would not have looked Frankish",
-      "Kublai Khan is a GAIA KING (renamed). Acceptable as a stand-in, but he is unowned and inert, so the Khan's court is scenery rather than a party to the event",
-      "Mongols are cast as the bandit raiders that ambush the caravan, which inverts the Pax Mongolica the Polos actually travelled under — Mongol authority is what made the route passable; the raiders on that stretch were local brigands, not the Khan's own people",
-      "Only 12 combat-capable units exist on a 120x120 map; the 'harsh terrain' threat named in the brief is represented purely by cliff decoration with no attrition or hazard mechanic"
+      "Niccolo and Maffeo Polo, Venetian merchants, are cast as MAN_AT_ARMS — armoured infantry is a poor read on wealthy traders when the engine offers villagers, monks or trade carts as closer stand-ins.",
+      "The caravan's pack animals are SHEEP; the engine ships Trade Carts (and camel-type units) that would represent a Silk Road merchant caravan far more legibly, so this substitution was avoidable.",
+      "Marco Polo is a KNIGHT — a mounted European man-at-arms rather than the teenage merchant's son the sources describe; a renamed scout or villager would have been truer.",
+      "Kublai Khan appears only as a GAIA KING beside a GAIA CASTLE/TOWN_CENTER, so the Khan is neutral scenery rather than an actor, and the Mongol player doubles as anonymous bandits with no distinction between the imperial court and the raiders.",
+      "Geographic sequence is inverted: the narration has the Taklamakan opening at the oasis (D1) before Marco reports 'we have crossed the high passes of the Pamir' (D3), whereas the Polos crossed the Pamir before descending to Kashgar and the Taklamakan's southern rim.",
+      "The Shangdu palace is represented by a European-style CASTLE rather than any Mongol/Chinese-flavoured structure available to the Mongol or Chinese architecture sets."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -62,6 +63,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 4.0,

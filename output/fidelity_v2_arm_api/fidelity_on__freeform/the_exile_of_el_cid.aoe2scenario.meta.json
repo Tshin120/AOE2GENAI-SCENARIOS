@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.333,
     "setting": 4.0,
@@ -45,6 +46,41 @@
       "El Cid's ally, the Hudid king of Zaragoza (al-Mu'tamin/al-Musta'in), is never placed as a unit or player at all — the patron whose service defines 1081-1086 exists only in narration text.",
       "The defeat condition kills El Cid in battle, whereas he died of natural causes in Valencia in 1099; acceptable as a campaign stake but not a historical outcome.",
       "Only 107 objects on a 120x120 map: Zaragoza, Tevar and Valencia are all represented by the single Player 2 town centre/castle complex rather than as distinct locations, so the geography of the exile is not really depicted."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "EL_CID"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "SPANISH",
+        "2": "SARACENS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 3.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 4.667,
+    "pedagogy": 4.0,
+    "mean": 3.917,
+    "issues_found": [
+      "Only two players exist, so Berenguer Ramon II of Barcelona — a Catalan Christian count — is represented by the same SARACEN player that stands for Zaragoza's rivals and Muslim Valencia; his 'army' at Tevar is drawn from a roster including CAMEL_RIDER, which is culturally wrong and avoidable (a third player set to Spanish/Franks was possible)",
+      "No hero or renamed unit is evident for Berenguer Ramon II or the 'rival captain' beyond the four CHANGE_OBJECT_NAME actions, and the Tevar objective is satisfied by destroying a generic enemy object rather than capturing the count (the sources have Berenguer captured, not slain — the text says 'the rival captain is slain')",
+      "Alfonso VI of Castile, the figure who banished El Cid and the political frame of the whole campaign, appears only in narration with no representation",
+      "Zaragoza, El Cid's employer, has no presence as a friendly or allied party; the player fights 'for' a patron who does not exist on the map",
+      "Valencia is taken by storming a CASTLE (the Alcazar) when the city actually fell after a roughly twenty-month blockade and starvation; no siege/attrition mechanic reflects this",
+      "Player 1's opening force (3 MAN_AT_ARMS, 2 SPEARMAN, 3 villagers, a Town Center and houses) reads as a standard AoE2 start rather than a landless exile's mounted retinue — El Cid's following was cavalry-heavy, and no knights are given to the player at all"
     ],
     "combatants_precondition": {
       "passed": true,

@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:53:52Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.667,
     "material": 3.0,
@@ -44,20 +46,22 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
-    "objective": 3.0,
-    "pedagogy": 3.0,
-    "mean": 2.75,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.0,
     "issues_found": [
-      "Player 2's leader is the SALADIN hero — Saladin was a late-12th-century Ayyubid sultan in Egypt/Syria, a century after El Cid's death and 3,000 km away. The engine offers renamable generic units (and other Middle Eastern/Iberian heroes) that could have stood in for al-Qadir/Ibn Jahhaf of Valencia or the raider chief; using a famous hero from the wrong century and region is avoidable error.",
-      "Both active players are set to RANDOM civilization, so the architecture, unit roster and language of El Cid's Castilians and the Andalusi defenders are undefined at runtime — Spanish and Saracens were both available and obvious.",
-      "A single enemy player represents both Al-Mu'tamin's northern rivals (Aragon / al-Hayib of Lérida, who were Christian-allied Zaragozan enemies) and the city of Valencia, so the north-eastern 'raider camp' fields camel riders and cavalry archers under Saladin rather than anything resembling Aragonese or Lleidan troops.",
-      "Al-Mu'tamin of Zaragoza, El Cid's actual employer for most of the exile, exists only as dialogue text — no allied player, units or city, so the mercenary-service relationship that defines the period is never represented on the map.",
-      "The Almoravid intervention (Sagrajas 1086, Cuarte 1094) — the decisive military context of El Cid's Valencian years — is entirely absent, and the 1093-94 blockade/starvation of Valencia is reduced to a wall-breach assault.",
-      "El Cid's retinue is 4 knights with a Town Center and full building set, implying a settled lordship rather than the landless exile band described in the narration."
+      "SALADIN is placed as the enemy leader standing in for both the 'Rival Raider Chief' and the 'Governor of Valencia'. Saladin is an Ayyubid ruler of Egypt/Syria a century later (d. 1193) and utterly unconnected to al-Andalus; a renamed generic Camel Rider, Mameluke or Champion would have been the correct, entirely avoidable substitution.",
+      "Both players' civilizations are left RANDOM, so architecture sets, unit rosters and tech could render Valencia as, e.g., Britons or Mongols; Spanish/Saracen (or Berber) assignment was available and free.",
+      "Al-Mu'tamin of Zaragoza speaks as El Cid's patron but exists only as text - there is no Zaragozan player, no allied Muslim army, and thus no representation of El Cid serving a Taifa king, the central fact of the exile years.",
+      "The same Player 2 hosts both the northern 'rival raider camp' and Valencia, so the historically distinct campaigns (against Aragon/Berenguer Ramon II in the Ebro, then the Levantine conquest) are collapsed into one enemy.",
+      "Valencia is reduced to a wall-and-castle assault decided by killing a hero; the historical capture was a twenty-month blockade and starvation siege ending in negotiated surrender after Ibn Jahhaf's coup - nothing in the triggers models attrition or blockade.",
+      "The 'rival raider camp' is an invented generic objective; El Cid's Zaragozan service produced named victories (Almenar 1082, Morella/Olocau 1084) that could have been referenced.",
+      "Enemy force of 9 Cavalry Archers plus Camel Riders is a steppe-style composition; Andalusi/Almoravid armies would be better rendered with light cavalry, spearmen and archers on foot."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -66,7 +70,6 @@
         "SALADIN"
       ],
       "unsupported_heroes": [
-        "EL_CID",
         "SALADIN"
       ]
     },
@@ -85,6 +88,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

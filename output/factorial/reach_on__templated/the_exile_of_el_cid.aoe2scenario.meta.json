@@ -27,42 +27,44 @@
   "timestamp_utc": "2026-08-09T12:44:58Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.0,
-    "material": 2.333,
+    "material": 2.667,
     "events": 2.0,
-    "anachronism": 1.333,
-    "pedagogy": 1.667,
-    "mean": 1.867,
+    "anachronism": 2.0,
+    "pedagogy": 2.0,
+    "mean": 2.133,
     "anachronisms_found": [
-      "SALADIN placed as the enemy hero: Salah ad-Din lived 1137-1193 in Egypt/Syria and never set foot in Iberia; the in-game text even calls the foe 'Saladin's Emir', compounding the error. AoE2 offers alternatives (e.g. a generic Sultan/King unit, a renamed Castle-unit hero) so this was entirely avoidable.",
-      "28 CAMEL_RIDER for the Muslim side: Andalusi taifa and even Almoravid forces in Iberia fought as light javelin cavalry (jinetes), Berber infantry and heavy horse; massed camelry is North African/Levantine, not peninsular. Light Cavalry/Knights/Skirmishers were available in the engine.",
-      "31 CAVALRY_ARCHER as the enemy core: horse-archery was not a characteristic Andalusi/Almoravid arm; this is a steppe/Turkic template.",
-      "KING units in both Player Two and Player Three rosters represent nobody in the historical situation (al-Mutamin is voiced in text but never placed as a distinct figure), and give a European monarch model to Muslim taifa rulers.",
-      "A single monolithic 'Almoravid emir' enemy for the whole 1081-1094 span: the Almoravids only crossed to Iberia in 1086 and El Cid's Zaragoza-era opponents were Christian (Aragon, Berenguer Ramon II of Barcelona) as often as Muslim; none of those belligerents appear at all."
+      "SALADIN placed as the enemy hero: Salah ad-Din (1137-1193, Egypt/Syria) was born four decades after El Cid's death and never set foot in Iberia. The editor offered generic Kings, Saracen/Berber-flavoured units or an unnamed hero, so this was entirely avoidable.",
+      "Dialogue line 'Saladin's Emir' compounds the error by making the Ayyubid sultan the campaign's overlord in the taifa of Zaragoza.",
+      "Enemy roster of 28 CAMEL_RIDER and 31 CAVALRY_ARCHER is a Levantine/steppe army composition; Andalusi taifa and Almoravid forces fought as light lancers (jinetes), Berber infantry and javelineers, with camels essentially absent from Iberian battlefields.",
+      "King Alfonso VI of Castile, the man who exiled Rodrigo and the pivotal antagonist/patron of the period, is absent entirely; the Christian rivals El Cid actually fought for Zaragoza (Sancho Ramirez of Aragon, Berenguer Ramon II of Barcelona at Almenar and Tevar) are replaced by a generic 'Traitor King'.",
+      "Two generic KING units stand in for named historical rulers (Al-Mutamin, Yusuf ibn Tashfin), so the ally who is repeatedly named in dialogue has no corresponding identified figure on the map."
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 2.0,
-    "objective": 2.0,
+    "objective": 2.333,
     "pedagogy": 2.0,
-    "mean": 2.0,
+    "mean": 2.083,
     "issues_found": [
-      "SALADIN is placed as the antagonist and is the primary victory target. Saladin (1137-1193, Egypt/Syria) has nothing to do with 11th-century Iberia; the historical opponents were the taifa of Lerida/Al-Mundir, Berenguer Ramon II of Barcelona, and later the Almoravid emir Yusuf ibn Tashufin. The engine ships no Almoravid hero, but a renamed generic King/Cavalry unit was available and would have been correct; importing a different named hero from the wrong century and region is avoidable error.",
-      "In-game text names 'Saladin's Emir' and 'the emir of the Almoravids' interchangeably, conflating two unrelated dynasties.",
-      "Both active players are set to RANDOM civilization, so architecture and unit rosters are not anchored to Iberian/Moorish appearance at all — an avoidable omission given Spanish and Saracen/Berber-flavoured civs exist.",
-      "Enemy composition is 28 Camel Riders plus 31 Cavalry Archers; Andalusi and Almoravid armies in Iberia fought as Berber light horse and jinetes, not camel cavalry, and mass cavalry archers are equally out of place for the peninsula.",
-      "None of the campaign's actual turning points appear: the victory at Almenar (1082) for Al-Mutamin, the defeat of Sancho Ramirez, the Battle of Tevar/Morella (1084) against Berenguer Ramon II, or the two-year siege and capture of Valencia in 1094.",
-      "The plot substitutes invented generic beats — 'raider outpost', 'bandits', 'Ambusher', 'Traitor King', an unnamed fortress — for documented campaigns.",
-      "Valencia, the stated goal of the brief, exists nowhere as a placed settlement; there is no city to conquer, only a Castle/Keep/stone-wall compound belonging to Saladin.",
-      "Victory is DESTROY_OBJECT on Saladin (or destroying a gate), i.e. decapitating an anachronistic enemy leader, rather than taking possession of Valencia — El Cid's actual and defining achievement.",
-      "Defeat on the death of Player 3's KING (standing in for Al-Mutamin) misrepresents history: Al-Mutamin died of natural causes in 1085 and El Cid's career continued regardless.",
-      "GAIA decoration includes ROMAN_RUINS and a SKELETON as the 'old ruins' clue site — generic dungeon-crawl set dressing rather than anything Iberian."
+      "SALADIN is placed as the enemy leader ('Saladin's Emir', 'emir of the Almoravids'). Saladin was an Ayyubid Kurd ruling Egypt and Syria a century after El Cid's death (d. 1193); the Almoravid commanders El Cid faced were Berbers such as Yusuf ibn Tashfin or his nephew at Cuarte. AoE2 ships several Iberian-campaign heroes (King Alfonso, King Sancho, Imam, Count Julian) and generic units that could have been renamed, so this is avoidable.",
+      "Both active players are set to civilization RANDOM, so architecture and unit lines are not guaranteed to be Spanish/Saracen; the Iberian and Andalusi setting is not actually asserted in the scenario data.",
+      "King Alfonso VI, named in the narration as the man who exiled Rodrigo, appears nowhere as an object despite a KING_ALFONSO hero existing in the engine.",
+      "Enemy army is 28 camel riders plus 31 cavalry archers with no infantry; Almoravid armies were built on Berber and Andalusi light cavalry, spear infantry and drum-and-javelin foot, and camel riders in Iberia are essentially unattested.",
+      "Player 1's 'small retinue' (El Cid plus 16 troops, a Town Center, Barracks, Stable, Archery Range and Blacksmith) is a standard build-order base rather than a landless exile's warband; the brief's growth-through-victory is handled only by CHANGE_OWNERSHIP triggers.",
+      "The narrative spine is generic scripted-campaign filler: 'Ambusher', 'Traitor King', 'Rescued Ally', 'Final Ally', an invented betrayal and a fortress breach. The actual turning points — the victory over Aragon and Berenguer Ramon II at Almenar/Tevar, the capture of the Cid's Castilian rival, the 1094 siege and taking of Valencia, and the defence at Cuarte in 1094 — are absent.",
+      "Valencia, the stated culmination of the brief, is never named in the in-game text or encoded in any condition; the final target is an anonymous 'enemy stronghold'.",
+      "Defeat is also triggered by the death of Player 3's KING (Al-Mutamin). Al-Mutamin died naturally in 1085 and his death did not end El Cid's career; the Cid simply continued serving his son al-Musta'in.",
+      "Victory on destroying a single GATE_NORTH_TO_SOUTH inside an area is an engine bookkeeping condition, not the historical goal of taking and holding a city."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -71,7 +73,6 @@
         "SALADIN"
       ],
       "unsupported_heroes": [
-        "EL_CID",
         "SALADIN"
       ]
     },
@@ -90,6 +91,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

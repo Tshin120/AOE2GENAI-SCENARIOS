@@ -30,20 +30,21 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
-    "setting": 4.0,
-    "events": 4.0,
+    "setting": 3.0,
+    "events": 3.0,
     "objective": 5.0,
-    "pedagogy": 4.0,
-    "mean": 4.25,
+    "pedagogy": 3.0,
+    "mean": 3.75,
     "issues_found": [
-      "Troyes and Chalons were held by Anglo-Burgundian garrisons loyal to Philip the Good as much as to Henry VI; assigning them wholly to a BRITONS player and having them shout 'Champagne remains loyal to King Henry' erases the Burgundian dimension that actually made the towns negotiable.",
-      "No named commander on either side except Joan: the French column has no Duke d'Alencon, La Hire or Dunois although the engine ships heroes for all three and all three rode with the Reims column, so their absence is avoidable.",
-      "The brief's 'can be fought or persuaded to surrender' mechanic is not implemented: the only garrison triggers are TIMER-driven PATROL sorties and DESTROY_OBJECT checks, so Troyes is 'fallen' and Chalons 'taken' by force, whereas historically Troyes capitulated after negotiation and a bluffed assault and Chalons opened its gates without a fight.",
-      "Force scale is very thin for the event: 12 French combat units (4 knights, 4 crossbowmen, 4 spearmen) stand in for an army of some ten thousand, and each 'garrison' is 2 castles with about 8 defenders.",
-      "7,574 oak trees dominate a 120x120 map representing the open chalk plains and vineyards of Champagne; the route Auxerre-Troyes-Chalons-Reims was notably open country, not near-continuous forest.",
-      "The 'English rider spurs for Troyes' warning is invented flavour with no source basis."
+      "The opposing player is assigned BRITONS (English) alone, but Troyes, Chalons and Reims in 1429 were held by Anglo-BURGUNDIAN garrisons and Burgundian-loyal townsmen; the Duke of Burgundy's party is entirely absent though the engine now ships a Burgundians civilization.",
+      "No named commander on either side except Joan: the Duke of Alencon, La Hire and Dunois rode with the column and the 'English Captain of Troyes' speaks in text but is not represented by any renamed unit.",
+      "Force composition is a token escort (4 knights, 4 crossbowmen, 4 spearmen) for what was a royal army of roughly 12,000 men; even by AoE2 abstraction the column is implausibly thin for a march described as 'the Dauphin's column'.",
+      "7,574 oak trees on a 120x120 map (over half the tiles) makes Champagne a dense forest; the historical march crossed open chalk plains and vineyard country.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but the only triggers for Troyes and Chalons are DESTROY_OBJECT ('Troyes has fallen', 'Chalons is taken'). Historically Troyes capitulated by negotiation after a brief investment and Chalons opened its gates without a fight, its bishop presenting the keys; the scenario as built asserts two storms that did not happen.",
+      "Reims itself is represented only by a single GAIA monastery and no town; the city that opened its gates and staged the coronation has no urban presence."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -64,6 +65,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 3.333,

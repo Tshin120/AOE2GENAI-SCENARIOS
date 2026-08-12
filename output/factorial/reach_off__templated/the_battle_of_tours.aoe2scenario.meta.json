@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:46:19Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.667,
     "material": 3.0,
@@ -46,22 +48,22 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
-    "objective": 4.0,
-    "pedagogy": 3.0,
-    "mean": 3.0,
+    "objective": 4.333,
+    "pedagogy": 4.0,
+    "mean": 3.083,
     "issues_found": [
-      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero unit — a figure from 1066, over three centuries later. Renaming a generic Militia/Man-at-Arms or Frankish Paladin would have avoided this.",
-      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, a 12th-century Ayyubid sultan — the wrong figure by 400 years, and one strongly associated with a different theatre entirely.",
-      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian — again a wrong named hero where a renamed generic cavalry unit would have served.",
-      "Both active players are set to civilization RANDOM, so architecture, unit skins and tech tree are arbitrary; Franks and Saracens (or Byzantines/Berbers) were available and would have been correct.",
-      "The Umayyad position is built as a CASTLE with 60 STONE_WALL segments, a GATE and four GUARD_TOWERs — Abd al-Rahman's force was a mobile raiding army with a wagon/booty camp, not a fortified stone stronghold.",
-      "Player 1 (Franks) is given a TOWN_CENTER whose destruction triggers defeat, and the enemy taunt speaks of 'the Frankish stronghold' — Martel's army held a wooded ridge in the open field, not a settlement.",
-      "14 CAMEL_RIDERs for a Umayyad army campaigning in Gaul overstates camelry; the invaders fought as horse cavalry.",
-      "Total combatant counts (roughly 42 Franks vs 49 Umayyads) are tiny against dialogue claiming Umayyad horsemen 'thousands strong'."
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero — a Norman of 1066, over three centuries out of period, when a renamed generic Militia/Man-at-Arms or Frankish hero unit would have been the correct substitution.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, an Ayyubid Kurd of the 1180s — wrong dynasty, wrong ethnicity, wrong century by 450 years.",
+      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian; a Frankish/Aquitanian leader is neither Spanish nor of this era.",
+      "Both active players are left as RANDOM civilization, so architecture and unit skins for the Frankish and Umayyad sides are unassigned and could render as anything from Japanese to Mayan.",
+      "The Umayyad raiding army's camp is built as a CASTLE with 60 STONE_WALL segments, a GATE and 4 GUARD_TOWERs — the invaders were a mobile plunder column encamped in the open, not a permanent fortification. Player 3's PAVILION_A/TENT_A show the correct idiom was available.",
+      "CAMEL_RIDER x14 in the Umayyad host is a stretch: the 732 force was Arab and Berber horse cavalry, not camelry.",
+      "Player 1's defeat on loss of a TOWN_CENTER imports a settlement the Franks did not defend at Tours; the historical stake was the integrity of the infantry line, not a town."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -91,6 +93,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

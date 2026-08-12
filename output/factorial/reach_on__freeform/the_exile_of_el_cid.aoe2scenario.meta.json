@@ -27,39 +27,40 @@
   "timestamp_utc": "2026-08-09T12:51:27Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
-    "combatants": 2.0,
+    "combatants": 2.333,
     "material": 3.0,
     "events": 4.0,
     "anachronism": 2.0,
-    "pedagogy": 2.667,
-    "mean": 2.733,
+    "pedagogy": 3.0,
+    "mean": 2.867,
     "anachronisms_found": [
-      "SALADIN placed as the enemy hero: Salah ad-Din (1138-1193) was a Kurdish sultan of Egypt and Syria who was born some 40 years after El Cid's death and never set foot in Iberia. The engine offers plenty of anonymous Saracen alternatives (the KING unit already present, or a generic Castle-unit commander), so this was avoidable.",
-      "The enemy roster (CAMEL_RIDER x4, Saracen-style CASTLE/TENT_D/PAVILION_C, Saladin) directly contradicts the dialogue, which names the first opponent as a Christian 'rival Count' - the historical rivals of the Zaragoza campaign were Sancho Ramirez of Aragon and Berenguer Ramon II of Barcelona, who would field knights and crossbowmen, not desert cavalry.",
-      "MONASTERY on the Muslim player's side represents a mosque only by default; less objectionable given engine limits, but combined with the enemy KING it muddles the taifa of Valencia into a generic 'Saracen' polity.",
-      "TREE_PALM_FOREST x12 and SHORE_FISH as the dominant landscape for a campaign fought largely on the arid Aragonese/Levantine frontier reads as generic desert-Orient rather than the Ebro and Turia valleys.",
-      "Al-Mu'tamin of Zaragoza, El Cid's actual employer and named in the briefing text, is not placed at all - there is no allied third player, so the defining 'mercenary in Muslim service' relationship exists only as narration."
+      "SALADIN placed as the enemy hero: Salah ad-Din (1137-1193) ruled Egypt and Syria a century after El Cid's exile and never set foot in Iberia. The engine offers KING_SANCHO, KING_ALFONSO and the Saracen/Berber-flavoured generic units of the actual El Cid campaign, so this was an avoidable choice - especially as the on-screen text names the opponents as a Christian 'rival Count' and then the taifa of Valencia.",
+      "A generic KING unit accompanying Saladin adds a second, unnamed 'royal' figure that corresponds to nobody in the 1081-1094 narrative (Al-Mu'tamin is the player's ally, not an enemy).",
+      "MONASTERY in the Muslim/Valencian camp - a Christian religious building fronting a taifa force; the engine's mosque-skinned Saracen architecture set was available.",
+      "The first enemy force is described as a Christian Count's warband but is composed of CAMEL_RIDERs, TENT_D and PAVILION_C - Muslim-styled material for a Catalan/Castilian rival."
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
-    "objective": 2.0,
-    "pedagogy": 3.0,
-    "mean": 2.5,
+    "objective": 3.0,
+    "pedagogy": 4.0,
+    "mean": 2.75,
     "issues_found": [
-      "Player 2's leader is the SALADIN hero — the Ayyubid sultan of Egypt/Syria, active a century after El Cid's death and never in Iberia. He stands in for two entirely different figures (the rival Christian Count of Barcelona and the ruler of Valencia). The editor allows renaming a generic Camel Rider, King, or Cavalry Archer, so this substitution was avoidable.",
-      "Both players are set to RANDOM civilization, so architecture and unit sets are unassigned; the scenario cannot guarantee Spanish (Castilian) buildings for El Cid's retinue or Saracen/Berber architecture for the taifa forces.",
-      "One enemy player is used for both the 'rival Count's warband' and the defenders of Valencia, collapsing the Christian Catalan opponent (Berenguer Ramón II at Almenar/Tévar) and the Muslim city of Valencia into a single camel-riding, Saladin-led force. No Christian rival force exists.",
-      "The ally central to the brief, Al-Mu'tamin of Zaragoza, appears only as text and a MODIFY_RESOURCE gift — there is no Zaragozan player, banner, or contingent on the map.",
-      "Victory is coded as the death of the SALADIN hero rather than the fall of the city (destroying the Castle/Town Center or occupying Valencia), so the 1094 siege is reduced to a hero hunt.",
-      "TREE_PALM_FOREST as the dominant vegetation and only 113 objects on a 100x100 map give a generic desert-oasis look rather than the irrigated huerta and walled Levantine city of Valencia.",
-      "Only one Castle plus 8 stone wall segments and 2 guard towers represent Valencia — far too slight for the rich walled coastal capital the narration describes and for a nine-month siege."
+      "Player 2's hero is SALADIN, the Kurdish Ayyubid sultan of Egypt and Syria active in the 1170s-1190s — an entirely different culture, region and century from the Iberian taifas of 1081-1094. The engine has no al-Mu'tamin, al-Mundhir or Ibn Jahhaf hero, but a renamed KING or generic Saracen cavalry would have been correct; a named crusade-era hero is an avoidable error.",
+      "The narration identifies the first enemy as a Christian 'rival Count' (historically Berenguer Ramon II of Barcelona, defeated at Almenar/Tebar), yet the only opposing roster is a single Muslim-flavoured force of camel riders, cavalry archers and a KING under Saladin's banner — the two adversaries of the campaign (Christian count and taifa rival) are collapsed into one and mislabelled.",
+      "Both players are set to RANDOM civilization, so architecture and unit availability may render as Britons, Goths, Mongols, etc. Spanish (or Castilian-appropriate) for El Cid and Saracens/Berbers for the taifa opponent were available and should have been assigned.",
+      "CAMEL_RIDER x4 as the core of the enemy cavalry misrepresents Andalusian/Zaragozan and Valencian armies, which fought with Berber and Andalusi horse, not camelry.",
+      "PAVILION/TENT-based enemy camp plus a single CASTLE and 8 stone walls is a thin stand-in for Valencia, a large walled coastal city taken after a twenty-month blockade; there is no city to capture, only a hero to kill.",
+      "El Cid's death as the defeat condition is the brief's rule but is asserted in text ('El Cid has fallen in battle') where the historical Rodrigo died of natural causes in Valencia in 1099."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -68,7 +69,6 @@
         "SALADIN"
       ],
       "unsupported_heroes": [
-        "EL_CID",
         "SALADIN"
       ]
     },
@@ -87,6 +87,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

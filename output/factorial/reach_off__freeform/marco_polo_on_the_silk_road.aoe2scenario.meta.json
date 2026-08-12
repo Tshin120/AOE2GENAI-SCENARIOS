@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:54:03Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.0,
     "material": 3.0,
@@ -46,21 +48,21 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
     "objective": 5.0,
-    "pedagogy": 3.0,
+    "pedagogy": 4.0,
     "mean": 3.25,
     "issues_found": [
-      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero unit — a named eleventh-century Norman standing in for a thirteenth-century Venetian; the victory and defeat triggers key off him by that name, so the substitution is structural, not cosmetic. Renaming a generic unit was available.",
-      "Niccolo Polo is represented by the EL_CID hero — an eleventh-century Castilian, again a named figure from the wrong century and culture.",
-      "GENGHIS_KHAN is placed at the destination as the Khan the caravan is travelling to meet, but the Polos were received by Kublai Khan; Genghis died in 1227, 44 years before the journey's start. The engine ships no Kublai hero, so a renamed generic (or the Khan of the Mongol civ) was the correct fallback.",
-      "Both active players are left as civilization RANDOM, so architecture set, unit roster and language are unassigned — Shangdu may be rendered in Teutonic or Frankish stonework at random.",
-      "Shangdu is built from a CASTLE and two KEEPs, European fortification models rather than anything suggesting the Khan's summer palace; a walled compound of Mongol/Chinese-flavoured buildings was possible.",
-      "The escort is CROSSBOWMAN and KNIGHT — Western European heavy cavalry and crossbows for a merchant caravan that in fact travelled with local guides, camels and Mongol-issued safe-conduct; camels or trade carts existed in the catalogue.",
-      "Pack animals are modelled as SHEEP, which are herdable food rather than laden beasts; trade carts or camels would have carried the 'caravan goods' idea the defeat text asserts."
+      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero - a Norman duke of the 11th century, an entirely unrelated culture and era; a renamed generic unit (or even a Trade Cart escort figure) was available and would have been correct.",
+      "Niccolo Polo is represented by EL_CID, an 11th-century Castilian warlord - again wrong culture and wrong century for a 13th-century Venetian merchant.",
+      "GENGHIS_KHAN is placed (under GAIA) at the destination, apparently standing in for Kublai Khan. Genghis died in 1227, decades before the journey and before Shangdu was built; the text explicitly names Kublai, so the placed hero contradicts the narration.",
+      "Both players are set to RANDOM civilization, so the castle, keep and archery range architecture is unspecified and could render as any culture from Britons to Aztecs - avoidable, since Mongols/Persians/Chinese/Turks were all selectable.",
+      "The caravan's 'pack animals' are SHEEP, when the engine ships Trade Carts (and camels) that would read far better as a Silk Road merchant caravan; the escort of KNIGHTS and CROSSBOWMEN is a European field force rather than hired caravan guards.",
+      "GAIA-owned CASTLE and KEEPs with PALISADE_WALL fragments are an odd, unexplained fortification set for either a Persian oasis or Shangdu's summer palace."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -89,6 +91,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.333,
@@ -97,13 +100,14 @@
     "pedagogy": 4.0,
     "mean": 3.25,
     "issues_found": [
-      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero — an 11th-century Norman duke standing in for a 13th-century Venetian teenager; a renamed generic villager/trade cart/militia would have been the correct abstraction, so this is avoidable cross-culture, cross-century casting.",
-      "Niccolo Polo is represented by EL_CID, an 11th-century Castilian warlord — again a wrong-culture, wrong-era hero model where a renamed generic unit was available.",
-      "GENGHIS_KHAN is placed (in GAIA) to stand for Kublai Khan at Shangdu; right culture but the wrong Khan, dead 44 years before the scenario's arrival date.",
-      "Both players' civilizations are left RANDOM, so architecture for the Venetian caravan, the bandit camp and Shangdu is undefined — no Chinese or Central Asian architecture set is guaranteed, and Shangdu itself is rendered only as a Castle plus two Keeps.",
-      "The escort is composed of KNIGHTs and CROSSBOWMEN — a European men-at-arms escort rather than the hired local guides and guards a Venetian merchant caravan would have used across Persia and the Pamir.",
-      "The bandit force is entirely mounted (cavalry archers, light cavalry, scouts) plus an ARCHERY_RANGE, giving raiders a permanent military production building rather than a camp.",
-      "The 'Defeat Caravan Lost' condition counts player 1 objects across the whole 120x120 map rather than the pack animals specifically, so its parameters do not actually track the sheep it claims to."
+      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero — an 11th-century Norman duke, wrong culture and wrong century for a 13th-century Venetian merchant. A renamed generic unit (villager, trade cart driver, even a merchant-style unit) was available and would have been correct.",
+      "Niccolo Polo is represented by EL_CID, an 11th-century Castilian warlord — again an unrelated culture and era for a Venetian trader.",
+      "GENGHIS_KHAN is placed (as GAIA) while the narration and victory text name Kublai Khan; Genghis died in 1227, 44 years before the journey depicted. Right culture, wrong person, and an avoidable anachronism given the text explicitly names Kublai.",
+      "Both active players are assigned civilization RANDOM, so the Polos' escort and the steppe bandits may render with any architecture set — Mongols/Persians/Saracens/Chinese were all available and appropriate.",
+      "The Venetian escort is composed of KNIGHT x3 and CROSSBOWMAN x2 under Latin-European heroes — a mounted knightly retinue is not what a merchant caravan hired across Persia and the Tarim; camels, trade carts, or light cavalry/skirmishers would have been closer.",
+      "TREE_PALM_FOREST x20 is used across the whole route; palms suit a Persian oasis but not the Pamir passes or the Taklamakan margins.",
+      "Pack animals are SHEEP; the engine offers Trade Carts and Camels, which would have represented a goods-bearing Silk Road caravan far better than a flock.",
+      "GAIA CASTLE + KEEP x2 for Shangdu gives the Khan's summer palace European fortification rather than any of the East Asian building sets available."
     ],
     "combatants_precondition": {
       "passed": false,

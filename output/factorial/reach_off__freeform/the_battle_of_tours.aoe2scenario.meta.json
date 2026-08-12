@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:53:42Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 2.667,
     "material": 3.0,
@@ -46,22 +48,21 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
-    "events": 4.0,
+    "events": 4.333,
     "objective": 5.0,
-    "pedagogy": 3.0,
-    "mean": 3.25,
+    "pedagogy": 4.0,
+    "mean": 3.333,
     "issues_found": [
-      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero unit — a named figure from 1066, over three centuries later. The engine ships no Martel hero, so a renamed generic Champion or Teutonic-style infantry hero should have stood in instead of another named Norman.",
-      "Abd al-Rahman al-Ghafiqi is represented by the SALADIN hero — a named Ayyubid sultan of 1187, and of a wholly different dynasty and region from the Umayyad emir of al-Andalus.",
-      "Duke Odo of Aquitaine is represented by EL_CID, a named Castilian of the 1090s; the Aquitanian ally is thus another wrong named historical person rather than a renamed generic.",
-      "Both active players are set to RANDOM civilization, so Frankish and Umayyad/Saracen architecture and unit bonuses are left to chance; nothing guarantees the period-appropriate look for either side.",
-      "Player 3 (the Aquitanians) appears to have no civilization assignment at all in the roster listing.",
-      "Umayyad force includes 6 KNIGHTs — heavy stirrup-and-lance cavalry — alongside camel riders and cavalry archers; the Berber and Arab horse at Tours were lighter, and the engine's Light Cavalry/Camel/Cavalry Archer mix alone would have been closer.",
-      "10 GOLD_MINEs and 8 STONE_MINEs are scattered on a one-day battlefield scenario with no economy, pure map-generation residue.",
-      "Force scale is tiny (about 20 Franks, 21 Umayyads) for an engagement the sources describe as involving armies of many thousands, though this is partly an engine convention."
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero — a Norman duke of 1066, three centuries later and a different polity; a renamed generic Frankish champion/paladin would have been the correct substitution.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, a 12th-century Kurdish Ayyubid sultan — wrong dynasty, wrong culture, wrong century by over 450 years, and the victory trigger is literally keyed on DESTROY_OBJECT of SALADIN.",
+      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian — wrong realm and era; a renamed generic knight would have been better.",
+      "Both active players are set to civilization RANDOM, so architecture and unit bonuses are unassigned; Franks (and a Saracen/Berber-flavoured civ for the Umayyads) were available and would have fixed the building set.",
+      "Player 3 (Odo) is given SCOUT_CAVALRY and KNIGHT with no infantry at all; the Aquitanian contingent that raided the camp was a mixed force, and the tiny 20-unit armies understate a battle of tens of thousands even allowing for scale abstraction.",
+      "Umayyad roster leans on CAMEL_RIDER x7; the Andalusian host at Tours was overwhelmingly horse, and the engine's light/heavy cavalry would have been closer."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -91,6 +92,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

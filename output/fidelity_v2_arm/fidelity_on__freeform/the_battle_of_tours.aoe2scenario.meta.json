@@ -30,20 +30,20 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,
-    "events": 4.0,
-    "objective": 5.0,
-    "pedagogy": 4.0,
+    "events": 4.667,
+    "objective": 4.333,
+    "pedagogy": 4.667,
     "mean": 3.75,
     "issues_found": [
-      "All three players are assigned RANDOM civilization, so Frankish, Umayyad and Aquitanian architecture, unit skins and bonuses are left to chance — avoidable, since the engine ships Franks, Saracens/Berbers and could differentiate the Aquitanians",
-      "Player 2's strike arm includes 4 CAMEL_RIDER against only 3 SCOUT_CAVALRY: the Umayyad host at Tours was a horse-cavalry army, and the engine offers ample light/heavy horse alternatives, so the camels are an avoidable misrepresentation",
-      "Frankish force is only 5 MAN_AT_ARMS + 6 SPEARMAN + 6 ARCHER — an extremely thin 'shield-wall' for a battle whose defining feature was a deep, immovable infantry mass; archers were also a marginal element of Martel's army",
-      "Wave 3 'Third Charge' fires only a DISPLAY_INSTRUCTIONS with no PATROL actions, so the narrated third charge never actually occurs on the map",
-      "Leaders are represented by the generic KING unit (renamed), which is a non-combat, easily-killed piece; victory hinging on killing a KING makes Abd al-Rahman trivially fragile rather than a figure who fell in the melee",
-      "No explicit elevation or terrain data supporting the 'wooded high ground'; the woods are conveyed almost entirely by 4,720 oak trees"
+      "All three players are set to RANDOM civilization, so Frankish and Umayyad architecture, unit skins and tech are left to chance — the Frankish shield-wall could appear in Japanese or Mesoamerican architecture. Frankish/Byzantine and Saracen/Berber civs were available and this is entirely avoidable.",
+      "The Umayyad strike force is built around CAMEL_RIDER x4 and CAVALRY_ARCHER x4; the army that fought at Tours was lance- and sword-armed Arab and Berber horse, not camelry or horse archers. Knights/Light Cavalry or Mamluke-style heavy horse would have been closer, and SCOUT_CAVALRY x3 is a thin core for the force that terrified the chroniclers.",
+      "Charles Martel, Abd al-Rahman and Odo are all represented by the KING unit — a defensible renamed generic, but the King is a non-combatant with negligible attack, so the victory condition (slaying Abd al-Rahman) and defeat condition (Charles Martel's death) hinge on units that cannot plausibly 'fall in the melee' they are narrated as fighting in.",
+      "The 'three distinct charges' structure is a narrative invention; the sources describe a day-long clash, not three enumerated waves.",
+      "Force scale is very small (roughly 17 Franks, 15 Umayyads, 8 Aquitanians) for a 120x120 map with 4,720 trees, so nothing resembling a shield-wall frontage or repeated mass charge can actually form."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -67,6 +67,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.667,
     "setting": 2.0,

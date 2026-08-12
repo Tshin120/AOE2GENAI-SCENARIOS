@@ -27,40 +27,42 @@
   "timestamp_utc": "2026-08-09T12:44:05Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 4.0,
-    "material": 2.667,
+    "material": 3.0,
     "events": 3.0,
-    "anachronism": 2.667,
+    "anachronism": 2.0,
     "pedagogy": 3.0,
-    "mean": 3.067,
+    "mean": 3.0,
     "anachronisms_found": [
-      "BERSERK (Player THREE) as the 'raider chief' — a Viking unit roughly five centuries out of period and out of culture for 1429 Champagne; a Woad Raider-free engine still offers Two-Handed Swordsman, Brigand-style Militia-line upgrades, or Knights for a bandit chief",
-      "MILITIA x5 (Player THREE) — a Dark Age unit type; by 1429 the engine's Man-at-Arms/Long Swordsman or Spearman-line upgrades were the obvious available choices",
-      "English garrison armed with CROSSBOWMAN x6 instead of the engine's available Longbowman/Archer line — the longbow was the defining English weapon of the Hundred Years' War and its omission is entirely avoidable",
-      "Player TWO's MONASTERY placed inside the hostile Troyes/Chalons fortifications rather than a church/cathedral at the Reims goal, so the coronation site itself has no ecclesiastical building",
-      "TREE_OAK x2400 blanketing a 120x120 map — the Champagne route from Gien through Auxerre, Troyes and Chalons is open chalk farmland, not dense forest"
+      "BERSERK as the 'raider chief' in Player Three's force: a Viking-culture unit some 400+ years out of period and out of region for 1429 Champagne; a Militia/Woad-free option such as a Militia, Brigand-style Knight, or even an Outlaw-flavoured Militia leader was available and would not have been anachronistic",
+      "The English garrison at Troyes/Chalons is built entirely from CROSSBOWMAN and PIKEMAN with no Longbowman, despite the Longbowman being the engine's signature and historically correct English unit for the Hundred Years' War",
+      "Player One's escorted VIP is a KING unit, i.e. an already-crowned monarch, when the entire premise is that Charles is the uncrowned Dauphin travelling to be crowned (defensible as an engine limit, but the flag/king iconography undercuts the narrative)",
+      "2,400 TREE_OAK on a 120x120 map turns the open chalk plains and vineyard country of Champagne between Troyes and Reims into dense forest"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 3.0,
     "setting": 2.0,
     "events": 3.0,
     "objective": 5.0,
-    "pedagogy": 4.0,
+    "pedagogy": 3.667,
     "mean": 3.25,
     "issues_found": [
-      "Both active players are set to RANDOM civilization, so the French escort and the English garrison may appear as Aztecs, Mongols, Japanese, etc., with wholly wrong architecture and unit skins for 1429 Champagne.",
-      "The English garrison at Troyes fields CROSSBOWMAN and PIKEMAN only; the defining English arm of the Hundred Years' War, the longbowman, is available in the engine (Britons) and was avoidable to omit, especially since civ assignment was left random.",
-      "Player 3's raider chief is a BERSERK, a Viking unit five centuries out of place in 1429 France, alongside MILITIA (a Dark Age unit) rather than the engine's brigand-appropriate options.",
-      "No named commander besides Joan: the Duke of Alencon, Dunois, or La Tremoille accompanied the march and could have been represented by renamed heroes/units; the English side has no named captain either.",
-      "The brief's central mechanic - garrisons that can be 'persuaded to surrender' (Troyes and Chalons in fact capitulated after negotiation and a show of force) - is absent; the only trigger path is 'Gate Breached'/destruction, converting a largely bloodless political progress into a fighting march.",
-      "No cathedral or church structure is placed at the Reims victory area; the only Monastery in the scenario belongs to the hostile English player, so the coronation goal has no built referent.",
-      "Invented content: two timed 'Pursuit Wave' English cavalry attacks, a scripted pikeman 'Ambush', and a raider-chief side quest that unlocks allied pikemen - none of which correspond to the June-July 1429 march, which met almost no field opposition.",
-      "2,400 oak trees on a 120x120 map produce dense forest, whereas the Reims route crossed the open, cultivated plains of Champagne."
+      "Both active players are set to RANDOM civilization, so the architecture and unit skins for the French royal party and the English/Burgundian garrisons are undefined — the engine offers Franks and Britons, making this an avoidable error",
+      "The English garrison (Player 2) is built from CROSSBOWMAN and PIKEMAN with no LONGBOWMAN, the one unit the engine ships specifically to represent English forces of the Hundred Years' War",
+      "The 'raider chief' of the side quest is a BERSERK, a Viking unit of a wholly different culture and era; a Militia, Woad Raider-free generic unit or a renamed brigand would have served",
+      "No Burgundian presence at all, yet Troyes and Chalons were held by Anglo-Burgundian garrisons and the negotiations that opened them were with Burgundian-aligned townsmen",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but the triggers encode only combat (Gate Breached on DESTROY_OBJECT); the historical surrenders of Troyes, Chalons and Reims without storm are absent",
+      "The scenario invents an English pikemen ambush and a peasant raider sub-plot ('slay their chief and our pikemen will march with you') that have no basis in the June-July 1429 march",
+      "GAIA roster of 2400 oak trees renders the open chalk plains of Champagne as dense forest",
+      "Only one town-scale settlement is built (a single CASTLE, GUARD_TOWER, MONASTERY and 18 wall segments); Troyes, Chalons and Reims are not distinguishable as separate places on the route"
     ],
     "combatants_precondition": {
       "passed": true,
@@ -84,6 +86,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.0,
     "setting": 2.0,

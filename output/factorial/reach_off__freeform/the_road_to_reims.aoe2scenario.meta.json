@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:53:34Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 4.0,
     "material": 3.333,
@@ -43,7 +45,8 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 3.0,
     "setting": 2.0,
     "events": 3.0,
@@ -51,13 +54,14 @@
     "pedagogy": 3.0,
     "mean": 3.0,
     "issues_found": [
-      "Both players are set to RANDOM civilization, so the French escort column and the Anglo-Burgundian garrisons may appear with entirely wrong architecture and unit sets (e.g. Meso-American or East Asian buildings for Champagne towns) — the engine offers Britons and Franks/French, so this is avoidable.",
-      "The garrison commanders at Troyes and Chalons are unnamed generic units (a CHAMPION and a CAVALIER); no attempt is made to represent or rename any historical figure, and no French captains (La Hire, Duke d'Alencon, Poton de Xaintrailles — all available as renamed generics) accompany Joan, though they led the march.",
-      "Troyes and Chalons were held largely by Anglo-Burgundian garrisons, and both yielded by negotiation — Chalons opened its gates without a fight and Troyes capitulated once assault was prepared. The scenario's only encoded path is killing the enemy commander, so the brief's promise that garrisons 'can be fought or persuaded to surrender' is not implemented at all.",
-      "Terrain furnishing is generic random-map economy: 640 oak trees, 5 gold mines, 4 stone mines, 8 forage bushes and grazing sheep, with no roadway, river (the Seine/Marne), or town fabric linking Auxerre-Troyes-Chalons-Reims; the route the mission is about is not legible on the map.",
-      "Reims cathedral is represented only by a single GAIA MONASTERY with no surrounding city, which understates the coronation site that is the scenario's whole point.",
-      "Narration calls Charles 'the boy-king' — he was 26 in 1429; the boy-king of the period was Henry VI of England.",
-      "Auxerre, which also had to be passed and negotiated with on this march, is absent."
+      "Both players are set to RANDOM civilization, so the French royal army and the Anglo-Burgundian garrisons may appear with wholly inappropriate architecture and unit rosters (Franks and Britons/Burgundians were available and obvious choices).",
+      "No named commander on the English side: the Troyes and Chalons 'garrison commanders' are a generic CHAMPION and CAVALIER, though the engine ships Joan-of-Arc-campaign heroes (Sir John Fastolf, the Duke of Burgundy, etc.) that could have been used.",
+      "None of the French captains who actually rode with the coronation army (La Hire, the Duke of Alencon, Dunois) appear, despite La Hire and other French heroes existing in the engine's roster.",
+      "The escort is 14 combatants total; the coronation march numbered roughly 12,000 men, and no attempt is made to suggest a royal host (no siege equipment, no baggage, no large levy of pikemen).",
+      "Troyes and Chalons are treated as purely Anglo-English strongholds ('Troyes belongs to King Henry', 'This town is England's'); both were in fact Burgundian-allegiance towns with mixed Anglo-Burgundian garrisons, and both submitted rather than being stormed.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but only the combat path is implemented — the historically decisive negotiated capitulations are absent from the triggers.",
+      "Terrain is 640 oak trees with forage bushes and deer, i.e. deep forest, rather than the open chalk farmland and vineyards of Champagne through which the march actually passed.",
+      "Reims cathedral is represented only by a GAIA monastery; a wonder or at minimum a walled town would have read better, and the ambient line calls Charles VII a 'boy-king' when he was 26."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -81,6 +85,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.333,
     "setting": 2.0,

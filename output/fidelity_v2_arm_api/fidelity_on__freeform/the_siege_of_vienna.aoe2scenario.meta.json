@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.0,
     "setting": 4.0,
@@ -39,13 +40,48 @@
     "pedagogy": 4.0,
     "mean": 3.75,
     "issues_found": [
-      "No Janissaries: the Ottoman storming force consists entirely of Camel Riders, Cavalry Archers and Light Cavalry plus artillery, yet the Janissary is in the editor's Turkish roster and was the actual assault infantry at the Carinthian Gate. Cavalry charging a walled breach is historically backwards.",
-      "The Ottoman side has no infantry at all and no Villager-type sappers beyond a single VILLAGER_MALE, so the mining/countermining that the narration makes central is represented by one unit against a force of horsemen.",
-      "'Spanish arquebusiers' are rendered as CROSSBOWMAN x8 when the editor offers Hand Cannoneers (and Turkish/Teutonic gunpowder units) — an avoidable substitution given the text explicitly names firearms.",
-      "Garrison strength is token (1 Champion, 8 Pikemen, 8 Crossbowmen, 4 Spearmen) for a defence of roughly 17-20,000 men behind Vienna's walls; the wall circuit (192 stone wall segments) is far better represented than the men on it.",
-      "Salm is said to be wounded on 11 October; he was struck by stone splinters during the final assault of 14 October.",
-      "ONAGER x2 alongside MANGONEL x3 is an odd choice for 1529 — the Ottoman siege was dominated by cannon and mines, and only 2 Bombard Cannon are placed.",
-      "The 300-second victory timer compresses three dated assaults, a mine, and the autumn rains into five minutes, making the 'hold out' far shorter than the three-week hold the brief describes."
+      "The Ottoman assault force contains no infantry at all: CAMEL_RIDER x6, CAVALRY_ARCHER x6 and LIGHT_CAVALRY x4 carry the attacks on the Carinthian Gate, yet the Turks in this engine ship the JANISSARY, the very unit that led the historical storming parties. This is an avoidable substitution and the camel riders are wholly out of place before Vienna.",
+      "Suleiman is represented by a KING, a non-combat pageant unit; a renamed Elite Janissary or Cavalry Archer would have been a defensible stand-in for a sultan who was present with the army, and the King cannot participate in the siege in any way.",
+      "The 'Spanish arquebusiers' named in Salm's speech are placed as CROSSBOWMAN x8 — a firearms garrison rendered as bowmen when Teuton gunpowder infantry (Hand Cannoneer) was available; the placed content contradicts the text.",
+      "The Landsknecht core of the garrison is represented by PIKEMAN x8 and SPEARMAN x4 with a single CHAMPION; two-handed swordsmen or more Champions would better match a body of doppelsoldner, and 21 total defenders is a very thin abstraction of ~20,000.",
+      "No Danube or arm of the river anywhere on the map, and 1,414 oak trees dominate the terrain; Vienna's setting was a walled city on a major river with a cleared glacis, not deep woodland.",
+      "The first great assault is dated 29 September; the Ottomans had only just closed the investment (27 September) and the serious mine-and-assault phase belongs to 6-14 October. Salm's wounding is placed on 11 October rather than during the final assault of 14 October.",
+      "Victory at 300 seconds compresses three dated assaults, a countermine sequence and the onset of the rains into five minutes, which is a thin 'hold' for a three-week siege."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "TEUTONS",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 3.333,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.083,
+    "issues_found": [
+      "No Janissaries in the Ottoman order of battle: the Turks civilization ships the Janissary, the elite gunpowder infantry that actually led the assaults on the Carinthian Gate, yet Player 2's assault waves are Camel Riders, Light Cavalry and Cavalry Archers — a steppe/raiding force wholly unsuited to storming a breached curtain wall.",
+      "The garrison text promises 'Spanish arquebusiers' but the placed roster contains only Crossbowmen, Pikemen and Spearmen; Teutons have access to Hand Cannoneers, so the omission of any gunpowder defender is avoidable and directly contradicts the narration.",
+      "Only two Bombard Cannons plus Mangonels/Onagers represent the Ottoman siege train; the mangonel/onager choice is engine-appropriate but the 300-gun bombardment that reduced the medieval wall is under-represented at a scale of two guns.",
+      "No Danube (or any water) on a 144x144 map: Vienna's position on the Danube, the Ottoman bridging problem, and the flooded/muddy camp that ended the siege are geographically absent.",
+      "1,414 oak trees crowd the map, whereas the ground before Vienna was a deliberately cleared glacis — the suburbs were burned by the defenders precisely to deny cover.",
+      "Salm is a renamed Champion (acceptable substitution) but Suleiman is a KING unit, a passive non-combatant that reads as a throne-piece rather than a commander; a renamed cavalry hero would have served better.",
+      "Withdrawal dated 14 October; the final great assault fell on 14 October and the Ottoman army broke camp on 15-16 October, so the closing narration compresses the climax out of the scenario.",
+      "The city itself is six houses, a Town Center, Market and Monastery — far too thin for a defended imperial city of ~20,000 with a garrison of 17,000-20,000."
     ],
     "combatants_precondition": {
       "passed": true,

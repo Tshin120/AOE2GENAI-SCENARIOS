@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.333,
     "setting": 4.0,
@@ -45,6 +46,41 @@
       "The two [Ambush] Sortie triggers invent field engagements: neither Troyes nor Chalons sallied out against the royal column",
       "Auxerre, which also had to be negotiated past on the way to Troyes, is omitted, and the Troyes episode is simplified into an immediate opening of the gates when in reality there was a several-day standoff and an assault under preparation before the town capitulated",
       "900 oak trees on a 120x120 map presents Champagne as near-continuous forest rather than the open chalk plains and vineyards of the actual route"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "BRITONS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.25,
+    "issues_found": [
+      "The garrisons of Troyes and Chalons are cast purely as Britons/English; in fact both towns were Anglo-Burgundian, with Burgundian loyalties the decisive factor in their surrender. No Burgundian presence or distinction is represented despite the engine offering additional players/civilizations.",
+      "No French commanders other than Joan appear: the Duke of Alençon, the Bastard of Orleans (Dunois) and La Trémoïlle all rode with the column, and the engine ships suitable hero/renamed-unit options for at least some of them.",
+      "The march east is preceded in the sources by the Loire campaign and the field victory at Patay (18 June 1429); the narration jumps straight from 'the relief of Orleans' to the road to Reims, silently omitting the campaign that made the march possible.",
+      "Auxerre, the first town on the route to be passed by negotiation, is absent; only Troyes and Chalons are modelled.",
+      "The escort force of roughly 22 units badly understates the ~12,000-strong army that accompanied Charles, and there is no baggage/artillery representation of the siege train Joan drew up before Troyes.",
+      "The Troyes surrender text ('open the gates rather than face siege') and the 'Chalons submits without a blow, just as Troyes did before it' line flatten the fact that Troyes held out for days and only yielded after Joan visibly prepared an assault."
     ],
     "combatants_precondition": {
       "passed": true,

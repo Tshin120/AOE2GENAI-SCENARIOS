@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.667,
     "setting": 4.333,
@@ -43,6 +44,38 @@
       "16 Skirmishers on the Frankish side overstates the missile element of Martel's host, which the sources describe as a dense, largely close-order infantry mass; the engine offered no better light-infantry filler, but the count is high.",
       "Umayyad Cavalry Archers are a debatable inclusion for a 732 Andalusian column, whose strength lay in lance-armed Arab and Berber horse (already represented by Knights and Camel Riders).",
       "Absolute force sizes (41 Franks vs 33 Umayyads plus 10 Aquitanians) compress an engagement of tens of thousands, though this is a normal scenario abstraction."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "SARACENS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.333,
+    "events": 5.0,
+    "objective": 5.0,
+    "pedagogy": 5.0,
+    "mean": 4.583,
+    "issues_found": [
+      "Abd al-Rahman is represented by a Cavalier (Frankish-style heavy lancer) rather than a renamed light cavalry or camel-type unit; the Umayyad strike force also relies on 18 Knights, giving the invaders a Western European heavy-cavalry look when the engine's Saracen roster offered Camel Riders/Cavalry Archers/Light Cavalry as closer substitutes",
+      "Camel Riders x9 in Poitou in 732 is a stretch; Umayyad forces in Gaul were Arab and Berber horsemen, and the engine had light cavalry available as a better stand-in",
+      "Player 3 (Duke Odo's Aquitanians) has no civilization listed, so his contingent's architecture/tech identity is left unassigned even though Franks would have been the obvious choice",
+      "The Frankish position has a Monastery and Town Center on the ridge, implying a settlement/army camp structure the sources do not describe at the battle site",
+      "Odo's force is only 9 Scout Cavalry plus a leader Knight — a token contingent for a duke who commanded a substantial Aquitanian following"
     ],
     "combatants_precondition": {
       "passed": true,

@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:47:50Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 3.0,
     "material": 3.0,
@@ -35,17 +37,18 @@
     "pedagogy": 3.0,
     "mean": 2.933,
     "anachronisms_found": [
-      "ATTILA_THE_HUN placed as the enemy leader (Player Two) — Attila died in 453 AD, some 730 years before Temujin's rise; the dialogue calls this figure 'Jamukha'/'Merkit Captain', so the placed hero directly contradicts the text. Avoidable: a generic Mongol cavalry hero, a Khan-styled Cavalry Archer, or simply an unnamed elite unit would have served.",
-      "Player Two's CASTLE, KEEP, GUARD_TOWER x2 and STONE_WALL x10 — European stone fortification for a Merkit/Naiman steppe camp; the in-game text itself says 'a fortified camp near the river', which the 5 palisade walls would have covered. Steppe confederations had no stone castles.",
-      "CHAMPION x2 and SPEARMAN x10 in the enemy roster — heavy Western infantry types for a horse-archer nomad confederation; Merkit/Naiman forces should be almost entirely mounted (cavalry archer / light cavalry), as the player's own roster correctly is.",
-      "KING units for Player One and Player Three plus a QUEEN — the AoE2 King/Queen models are crowned European monarchs, used here for Temujin's entourage, Toghrul Khan and presumably Borte; a Monk, Cavalry Archer or Light Cavalry stand-in would have been less jarring.",
-      "CASTLE_RUINS gaia object used for the 'ruins' where Temujin finds proof of Borte's captivity — stone castle ruins do not belong on the 12th-century Mongolian steppe."
+      "ATTILA_THE_HUN placed as the hero of Player TWO (the Merkit/Naiman/Jamukha side) — Attila died in 453 AD, roughly 730 years before Temujin's rise; the engine offers plenty of alternative hero or generic cavalry-archer stand-ins, so this was avoidable",
+      "Player TWO's CASTLE, KEEP, GUARD_TOWERs and 10 STONE_WALL segments — the Merkit and Naiman were pastoral steppe confederations whose 'strongholds' were fortified camps and wagon laagers, not European stone donjons; palisade/watch-tower/yurt combinations were available in the engine",
+      "CHAMPION x2 in the steppe enemy roster — heavy European two-handed infantry has no place in a Merkit/Naiman order of battle, which was overwhelmingly horse archers and light lancers",
+      "KING and QUEEN units used to represent Toghrul Khan and Borte — European monarchic iconography for steppe khans and a khatun; the engine's generic villager/monk/hero options would be less jarring",
+      "GATE_NORTH_TO_SOUTH and stone gatehouses on a nomadic tribal camp"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 3.0,
@@ -53,14 +56,14 @@
     "pedagogy": 3.0,
     "mean": 2.5,
     "issues_found": [
-      "Player 2, the antagonist standing in for Jamukha/the Merkits/the Naiman, is led by ATTILA_THE_HUN — a 5th-century figure inserted into a 1186-1206 Mongol civil war. This is precisely avoidable: a renamed generic cavalry hero or a renamed Light Cavalry/Cavalry Archer would have served as Jamukha or Tayang Khan.",
-      "Both active players are set to RANDOM civilization, so architecture and unit skins are unassigned and could render as Teutonic, Japanese, Mesoamerican, etc. — Mongols (or Huns/Tatars/Cumans) was the obvious assignment.",
-      "Player 2's fortified 'Naiman stronghold' is a CASTLE, KEEP, GUARD_TOWERs and 10 STONE_WALL segments. Neither the Merkits nor the Naiman held stone fortresses; the decisive Naiman defeat at Chakirmaut (1204) was a field battle on open ground.",
-      "Player 2's infantry core (2 CHAMPION, 10 SPEARMAN) is wrong for a steppe confederation whose armies were overwhelmingly mounted archers.",
-      "Player 1 is given a KING unit and Player 3 a KING and QUEEN — European royal iconography for tribal khans; Borte is represented (if at all) as a generic Queen rather than a rescued objective unit.",
-      "The Toghrul relationship is inverted and truncated: historically Toghrul (Wang Khan) sheltered Temujin and lent the army that recovered Borte, then turned on him and was destroyed in 1203. Here Temujin rescues Toghrul's camp and Toghrul's death is a DEFEAT condition, asserting a permanent alliance the sources contradict.",
-      "The Borte rescue — the brief's first named event — is reduced to narration about 'proof of Borte's captivity'; no rescuable Borte object or bring-to-area victory exists.",
-      "No condition encodes the kurultai of 1206 or the proclamation as Genghis Khan, the event the brief names as the climax; victory is simply kill-the-enemy-hero or raze-the-castle."
+      "Player 2's commander is ATTILA_THE_HUN, a 5th-century Hunnic figure, standing in for Jamukha/the Naiman Tayang Khan — an unrelated era and culture, and avoidable since a renamed generic cavalry unit or another mounted hero would have served",
+      "Both players' civilizations are left RANDOM, so architecture and unit tech tree may render as Frankish, Japanese, Teutonic, etc. — indefensible when Mongols (or Huns/Tatars) are in the engine",
+      "Player 2 fields CHAMPION x2, SPEARMAN x10, STONE_WALL x10, CASTLE, KEEP, GUARD_TOWER x2 and gates: a stone-fortified, heavy-infantry enemy for Merkit/Naiman nomads who had no masonry strongholds and fought as horse archers",
+      "The climactic 'Naiman stronghold, walls dark against the sky' siege is invented; the decisive Naiman defeat (Chakirmaut, 1204) was an open-steppe encirclement on Naqu Cliff, not a fortress assault",
+      "Borte's rescue — the brief's opening turning point — is reduced to finding 'proof of Borte's captivity'; no Borte object or rescue condition exists anywhere in the roster or triggers",
+      "The kurultai of 1206 and the proclamation as Genghis Khan, named in the brief, are not encoded in any victory condition; victory is simply killing the enemy hero or razing a castle",
+      "Toghrul (Wang Khan) of the Kereit is represented by generic KING/QUEEN units and, per the defeat condition, his death loses the game — historically Temujin destroyed Toghrul in 1203, so an ally-must-survive condition contradicts the outcome",
+      "Player 1's hero is named GENGHIS_KHAN from the outset while the narration calls him Temujin in 1186 — a minor anachronism the engine forces, but the KING unit also sitting in Temujin's warband has no historical referent"
     ],
     "combatants_precondition": {
       "passed": false,
@@ -87,6 +90,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

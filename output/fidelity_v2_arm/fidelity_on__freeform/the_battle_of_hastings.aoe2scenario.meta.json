@@ -30,23 +30,21 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
-    "combatants": 4.0,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.333,
     "setting": 2.0,
     "events": 4.0,
     "objective": 5.0,
-    "pedagogy": 4.0,
-    "mean": 3.75,
+    "pedagogy": 4.667,
+    "mean": 3.833,
     "issues_found": [
-      "Both players are set to RANDOM civilization, so the Normans may appear with Japanese, Aztec, or Turkish architecture and receive a wholly inappropriate tech/unit profile; Franks (or Britons for Harold) were available and should have been assigned explicitly.",
-      "4,800 oak trees on a 120x120 map turns Senlac Hill into dense woodland; the battle was fought on an open ridge above marshy ground, with the Andredsweald only behind the Saxon line.",
-      "Standard random-map economic furniture (10 gold mines, 8 stone mines, 16 forage bushes, sheep, deer) is present in a one-day field battle where no economy existed.",
-      "Player 2's two Guard Towers and a Monastery imply fortification and a garrison position; Harold's army arrived and formed an unfortified shield wall on the ridge with no stone works.",
-      "Both sides are given Town Centers, an artefact of standard map generation rather than anything at Hastings.",
-      "Norman force ratio is inverted: 20 Knights but only 10 Man-at-Arms and 14 Archers. William's largest contingent was infantry, with cavalry perhaps a third of the host.",
-      "Player 2 is given 4 Archers; Anglo-Saxon missile troops at Hastings were negligible and the sources emphasise their near-total absence.",
-      "The 'Feigned Retreat Draws the Housecarls' trigger only prints text on OBJECTS_IN_AREA; nothing actually pulls Saxon units off the line, so the battle's decisive tactic is asserted rather than modelled.",
-      "No representation of Harold's brothers Gyrth and Leofwine, or of the Malfosse pursuit that ended the day."
+      "Both players are set to RANDOM civilization, so Norman and Anglo-Saxon architecture, unit bonuses and visual identity are left to chance — Franks/Britons were available and avoidable error.",
+      "4,800 TREE_OAK objects blanket a 120x120 map; Senlac Hill was an open ridge with a marshy bottom and cleared slopes, not dense forest, and heavy woods make the cavalry-versus-shield-wall action the brief describes impossible to stage.",
+      "Random-map economic furniture (10 gold mines, 8 stone mines, 16 forage bushes, 12 sheep, 8 deer) plus Town Centers, Blacksmith, Archery Range, Stable, Barracks and Monastery frame a base-building match rather than a single-day pitched battle; no army in 1066 was building a monastery on the field.",
+      "Player 2 receives 2 Guard Towers, and both sides a Town Center — no fortifications existed on Senlac Hill; Harold's strength was the unfortified shield wall itself.",
+      "Harold is represented by the KING unit, a militarily inert object, whereas Harold fought and died in the line; a renamed Champion or Teutonic Knight would have been a truer stand-in.",
+      "The 'Feigned Retreat Draws the Housecarls' trigger only prints text — no housecarls actually break formation or change ownership/stance, so the battle's decisive tactic is asserted rather than modelled."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -70,6 +68,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.667,
     "setting": 2.0,

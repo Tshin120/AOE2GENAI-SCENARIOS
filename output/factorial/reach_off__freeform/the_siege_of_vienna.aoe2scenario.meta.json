@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:53:55Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 3.333,
     "material": 3.0,
@@ -45,7 +47,8 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 3.0,
     "setting": 2.0,
     "events": 4.0,
@@ -53,13 +56,14 @@
     "pedagogy": 4.0,
     "mean": 3.5,
     "issues_found": [
-      "Both players are set to RANDOM civilization, so the defenders may appear with Aztec, Japanese or Mongol architecture and unit skins instead of a Central European (Teutons/Hungarians/Bohemians) garrison and an Eastern (Turks) besieger — an avoidable assignment error given the engine ships a Turks civ explicitly modelled on the Ottomans.",
-      "The brief's 'Spanish arquebusiers' are represented by 6 CROSSBOWMAN; the engine ships HAND_CANNONEER, the obvious gunpowder-infantry stand-in for 1529 arquebusiers, so the choice is avoidable.",
-      "The Ottoman roster contains no gunpowder infantry at all: janissaries, the core of Suleiman's assault troops at the Carinthian Gate, are absent (again HAND_CANNONEER or ELITE_JANISSARY were available), and the attackers are instead 5 CAMEL_RIDER, 4 LIGHT_CAVALRY and 6 CAVALRY_ARCHER — a steppe/desert cavalry force that did not storm Vienna's breaches.",
-      "Ottoman siege train includes BOMBARD_CANNON, MANGONEL and ONAGER; Suleiman's heavy artillery was in fact bogged down and left behind on the Danube march, which is why the siege turned on mining rather than battering — the placed content contradicts the scenario's own mine-centred narrative.",
-      "3,541 TREE_OAK dominate the map, making the Vienna plain and its trench/siege lines into dense forest; the historical approaches and Ottoman camp were open ground.",
-      "Both commanders are the same generic KING object, so Salm and Suleiman are visually indistinguishable and neither is characterised beyond dialogue.",
-      "No sapper/mine visual apparatus beyond a scripted KILL_OBJECT on a wall segment; the countermining the brief foregrounds is narration plus one trigger rather than playable content."
+      "Both players are set to RANDOM civilization, so architecture, unit bonuses and visual identity for the Habsburg garrison and the Ottoman army are left to chance — the engine offers Turks (with Janissaries and bombards) and Teutons/Spanish, so this was avoidable.",
+      "The text explicitly promises 'Spanish arquebusiers', yet the garrison's ranged arm is CROSSBOWMAN x6 and SKIRMISHER x4; the engine ships HAND_CANNONEER, the obvious 1529 gunpowder stand-in.",
+      "The Ottoman assault force is CROSSBOWMAN x6 with no gunpowder infantry — the Janissary corps, the single most characteristic element of Suleiman's army, has no representative (JANISSARY/HAND_CANNONEER exists in the engine).",
+      "Ottoman order of battle is cavalry-heavy (CAMEL_RIDER x5, LIGHT_CAVALRY x4, CAVALRY_ARCHER x6) for an operation that was fought as trench, mine and infantry assault work against a walled city; akinci raiders were used for foraging, not for storming the Carinthian Gate.",
+      "BOMBARD_CANNON and ONAGER overstate Ottoman firepower: Suleiman's heavy siege guns were bogged down and largely left behind on the Danube march, which is precisely why the Ottomans relied on mining.",
+      "Both commanders are represented by the generic KING object; acceptable as a renamed stand-in, but a KING is an odd cast for a city defence commander and for a Sultan in camp, and no attempt is made at a culturally appropriate hero unit.",
+      "3541 oak trees dominate the map; the Vienna glacis had in fact been cleared of cover and suburbs burned before the siege, so heavy forest right up to the works is misleading.",
+      "Salm's death as an instant-defeat condition slightly misstates history — Salm was mortally wounded during the siege yet Vienna held."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -81,6 +85,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.0,
     "setting": 2.0,

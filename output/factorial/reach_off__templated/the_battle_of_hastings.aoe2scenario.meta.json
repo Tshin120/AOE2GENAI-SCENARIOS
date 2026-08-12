@@ -27,6 +27,8 @@
   "timestamp_utc": "2026-08-09T12:45:45Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 4.0,
     "material": 2.667,
@@ -45,23 +47,24 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,
     "events": 4.0,
     "objective": 4.0,
-    "pedagogy": 4.0,
+    "pedagogy": 3.667,
     "mean": 3.5,
     "issues_found": [
-      "Both players are set to RANDOM civilization, so the architecture set and unit bonuses are unpredictable — Britons/Franks (or Byzantines for Norman knights) were available and would have fixed Anglo-Saxon and Norman visual identity.",
-      "Harold Godwinson is represented by the generic KING unit, a non-combat, near-defenceless piece; the man who reportedly fought on foot in the shield wall until struck down is thus a passive object rather than a fighting champion-class stand-in.",
-      "Player 2 holds 44 STONE_WALL segments, a GATE and 4 GUARD_TOWERs. Harold's army fought on an unfortified ridge with no masonry whatsoever; the shield wall as stone curtain plus towers turns Senlac Hill into a castle-town siege.",
-      "4,174 oak trees smother a 120x120 map; the ridge above the Hastings marsh was open downland with the Andredsweald behind, not near-continuous forest, and heavy woods make the cavalry envelopment the brief promises impossible to stage.",
-      "Both sides have TOWN_CENTER, MILL, HOUSE, MONASTERY, BARRACKS, STABLE, ARCHERY_RANGE etc. — a settled economy neither invasion army nor the hastily assembled Saxon host possessed on the field.",
-      "16 SKIRMISHERs on the Saxon side overstates Anglo-Saxon missile troops, whose near-absence at Hastings was a decisive weakness; the Normans' archer arm (10 ARCHER vs 21 KNIGHT) is correspondingly underweighted.",
-      "Secondary victory VC2 awards the Norman player the battle simply for having a unit alive after 600 seconds — the nightfall deadline historically favoured Harold, whose army only had to hold until dark, so this inverts the clock.",
-      "Defeat on loss of the player's TOWN_CENTER is a generic AoE2 condition with no counterpart at Hastings; the Normans had no base to lose beyond the Pevensey/Hastings camp, which was never threatened.",
-      "The signature feigned retreats are only narrated in text; no trigger (PATROL/TASK_OBJECT) models a Norman withdrawal drawing the fyrd off the ridge, so the player never performs the tactic the brief centres on."
+      "Both players are set to RANDOM civilization, so Norman and Anglo-Saxon architecture sets and unit bonuses are left to chance — the single most avoidable setting error, given Franks/Britons were available.",
+      "Player 2 (Harold) is given 44 STONE_WALL segments, a GATE_NORTH_TO_SOUTH and 4 GUARD_TOWERs, plus triggers to close the gates. Senlac Hill was an unfortified ridge; the shield wall was a formation of men, not masonry, and stone curtain walls invert the tactical problem the Normans actually faced.",
+      "4,174 TREE_OAK on a 120x120 map makes the battlefield largely forest; Senlac was an open slope with the Andredsweald behind the Saxons, not around them.",
+      "Anglo-Saxon side is given a STABLE; Harold's army fought entirely dismounted.",
+      "16 SKIRMISHERs for the Saxons overstates Anglo-Saxon missile capability, which the sources describe as negligible at Hastings (the Normans held the archery advantage).",
+      "Harold is only the generic KING unit with no evidence of renaming, so the player's target is anonymous rather than identified as Harold Godwinson.",
+      "Defeat on loss of the Norman TOWN_CENTER is an anachronism — the invasion force had a beachhead camp at Hastings, not a settled town centre, and its loss decided nothing.",
+      "Alternate victory by surviving a 600s timer with one unit alive rewards the Norman player for merely enduring, whereas William had to break the line before nightfall or the invasion failed.",
+      "Feigned retreats are announced in narration but no trigger models them; the PATROL sorties are the only tactical scripting."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -85,6 +88,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,

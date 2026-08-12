@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.667,
     "setting": 3.333,
@@ -39,13 +40,48 @@
     "pedagogy": 4.0,
     "mean": 3.917,
     "issues_found": [
-      "Player 2 (Turks) fields no Janissaries, the engine's Turkish unique unit and the iconic core of Mehmed II's assault troops; instead the Ottoman host is built from Knights, Cavaliers and Crossbowmen, a generic European composition. This substitution was avoidable.",
-      "Mehmed II is represented by a CAVALIER and Giustiniani by a CHAMPION renamed via triggers — acceptable given no engine heroes exist, but the Ottoman commander as a mailed Frankish-style Cavalier reads as a Latin knight rather than a Sultan.",
-      "No third player for the Genoese/Venetian contingent, even though the narration turns on Giustiniani's Genoese wavering after his fall; his soldiers are indistinguishable from Byzantine line troops.",
-      "TREE_PALM_FOREST x10 is botanically wrong for the Bosphorus in spring 1453 and an avoidable choice given the engine's oak/pine sets.",
-      "The Golden Horn strand is narrated (ships dragged overland, sea walls to be guarded) but implemented purely as land-unit spawns: no docks, warships, transports or any naval object appears anywhere in the roster, so the outflanking of the sea walls is asserted rather than shown.",
-      "Only 2 gates and 78 stone wall segments stand in for the triple Theodosian line; there is no outer wall/moat layering, so the 'repair the breach' mechanic plays out on a single curtain.",
-      "The victory narration ('Constantinople stands, and the Empire endures') asserts a counterfactual outcome for the historical event the scenario names."
+      "Ottoman assault force is cavalry-heavy (6 Knights, 8 Cavalry Archers, 1 Cavalier) while the historical assaults on the Theodosian Walls were carried out by infantry — azabs, bashi-bazouks and Janissaries; the Turks civ ships the JANISSARY unit and it is entirely absent, an avoidable omission for the most famous infantry of the siege.",
+      "Player 2 has no Militia/Champion-line infantry at all, so the wall-storming that defines the event is performed by mounted troops.",
+      "No water is present anywhere in the roster (no ships, no docks, no transports), yet the objectives and D4 text demand the player 'guard the sea walls along the Golden Horn and Marmara' and describe ships dragged overland; the 'Golden Horn Raid' trigger simply spawns more land units, so the naval flank exists only in text.",
+      "Only 78 stone wall tiles and 3 Guard Towers on a 120x120 map cannot represent the double Theodosian land wall with its moat and 96 towers; there is a single wall line rather than inner/outer works.",
+      "TREE_PALM_FOREST x10 is a desert/tropical tree set, wrong for the Thracian/Marmara landscape.",
+      "GOLD_MINE x10, STONE_MINE x8, FORAGE_BUSH x16 and SHEEP x18 are generic economic scatter inside a city under blockade and starvation, undercutting the siege setting.",
+      "Byzantine garrison lacks any Byzantine-flavoured defenders the engine offers (e.g. Cataphract for the emperor's household, Hand Cannoneer/Genoese crossbow contingent is only hinted by 6 Crossbowmen); no Trebuchet or Mangonel for the defenders' counter-battery.",
+      "The 53-day siege is compressed into a 420-second scenario, and the winning text asserts 'Constantinople stands, and the Empire endures' — an outcome the sources do not record."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "BYZANTINES",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 3.333,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.083,
+    "issues_found": [
+      "No Janissaries: the Turkish civilization's unique unit in this engine is the Janissary, and the elite janissary corps led Mehmed's 29 May assault. Their absence is avoidable, with the Ottoman infantry represented only by generic CROSSBOWMAN and mounted KNIGHT/CAVALRY_ARCHER.",
+      "The 'Ships Over Land' dialogue and the 'Golden Horn Raid' trigger assert an amphibious outflanking, but the rosters contain no naval units, no docks and no visible water — the engine offers Galleys, Cannon Galleons and Transport Ships, so this was avoidable.",
+      "TREE_PALM_FOREST x10 is wrong flora for the Bosphorus/Thrace; the engine's oak, pine or Mediterranean tree sets would fit.",
+      "Gaia clutter (10 gold mines, 8 stone mines, 16 forage bushes, 18 sheep) is generic economic scatter rather than urban detail; a besieged city cut off by land and sea would not be dotted with grazing flocks and open mines.",
+      "Only 3 BOMBARD_CANNON represent a siege train of some seventy guns including the Basilica; the two scripted breaches are handled by KILL_OBJECT rather than by actual cannon fire, so the bombardment is narrated more than modelled.",
+      "The victory epilogue ('Constantinople stands, and the Empire endures a little longer') is counterfactual, though the brief itself frames victory this way.",
+      "Giustiniani is represented by a single CHAMPION and his fall is detected by DESTROY_OBJECT, so the historically decisive moment (his wounding and withdrawal collapsing morale) has no mechanical consequence beyond a message."
     ],
     "combatants_precondition": {
       "passed": true,

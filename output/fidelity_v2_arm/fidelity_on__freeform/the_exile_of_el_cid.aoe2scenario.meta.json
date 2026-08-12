@@ -30,7 +30,8 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
@@ -38,13 +39,13 @@
     "pedagogy": 4.0,
     "mean": 3.0,
     "issues_found": [
-      "El Cid himself is placed as a generic CHAMPION even though the engine ships a dedicated 'El Cid' hero unit (used in the official El Cid campaign) — an avoidable substitution, and the defeat trigger fires on the death of an anonymous Champion",
-      "Player 1 is assigned FRANKS rather than SPANISH, despite the Spanish civilisation existing and being the obvious fit for a Castilian retinue (Franks give French castle/architecture and Throwing Axemen availability)",
-      "Player 2 civilisation is left as RANDOM, so Zaragoza/Barcelona/Valencia architecture (mosque, Middle-Eastern building set) is not guaranteed — the taifa cities may render with any civ's buildings",
-      "All three distinct antagonists — al-Mutamin's Zaragoza (ally), Berenguer Ramon II of Barcelona (enemy), and Ibn Jahhaf's Valencia (target) — are collapsed into a single Player 2 roster, so the player's Muslim patron is indistinguishable from his Muslim and Christian enemies",
-      "Berenguer Ramon II, named and given dialogue, has no unit representing him; his 'defeat' is a DESTROY_OBJECT on an unnamed KING, so the historically notable capture (not death) of the Count of Barcelona at Tébar is misrepresented as a kill",
-      "Force scale is token: a 141-object map with 8 Player 1 units and 12 Player 2 units for a thirteen-year mercenary career and a two-year siege; the two-year starvation siege of Valencia is reduced to breaking one gate",
-      "TREE_PALM_FOREST across the map suits coastal Valencia but not the Ebro valley around Zaragoza and Almenar"
+      "El Cid is represented by a generic CHAMPION (infantry) even though Age of Empires II ships an actual 'El Cid Campeador' hero unit (mounted) — an entirely avoidable substitution, and it also makes the campaign's mounted mercenary captain fight on foot",
+      "Player 1 is assigned FRANKS; the Spanish civilization exists in the same expansion that added El Cid and is the obvious fit for a Castilian retinue",
+      "Player 2 civilization is RANDOM, so the Zaragozan/Valencian architecture, unit set and tech are literally unassigned — Saracens (or Berbers) was available and required for Andalusi opponents",
+      "Berenguer Ramon II, al-Mutamin and Ibn Jahhaf all appear only in text; in the roster they are anonymous KING objects, and both the Christian Catalan count and the Muslim qadi are lumped into the same player with the same camel/cavalry-archer roster",
+      "The Muslim ally al-Mutamin, who is spoken to in dialogue and who paid and sheltered El Cid, has no playable presence — there is no allied Zaragozan force at all, only a hostile player 2",
+      "Valencia's fall is staged as a southern gate stormed and the qadi cut down; the city actually capitulated by negotiated surrender after starvation, with Ibn Jahhaf executed afterwards",
+      "Only 141 objects and a single BARRACKS for the Castilian side; a nine-warrior retinue with two crossbowmen represents 13 years of mercenary campaigning very thinly"
     ],
     "combatants_precondition": {
       "passed": true,
@@ -65,6 +66,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

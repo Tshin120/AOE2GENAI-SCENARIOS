@@ -27,39 +27,42 @@
   "timestamp_utc": "2026-08-09T12:47:09Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
     "combatants": 4.0,
-    "material": 3.333,
-    "events": 3.333,
-    "anachronism": 4.333,
+    "material": 3.667,
+    "events": 3.0,
+    "anachronism": 4.0,
     "pedagogy": 3.0,
-    "mean": 3.6,
+    "mean": 3.533,
     "anachronisms_found": [
-      "English garrison of Troyes is built from CROSSBOWMAN and PIKEMAN only; the engine offers the Longbowman (and Man-at-Arms/Man-at-Arms line) which would be the obvious avoidable choice for a 1429 English garrison, and the crossbow-heavy roster actually reads as French",
-      "GAIA TREE_OAK x2880 on a 120x120 map turns the open chalk plains and vineyards of Champagne into dense forest",
-      "Reims Cathedral, the entire objective of the campaign, is represented only by a GAIA MONASTERY; a Wonder or a walled town centre was available and would have read far better",
-      "Player THREE 'English-loyal raiders' are CHAMPION + MILITIA, i.e. the plain infantry line, which gives no cultural read at all for Anglo-Burgundian routiers"
+      "Player One's King unit represents Charles, but in June-July 1429 he was still the Dauphin and uncrowned; the scenario's own text acknowledges this ('The Dauphin shall be crowned Charles VII'), so the King object is a visible contradiction of the premise it is built on",
+      "2,880 oak trees on a 120x120 map turns Champagne — open chalk plain, cereal country and vineyards between Troyes, Chalons and Reims — into dense woodland; the engine offers open grass/farm terrain, so this was avoidable",
+      "Player THREE's CHAMPION as the 'raider chief' is a generic two-handed swordsman with no counterpart in 1429 Champagne; an equivalent AoE2 option (a named-appearance cavalry or a Woad-free Long Swordsman/Cavalier) would have read no worse and a Burgundian-flagged captain would have read better",
+      "No English or Burgundian commander object anywhere: the garrisons of Troyes and Chalons were Anglo-Burgundian, and the scenario gives the opposing side no identity beyond generic pikemen and crossbowmen"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
     "setting": 2.0,
     "events": 3.0,
     "objective": 4.0,
-    "pedagogy": 4.0,
+    "pedagogy": 3.333,
     "mean": 3.25,
     "issues_found": [
-      "Both active players are set to RANDOM civilization, so the Anglo-French architecture and unit skins are undetermined at load; a Frankish/Briton assignment was trivially available and would have fixed the look of Champagne and of the English garrison.",
-      "The English garrison of Troyes is built from CROSSBOWMAN, when the engine ships both Archer and the Briton Longbowman — the signature English missile arm — making the choice an avoidable mis-characterisation.",
-      "The escort column consists of 5 knights and 5 crossbowmen; the historical march to Reims was an army of roughly ten to twelve thousand, and no French captains of the march (Dunois, Alençon, La Hire, La Trémoille) appear even as renamed generics.",
-      "The 'ambush at the river crossing' near Chalons is invented: Chalons opened its gates to Charles without a fight, as did Troyes after negotiation.",
-      "The 'raider chief' side quest (Player 3 Champion + Militia, Player 4 pikemen villagers) is wholly fictional and has no counterpart in the June-July 1429 march.",
-      "The brief promises garrisons that 'can be fought or persuaded to surrender', but the only implemented resolution is a Gate Breached destroy-trigger — the actual historical outcome at Troyes (capitulation after Joan's assault preparations) is not modelled.",
-      "Victory is gated on JOAN_OF_ARC entering the Reims area rather than on the KING (the Dauphin), inverting the stated and historical requirement that Charles reach the cathedral.",
-      "2,880 oak trees blanket a map representing the open chalk plains and vineyards of Champagne."
+      "Both active players are set to RANDOM civilization, so the architecture, unit bonuses and even the visual style of the 'French' escort and 'English' garrison are undefined at load — an avoidable error given Franks/Britons are both in the roster.",
+      "The English garrison of Troyes is built from CROSSBOWMAN x6 and PIKEMAN x6 with no LONGBOWMAN, discarding the engine's one distinctly English unit for a generic continental garrison.",
+      "No named English commander or captain of Troyes on player 2, and player 3's 'raider chief' is an unnamed CHAMPION.",
+      "The brief promises that Troyes and Chalons 'can be fought or persuaded to surrender', but the trigger graph contains no surrender/tribute/diplomacy path — only 'Gate Breached' on destroying the gate. Historically Troyes capitulated after Joan prepared an assault and Chalons opened its gates without a fight; the scenario only models storming them.",
+      "The 'Ambush at the river crossing' near Chalons and the repeated 'Pursuit Wave' English riders from Troyes are inventions; the march to Reims was notable for the near-absence of English field opposition.",
+      "The village side-quest (slay the raider chief, CHANGE_OWNERSHIP of player 4's pikemen) is wholly fictional and has no counterpart in the 1429 march.",
+      "Victory is checked on JOAN_OF_ARC entering the Reims area rather than on the KING (Dauphin), even though the brief itself states victory requires the Dauphin reaching the cathedral.",
+      "Map furniture is generic wilderness — 2,880 oak trees plus gold and stone mines and a ROMAN_RUINS decoration — rather than the settled Champagne countryside with the towns of Troyes and Chalons as places."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -83,6 +86,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.667,
     "setting": 2.0,

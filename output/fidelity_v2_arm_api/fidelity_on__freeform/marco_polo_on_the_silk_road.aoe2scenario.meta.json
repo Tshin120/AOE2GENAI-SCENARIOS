@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.0,
     "setting": 4.0,
@@ -39,12 +40,46 @@
     "pedagogy": 4.0,
     "mean": 4.0,
     "issues_found": [
-      "Kublai Khan himself is absent as a unit or character: the destination at Shangdu is only GAIA scenery (a CASTLE, TOWN_CENTER and two GUARD_TOWERs), so the man whose court the journey was undertaken to reach never appears.",
-      "Maffeo Polo, Niccolo's brother and the third member of the party on the 1271 departure, is entirely missing; the text speaks only of father and son.",
-      "The 'pack camels' are CAMEL_RIDER units — armed light cavalry standing in for baggage animals — when the engine offers TRADE_CART/trade cargo units that would far better represent a merchant caravan's goods.",
-      "Escort composition of 2 KNIGHTs, 3 MAN_AT_ARMS and 3 CROSSBOWMEN gives the Polos a Latin-European men-at-arms retinue; the Venetians travelled as merchants under Mongol safe-conduct (the Khan's golden tablet), not with heavy Western cavalry.",
-      "Attributing the ambush to 'Khaidu's horsemen' conflates Kaidu's dynastic war against Kublai with anonymous desert banditry; Polo's own account of the route dangers (Karaunas brigands, the Gobi crossing) is not what is depicted.",
-      "The party's actual hardships — Marco's long illness in Badakhshan, the year lost in the Pamirs and Gobi — are reduced to a single scripted PATROL ambush of 10 raiders."
+      "The 'pack camels' whose loss triggers defeat are CAMEL_RIDER units — armed cavalry, not pack animals. The engine ships TRADE_CART (and even the Persian/Saracen trade caravan line), which would have represented a merchant caravan's goods far better; this is an avoidable substitution.",
+      "The Polo escort is composed of KNIGHT x2, MAN_AT_ARMS x3 and CROSSBOWMAN x3 — a Latin-Christian men-at-arms retinue that the Polos, a party of three Venetian merchants travelling under Mongol passport (the paiza), never had. Spearmen/skirmishers or renamed villagers/light cavalry would have been closer.",
+      "Kublai Khan himself is absent as a character: Shangdu is only a GAIA Castle, Town Center and two Guard Towers with a flag, so the sovereign the whole journey is aimed at never appears even as a renamed generic unit.",
+      "Maffeo Polo, Niccolo's brother and the third member of the 1271 party (and a veteran of the 1260-69 first journey), is omitted entirely from roster and text.",
+      "Marco Polo is cast as the KING unit, which reads as a monarch rather than a merchant's son; a renamed villager or the same treatment given Niccolo would have been more apt (though the KING is at least a non-combatant escort object, which suits the mechanic).",
+      "The stone/gold mines and forage bushes are decorative economy objects with no gathering role in an escort mission — filler rather than setting."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "ITALIANS",
+        "2": "MONGOLS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.167,
+    "issues_found": [
+      "Maffeo Polo, Niccolo's brother and the third member of the 1271 journey (and a veteran of the earlier 1260-69 trip), is entirely absent; a second renamed villager or trade cart would have cost nothing.",
+      "The caravan's 'pack camels' are represented by three armed CAMEL_RIDER units. The engine ships a TRADE_CART (and Trade Cart / Trade Workshop objects) that would far better represent merchant pack transport; mounted camel warriors are an avoidable mis-cast for baggage animals.",
+      "Player 1's escort of 2 Knights, 3 Men-at-Arms and 3 Crossbowmen is a European men-at-arms retinue; the Polos travelled as a tiny merchant party under a Mongol paiza (safe-conduct tablet), not with a Latin knightly guard.",
+      "Kublai Khan's summer palace at Shangdu is rendered by a GAIA CASTLE plus Town Center and Guard Towers — a European fortification silhouette for a Mongol-Chinese imperial residence, when the nearby Pavilion/Yurt eyecandy shows the author knew better options existed.",
+      "Kublai Khan himself is never placed or named at Shangdu; the destination is an empty flag and building cluster rather than the Khan's court the brief foregrounds.",
+      "The ambush is attributed to 'Khaidu's horsemen'. Kaidu was a real contemporary Chagatayid rival of Kublai, but no source has him raiding the Polo caravan; the specific attack is invented.",
+      "95 objects on a 120x120 map leaves the deserts and Pamir passes largely as empty terrain; only 6 cliffs and 5 rock formations stand in for the mountain passes the narration announces."
     ],
     "combatants_precondition": {
       "passed": true,

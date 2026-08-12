@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.667,
     "setting": 3.0,
@@ -39,12 +40,48 @@
     "pedagogy": 4.333,
     "mean": 4.167,
     "issues_found": [
-      "GAIA roster places 2,400 oak trees on a 120x120 map, making Senlac an enclosed forest; the battlefield was an open ridge with the Andredsweald only at the Norman rear, and heavy woodland undercuts the cavalry-charge/feigned-retreat premise the text builds the mission on",
-      "Economic furniture inappropriate to a single-day pitched battle: Town Centers, 7 Houses, Barracks, Stable, Archery Range, Monastery, 10 gold mines, 8 stone mines, sheep and forage bushes for a battle that involved no settlement or production",
-      "Norman infantry is badly under-weighted (6 spearmen against 10 knights and 6 light cavalry); at Hastings the Norman line was mostly infantry with cavalry as the exploiting arm",
-      "No terrain elevation or marsh is evidenced in the placed content, so the defensive advantage of the hill named in the narration is asserted in text only",
-      "The 'Feigned Retreat' and 'Fyrd Lured' triggers only fire DISPLAY_INSTRUCTIONS; the decisive tactic of the battle is narrated rather than mechanically rewarded",
-      "Closing text 'William's claim to the English throne stands unopposed' overstates the outcome — Dover, London and the northern earls submitted only after further campaigning, and rebellions followed for years"
+      "2,400 oak trees on a 120x120 map turns Senlac Hill into dense forest; the battle was fought on an open ridge with the Andredsweald only at the Saxon rear, and heavy woodland also makes cavalry charges and feigned retreats physically implausible.",
+      "Scattered economic furniture (10 gold mines, 8 stone mines, 16 forage bushes, 12 sheep, 8 deer) belongs to a settlement map, not a single-day set-piece battle.",
+      "Both armies are given Town Centers and Houses (and the Anglo-Saxons a Monastery, Archery Range/Barracks/Stable for the Normans); neither side had a town or ecclesiastical base on the battlefield — Harold's army had marched from Stamford Bridge and William's was camped at Hastings.",
+      "The 'Fyrd Lured' turning point fires only DISPLAY_INSTRUCTIONS twice — the feigned retreat and the resulting break in the shield wall are narrated but never mechanically modelled (no unit tasking, ownership change, or AI reaction), so the battle's decisive tactic is text only.",
+      "Only 2 archers on the Anglo-Saxon side and no Norman crossbows/heavy infantry mass; the Norman force of 30 combatants is thin for depicting three lines (archers, infantry, cavalry).",
+      "Closing narration that William's claim 'stands unopposed' overstates the outcome — resistance continued through 1066-71."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "BRITONS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.667,
+    "setting": 3.333,
+    "events": 4.333,
+    "objective": 5.0,
+    "pedagogy": 4.333,
+    "mean": 4.333,
+    "issues_found": [
+      "2400 oak trees blanket a 120x120 map; Senlac Hill was fought over open slope and cultivated ground, with the Andredsweald woods only to the English rear — the forest density misrepresents the battlefield",
+      "Both sides are given Town Centers, Houses, a Monastery, an Archery Range, Barracks and Stable; Hastings was a single-day encounter battle with no settlement, fortification or production on the field",
+      "Gold mines, stone mines, forage bushes, sheep and deer are placed as economic resources, which has no correspondence to a one-day pitched battle and invites base-building play",
+      "No explicit terrain elevation is evident in the placed content for 'Senlac Hill', the defining tactical feature of the battle (the English held the high ground)",
+      "Norman force lacks any infantry beyond 6 spearmen; William's centre contained a substantial dismounted infantry contingent alongside the cavalry and archers",
+      "Anglo-Saxon Monastery is an odd inclusion for an army encamped overnight on a ridge",
+      "Closing text ('Duke William's claim to the English throne stands unopposed') overstates the outcome — resistance continued through 1066–71 (Exeter, the North, Ely)"
     ],
     "combatants_precondition": {
       "passed": true,

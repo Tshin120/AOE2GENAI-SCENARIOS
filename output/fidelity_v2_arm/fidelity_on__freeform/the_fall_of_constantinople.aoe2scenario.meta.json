@@ -30,21 +30,22 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
-    "combatants": 4.0,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 3.333,
     "setting": 2.0,
-    "events": 4.0,
+    "events": 3.667,
     "objective": 5.0,
-    "pedagogy": 4.0,
-    "mean": 3.75,
+    "pedagogy": 3.667,
+    "mean": 3.5,
     "issues_found": [
-      "Both players' civilizations are set to RANDOM, so neither the Byzantine defenders nor the Ottoman besiegers get their proper architecture set, unique units or bonuses — an avoidable omission given Byzantines and Turks both ship in the engine",
-      "The narration promises 'Janissaries, Sipahi cavalry and the whole Ottoman host', but the Ottoman roster is MAN_AT_ARMS x10 with no Hand Cannoneer or Janissary, the very unit the Turkish civ provides; generic men-at-arms are a poor stand-in for the elite gunpowder infantry that led the May 29 assault",
-      "Force ratio is essentially even (about 30 defenders against 31 besiegers), inverting the defining asymmetry of 1453 where roughly 7,000 defenders faced an army an order of magnitude larger",
-      "TREE_PALM_FOREST on the map is wrong flora for the Thracian/Marmara littoral and reads as a desert-set filler",
-      "No water, docks or ships anywhere in the roster, yet the scenario stages a Golden Horn sea-wall assault and narrates the fleet dragged overland; the naval dimension exists only in text",
-      "The Theodosian Walls are rendered by 49 stone wall tiles with two gates on a 120x120 map — no representation of the triple line (moat, outer wall, inner wall) that made the defence historically distinctive",
-      "The Giustiniani trigger text says he 'has fallen' when he was wounded and carried off, which is what precipitated the collapse; the trigger's own name ('Wounded') contradicts its displayed line"
+      "Both players are set to RANDOM civilization, so neither the Byzantine defenders nor the Ottoman besiegers get their correct bonuses, unique units, or architecture set — an avoidable error since the engine ships both Byzantines and Turks.",
+      "The final-assault narration promises 'Janissaries, Sipahi cavalry and the whole Ottoman host', but the Ottoman roster contains only MAN_AT_ARMS x10 as infantry; the editor offers the Janissary (and Hand Cannoneer), so the Sultan's elite corps is represented by a Feudal-age generic swordsman.",
+      "The Golden Horn episode has no naval component whatsoever: no docks, no galleys, no transports, no fire ships for either side, despite the text describing ships dragged overland and 'Ottoman marines' probing the sea walls.",
+      "TREE_PALM_FOREST x6 is vegetation wrong for Thrace/the Bosphorus; a Mediterranean or oak/pine set would be plausible.",
+      "Defender force composition is too symmetrical: ~30 Byzantine units against ~32 Ottoman units, whereas the sources describe roughly 7,000 defenders against 60,000-80,000 besiegers; the disparity that defined the siege is absent.",
+      "Byzantine roster includes KNIGHT x4 and CHAMPION x1 but no gunpowder or Byzantine-flavoured troops; the Genoese contingent under Giustiniani is only implied by a renamed unit and a trigger.",
+      "Hagia Sophia is represented by a MONASTERY (two are placed), and the defeat trigger fires on a monastery generically — the engine offers the Wonder/temple objects that would read more clearly as the great church."
     ],
     "combatants_precondition": {
       "passed": true,
@@ -66,6 +67,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 3.667,
     "setting": 2.0,

@@ -27,37 +27,41 @@
   "timestamp_utc": "2026-08-09T12:51:15Z",
   "fidelity": {
     "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v1",
+    "rubric_hash": "d2471612da57d3e1",
     "n_judgements": 3,
-    "combatants": 2.333,
-    "material": 3.0,
-    "events": 4.333,
+    "combatants": 2.667,
+    "material": 3.333,
+    "events": 4.0,
     "anachronism": 2.0,
     "pedagogy": 3.0,
-    "mean": 2.933,
+    "mean": 3.0,
     "anachronisms_found": [
-      "EL_CID placed as an English garrison commander: Rodrigo Diaz de Vivar died in 1099 and was Castilian, not English, and never fought in Champagne",
-      "WILLIAM_THE_CONQUEROR as the other enemy commander: he died in 1087, 342 years before the march to Reims; the editor offers period-correct English heroes from the Joan of Arc campaign (Sir John Fastolf, Duke of Suffolk) that were avoidable substitutes",
-      "English garrison armed with CROSSBOWMAN only: the engine provides the Longbowman, the signature English unit of the Hundred Years' War, so the crossbow-only garrison is an avoidable mismatch",
-      "PAVILION_A in the French camp is a decorative Asian/tent-style object rather than European campaign architecture"
+      "EL_CID placed as an English garrison commander: Rodrigo Diaz de Vivar died in 1099 and was a Castilian, not an Englishman - wrong century and wrong culture entirely",
+      "WILLIAM_THE_CONQUEROR placed as the second garrison commander: died 1087, some 340 years before the march to Reims; the engine offers Sir John Fastolf (an actual English commander of the 1429 campaign, shipped with the Joan of Arc campaign), so this was avoidable",
+      "English garrisons armed only with CROSSBOWMAN when the engine provides the Longbowman for exactly this English force; crossbows were more a Burgundian/continental garrison weapon than the signature English archery of 1429",
+      "Troyes and Chalons are labelled purely 'sworn to King Henry' and staffed as English; both were in practice Anglo-Burgundian towns, and no Burgundian presence is represented in text or roster"
     ]
   },
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,
     "events": 4.0,
     "objective": 5.0,
-    "pedagogy": 3.0,
+    "pedagogy": 4.0,
     "mean": 3.25,
     "issues_found": [
-      "The garrison commanders of Troyes and Chalons are EL_CID (Rodrigo Diaz, an 11th-century Castilian, on the English side no less) and WILLIAM_THE_CONQUEROR (d. 1087) — both are named heroes from the wrong century placed as 1429 English/Burgundian captains, an avoidable error since the editor offers generic units that can be renamed (and AoE2's Joan of Arc content ships English figures such as Sir John Fastolf)",
-      "Both players are assigned civilization RANDOM, so architecture, unit skins and tech could render as Aztec, Japanese, Mongol etc. — nothing anchors the map to 15th-century Champagne, and the French/English contrast is lost",
-      "The English garrisons are armed with CROSSBOWMAN and PIKEMAN only; the defining English arm of the period, the longbow (Briton Longbowman / archer line), is entirely absent",
-      "Troyes and Chalons are labelled purely 'English' garrisons ('sworn to King Henry'); in fact both were Burgundian-held towns of the Anglo-Burgundian alliance, and Troyes yielded after a short siege and negotiation with Robert le Macon rather than to a slain 'garrison commander'",
-      "The '[Ambush] Forest Ambush' by 'English Scouts' is invented — no such attack on the Reims progress is recorded",
-      "Reims cathedral is represented only by a GAIA MONASTERY and flags; the text promises 'twin towers' that nothing on the map supplies (a Wonder or castle-scale structure was available)"
+      "Player 2 (the English/Burgundian garrisons of Troyes and Chalons) is commanded by EL_CID, an 11th-century Castilian who has no connection to the Hundred Years' War; the engine offers no 1429 English hero, but a renamed generic Champion/Knight would have been the correct substitution, so this is avoidable error.",
+      "WILLIAM_THE_CONQUEROR is the second garrison commander — right island, wrong century by 363 years; he is a Norman duke of 1066, not a Lancastrian captain of Henry VI's occupation.",
+      "Both players are set to civilization RANDOM, so architecture and unit skins for the French escort and the English garrison towns are undetermined; Franks/Britons were the obvious explicit assignments.",
+      "The garrisons are labelled purely 'English' in dialogue ('sworn to King Henry'); Troyes and Chalons were held by Anglo-Burgundian forces, and it was largely Burgundian allegiance that shifted, which the scenario never mentions.",
+      "The 'Forest Ambush' by 'English Scouts' with five patrolling groups is an invention — the march from Gien to Reims met no significant field engagement after Troyes capitulated.",
+      "Troyes 'Falls in Battle' by DESTROY_OBJECT on the garrison commander presents the town as stormable; historically the brief investment ended in negotiated surrender, not the killing of a commander.",
+      "Reims cathedral is represented only by a GAIA MONASTERY plus torches/flags — a thin stand-in for the coronation site that is the map's whole objective, given the engine's Wonder and cathedral-scale buildings were available."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -86,6 +90,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 2.0,
     "setting": 2.0,

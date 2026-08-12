@@ -30,22 +30,22 @@
   "fidelity_v2": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2",
-    "n_judgements": 1,
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
     "combatants": 4.0,
-    "setting": 2.0,
+    "setting": 3.0,
     "events": 4.0,
     "objective": 2.0,
-    "pedagogy": 3.0,
-    "mean": 3.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
     "issues_found": [
-      "Both active players are set to RANDOM civilization. The engine ships a Mongols civ (and Tatars/Huns as alternatives); leaving Temujin's own tribe as a random draw means his warband and any built architecture may be Frankish, Teutonic or Japanese, an entirely avoidable error.",
-      "SUBOTAI is placed in Temujin's starting warband dated 1186. Subutai was born c. 1175 and entered Temujin's service in the late 1190s; he did not ride with the Borjigin warband of 1186.",
-      "All four opponents — the Merkit, Jamukha's Jadaran, the 'Naiman-aligned outpost' and Tayang Khan's Naiman — are lumped into a single Player Two. The anda alliance and its rupture are handled only by CHANGE_OWNERSHIP, so the player never faces distinct tribal confederations as the history requires.",
-      "The Merkit/enemy camp is enclosed with PALISADE_WALL x8 and a GATE_NORTH_TO_SOUTH. Steppe nomad camps of the period were unwalled yurt encampments; the engine's yurts alone (already used) would have been correct.",
-      "Enemy chiefs (Merkit chief, Jamukha, Tayang Khan) are represented by KING units — dismounted sedentary monarchs for mounted steppe chieftains — when a renamed cavalry or Khan-type unit was available.",
-      "The war against Toghrul/Wang Khan of the Kereit (1203), the decisive campaign before the Naiman war, is entirely absent; the Kereit appear only as a passing text mention as allies, and the Tatar campaigns are omitted too.",
-      "The break with Jamukha is triggered by an invented event — raiding a 'Naiman-aligned outpost to prove your strength'. The historical rupture followed Dalan Balzhut and Jamukha's election as Gur-khan in 1201, not a scripted raid.",
-      "Victory is UNCONDITIONAL and fires on no condition, so the encoded goal is not the kurultai proclamation the objective text and history point to; nothing in the trigger graph makes winning depend on reaching the gathering ground or slaying Tayang Khan."
+      "Both players are set to RANDOM civilization, so architecture (palisade walls, gate) and unit skins are undetermined; Mongols were available and should have been assigned to at least Player 1.",
+      "All three antagonists — the Merkit chief, Jamukha, and Tayang Khan of the Naiman — are the same Player 2 faction, collapsing three distinct steppe powers into one enemy and making the shifting alliance structure invisible mechanically.",
+      "The named chieftains are represented by KING units (a European crowned monarch model on horseless foot); a renamed cavalry unit or Cavalry Archer would have been a better substitute for a steppe khan.",
+      "Historical order is reversed: Jamukha and Toghrul of the Kereit jointly rescued Borte, but here the anda with Jamukha is forged only AFTER the Merkit raid, and the rescue text credits the Kereit alone.",
+      "The trigger causing Jamukha's break — raiding a 'Naiman-aligned outpost' — is invented; the rupture followed the Dalan Balzhut campaign and the tribes' election of Temujin, not a raid on Naiman clients.",
+      "Jamukha's own defeat and capture (1205) is omitted; he simply changes ownership and the player never confronts him.",
+      "Victory trigger has no condition and fires immediately, so the encoded win is unrelated to the kurultai, the death of Tayang Khan, or any historical milestone."
     ],
     "combatants_precondition": {
       "passed": false,
@@ -72,6 +72,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 3.0,

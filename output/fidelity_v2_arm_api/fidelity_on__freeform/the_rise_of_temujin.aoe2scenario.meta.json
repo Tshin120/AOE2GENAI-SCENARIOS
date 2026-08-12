@@ -31,6 +31,7 @@
   "fidelity_v2_1": {
     "judge_model": "anthropic/claude-opus-5",
     "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
     "n_judgements": 3,
     "combatants": 4.0,
     "setting": 4.0,
@@ -46,6 +47,41 @@
       "Timeline compression is presented as continuous: the Jamukha rupture (Dalan Baljut, c. 1187) and the Naiman defeat at Chakirmaut (1204) are shown as consecutive marches east",
       "Only 94 objects on a 120x120 map leaves the steppe nearly empty; the Merkit and Naiman 'camps' are three or four yurts each",
       "The trigger path 'Naiman Defeated - Kurultai' names the faction and the outcome rather than Tayang Khan himself, leaving the keyed target slightly under-labelled"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "MONGOLS",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "rubric_hash": "675888722d2d3786",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 3.667,
+    "objective": 5.0,
+    "pedagogy": 3.667,
+    "mean": 4.167,
+    "issues_found": [
+      "Tayang Khan of the Naiman is represented by a CAVALIER, a Western European heavy lancer; the Mongol/Turk rosters offer cavalry archers, light cavalry or even a renamed steppe horseman that would read far better on the steppe. The stray KNIGHT in Player 2's roster has the same problem.",
+      "Only two active players collapses the Merkits, Jamukha's Jadaran, and the Naiman confederation into a single TURKS opponent; the Merkits and Jamukha's following were Mongol tribes and a third player set to MONGOLS was available.",
+      "Toghrul / Wang Khan of the Kereit is entirely absent, yet he was the indispensable ally in the Merkit raid to recover Borte and Temujin's overlord for most of 1186-1203. The Tatar and Kereit wars are likewise skipped.",
+      "The narration has Temujin slay Toghtoa Beki during the rescue of Borte; the Merkit chief escaped and lived until roughly 1208, and it was Chilger Bokh, not Toghtoa, who had taken Borte.",
+      "A GAIA-owned CAVALIER and four GAIA LIGHT_CAVALRY are scattered on the map with no narrative role, and 94 objects on a 120x120 map leaves the steppe nearly empty of the rival camps the brief describes.",
+      "The kurultai of 1206 is only a text line attached to the victory trigger; no gathering of tribes, no assembled khans, and the proclamation is asserted rather than staged."
     ],
     "combatants_precondition": {
       "passed": true,
