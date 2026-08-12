@@ -1,0 +1,68 @@
+{
+  "title": "The Mongol Invasion of Japan",
+  "description": "Summer 1281. Kublai Khan's second invasion fleet arrives off Hakata Bay, where Japanese defenders have spent years building a stone wall along the shoreline. The player commands the samurai defence and must hold the wall and harass the anchored fleet until the late-summer typhoon destroys it.",
+  "scenario_type": "defense",
+  "map_size": 144,
+  "players": 2,
+  "difficulty": "hard",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "east_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Mongol_invasions_of_Japan",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_f28bbac329cf",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 16,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_mongol_invasion_of_japan.aoe2scenario",
+  "timestamp_utc": "2026-08-12T05:56:14Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.667,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.417,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the Japanese defenders and Yuan/Mongol invaders may appear with any architecture and unit bonuses; Japanese and Mongols are both in the engine and were the obvious assignments",
+      "The invasion fleet — the single most important element of the 1281 campaign — is represented by four PAVILION_A decorative buildings rather than any of the engine's actual ships (transport ships, war galleys, cannon galleons excepted for era). The 'anchored vessels' the player must burn are therefore land tents",
+      "There is no water anywhere in the placed content; a battle at Hakata Bay is staged on a landlocked map dominated by 272 oak trees, cliffs, gold and stone mines",
+      "No named commanders on either side: Kublai Khan is only mentioned in text, and no renamed unit stands for him, Shōni Kagesuke, or Takezaki Suenaga, despite generic units being freely renameable",
+      "Mongol/Yuan assault force is 6 PIKEMEN and 6 mangonels/onagers with only 6 cavalry archers — siege-heavy composition that misrepresents an amphibious landing force of Korean and Chinese conscript infantry and Mongol horse archers, and the invaders arrive by walking rather than landing from ships",
+      "Player 1 fields CROSSBOWMAN, a weapon absent from Japanese armies of the period, when the engine's archers alone would have served"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}

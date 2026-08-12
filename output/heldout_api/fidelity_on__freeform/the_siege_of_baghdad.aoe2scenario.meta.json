@@ -1,0 +1,65 @@
+{
+  "title": "The Siege of Baghdad",
+  "description": "January 1258. Hulagu Khan's Mongol army encircles the Abbasid capital, breaches the eastern wall after the caliph refuses terms, and sacks the city within two weeks. The player commands the Mongol siege and must take the caliph's palace before the defenders can organise a relief sortie.",
+  "scenario_type": "conquest",
+  "map_size": 144,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "middle_east",
+  "player_civ": "central_asian",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Siege_of_Baghdad_(1258)",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_399d0073152e",
+  "candidate": 1,
+  "attempts": 2,
+  "trigger_count": 16,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_siege_of_baghdad.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:05:18Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 4.0,
+    "issues_found": [
+      "Hulagu Khan is represented by a CHAMPION — an on-foot heavy infantryman — rather than a cavalry unit; the engine offers Cavalry Archer, Light Cavalry, or Scout Cavalry (or the Khan/Mongol cavalry hero models) that would suit a Mongol khan far better, so the mounted character of the Mongol command is lost.",
+      "No water at all is placed: Baghdad straddled the Tigris and the Mongols' bridge-of-boats blockade and the flooding of the dikes were central to the siege; the map is a dry plain.",
+      "The 'relief sortie' the entire defeat condition hangs on is an invention — no Abbasid relief army existed in 1258, and the one field sortie that was made was drowned when the Mongols cut the dikes, not thrown back against the siege lines.",
+      "Defender garrison is token (6 archers, 6 camel riders, 4 spearmen, 1 castle) against a force the sources put in the tens of thousands; the asymmetry of the historical siege — a vast Mongol host against a demoralised but numerous garrison — is inverted.",
+      "Defeat on 'Hulagu Khan Slain' has no historical basis; Hulagu directed the siege from outside and was never at risk, so the loss condition is not the one the Mongol side actually faced.",
+      "Player 1's camp is only yurts — no siege workshop or engineer presence, though the trebuchets/mangonels represent the Chinese siege corps that actually broke the wall."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "MONGOLS",
+        "2": "SARACENS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

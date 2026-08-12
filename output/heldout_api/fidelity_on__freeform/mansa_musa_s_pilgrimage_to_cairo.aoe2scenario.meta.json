@@ -1,0 +1,64 @@
+{
+  "title": "Mansa Musa's Pilgrimage to Cairo",
+  "description": "July 1324. The emperor of Mali arrives outside Cairo on his pilgrimage to Mecca, accompanied by an enormous caravan and distributing so much gold that its price in Egypt fell for years afterwards. The player escorts the caravan to the Mamluk sultan al-Nasir Muhammad's citadel, managing an audience complicated by the protocol of prostration that Musa was unwilling to perform.",
+  "scenario_type": "diplomacy",
+  "map_size": 120,
+  "players": 3,
+  "difficulty": "easy",
+  "region": "desert",
+  "player_civ": "middle_eastern",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Mansa_Musa",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_530dfb01e061",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 9,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\mansa_musa_s_pilgrimage_to_cairo.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:05:45Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 3.333,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.083,
+    "issues_found": [
+      "Mali is represented by the SARACENS civilization; where the engine offers a Malians civilization (African Kingdoms), that is the avoidable choice for Mansa Musa's own retinue, and Saracen camel riders/cavalry archers give the caravan a Levantine rather than West African character.",
+      "The Mamluk host is assigned TURKS; while the Mamluk elite was Turkic in origin, Saracen architecture would better match Cairo's cityscape, and the two sides end up nearly indistinguishable in unit roster (camel riders and cavalry archers on both).",
+      "The 'desert raiders' (Player 3 camel riders and light cavalry) and the accompanying defeat-by-assassination premise are invented; no source describes an armed attack on Musa's caravan approaching Cairo — the real hazards were logistical and diplomatic.",
+      "The 'enormous caravan' of the sources (thousands of followers, camels bearing gold) is rendered by 6 villagers and 4 camel riders; more baggage/villager/camel objects were available in the engine and would have cost nothing but placement.",
+      "A MONASTERY stands in for the citadel's religious establishment, and no representation of the Nile or Cairo's urban fabric appears in the object list beyond a single walled compound with one castle and two guard towers — Cairo in 1324 was one of the largest cities in the world."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "SARACENS",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

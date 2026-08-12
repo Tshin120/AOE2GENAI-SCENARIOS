@@ -1,0 +1,74 @@
+{
+  "title": "The Siege of Baghdad",
+  "description": "January 1258. Hulagu Khan's Mongol army encircles the Abbasid capital, breaches the eastern wall after the caliph refuses terms, and sacks the city within two weeks. The player commands the Mongol siege and must take the caliph's palace before the defenders can organise a relief sortie.",
+  "scenario_type": "conquest",
+  "map_size": 144,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "middle_east",
+  "player_civ": "central_asian",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Siege_of_Baghdad_(1258)",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_f038c785c668",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 11,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_siege_of_baghdad.aoe2scenario",
+  "timestamp_utc": "2026-08-12T05:55:39Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 3.667,
+    "mean": 3.0,
+    "issues_found": [
+      "GENGHIS_KHAN is placed to represent Hulagu Khan. Genghis died in 1227, thirty-one years before the siege, and the engine offers no Hulagu hero, so a renamed generic Mongol cavalry unit (or Khan/Cavalry Archer) was the correct and available solution. The defeat trigger even names the unit 'Hulagu Khan', confirming the substitution was avoidable.",
+      "SALADIN is placed to represent Caliph Al-Musta'sim. Saladin was a Kurdish Ayyubid sultan who died in 1193, of a different dynasty and the wrong century; the narration explicitly names Al-Musta'sim, so a renamed generic unit would have been far more faithful.",
+      "Both players are set to civilization RANDOM. The Mongol besiegers and the Abbasid/Saracen defenders are both fixed by history, and the engine ships Mongols and Saracens; leaving them random means the architecture set, unit skins and tech tree can be Britons or Teutons in Baghdad.",
+      "No water feature at all despite the narration asserting 'No relief can reach the city by land or river' — the Tigris divided Baghdad and the Mongols famously bridged and blockaded it, and the pontoon/river encirclement is the one geographic fact the text raises and the map omits.",
+      "Defender garrison is tiny (25 combat units behind 111 stone wall tiles) and includes CAMEL_RIDER as the sortie force, whereas the historically decisive Abbasid sortie under Mujahid al-Din Aybak occurred before the encirclement and was destroyed by flooding — the in-scenario mid-siege sortie is invented.",
+      "A single CASTLE stands for the Caliph's palace complex; the Dar al-Khilafa was a palace quarter, and the map's MARKET/MONASTERY give little sense of the House of Wisdom or the city's scale (302 objects on 144x144, with 92 palm trees as the main filler)."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "GENGHIS_KHAN",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "GENGHIS_KHAN",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}

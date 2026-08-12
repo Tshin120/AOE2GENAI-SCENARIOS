@@ -1,0 +1,73 @@
+{
+  "title": "The Battle of Kulikovo",
+  "description": "September 1380. Dmitry Donskoy's coalition of Russian principalities meets Mamai's Golden Horde army on the upper Don. The player commands the Russian centre, which must absorb the Horde's cavalry assault long enough for the ambush regiment concealed in the treeline to strike its flank.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "steppe",
+  "player_civ": "eastern_european",
+  "enemy_civ": "central_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Kulikovo",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_229d96776137",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 11,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_battle_of_kulikovo.aoe2scenario",
+  "timestamp_utc": "2026-08-12T05:58:14Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.0,
+    "issues_found": [
+      "Khan Mamai is represented by the GENGHIS_KHAN hero unit — a figure from the wrong century (d. 1227) and from the Mongol imperial period rather than the fragmenting Golden Horde of 1380; a renamed generic Light Cavalry or Cavalry Archer would have been correct and was available",
+      "Both players' civilizations are left as RANDOM, so architecture and unit bonuses could resolve to Japanese, Mayan, Aztec, etc. — neither the Slavic/Russian centre nor a steppe horde is guaranteed any plausible visual identity",
+      "CAMEL_RIDER x4 in the Golden Horde army: camels were not a component of Jochid steppe cavalry on the upper Don, and Light Cavalry/Cavalry Archer/Scout were already available to fill the roster",
+      "Russian force is cavalry-heavy (14 Knights + 10 Cavaliers vs 20 infantry) whereas the Russian centre at Kulikovo was overwhelmingly dismounted militia and city levies with the mounted druzhina held back or on the wings",
+      "Closing narration asserts 'Khan Mamai lies dead upon the steppe' — Mamai fled the field and was killed in Crimea some months later; the victory condition bakes this invention in",
+      "No unit is placed to represent Voivode Bobrok or Vladimir of Serpukhov, who commanded the ambush regiment the objectives text makes central; the flank strike is only two PATROL effects on unnamed units",
+      "MANGONEL x2 for the Horde: no siege artillery was deployed by either side in an open field battle on the Kulikovo plain"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": [
+        "GENGHIS_KHAN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}

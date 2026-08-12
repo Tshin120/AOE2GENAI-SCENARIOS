@@ -1,0 +1,64 @@
+{
+  "title": "The Battle of Talas",
+  "description": "July 751. An Abbasid army under Ziyad ibn Salih meets a Tang expeditionary force under Gao Xianzhi on the Talas river in Central Asia. The player commands the Tang column and must hold its line long enough to withdraw eastward, while the allied Karluk contingent on its flank changes sides mid-battle and turns the engagement into a rout.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 3,
+  "difficulty": "hard",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Talas",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_678ac5ad3ced",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 16,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_battle_of_talas.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:04:01Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 3.333,
+    "events": 5.0,
+    "objective": 5.0,
+    "pedagogy": 5.0,
+    "mean": 4.333,
+    "issues_found": [
+      "No water at all is placed: the Talas river, which the dialogue calls 'our shield' and which the Abbasid army is said to 'ford', is entirely absent from the map (360 cliff tiles stand in for terrain instead).",
+      "Player 3, the Karluk contingent whose defection is the scenario's turning point, has no civilization assigned, so its architecture (a lone Stable) is whatever the editor defaults to rather than a plausible steppe-Turkic assignment (e.g. Huns, Mongols, or Turks).",
+      "The Tang column includes 6 CAVALIER, a heavy European knight-line unit; the engine's Chinese roster offered cavalry-archer and light-cavalry options far closer to a Tang frontier army of the Anxi Protectorate.",
+      "Peacetime infrastructure (Town Center, Market, Monastery, Houses, Archery Range, Barracks) is placed for what the brief describes as an expeditionary column in the field, and the Abbasid side likewise gets a Castle, Town Center and gate — settlement furniture rather than a field encampment.",
+      "The 260-second overrun timer compresses an engagement the sources place over several days into roughly four minutes, leaving little room for the assault-then-defection sequence to be felt."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "CHINESE",
+        "2": "SARACENS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "title": "The Battle on the Ice",
+  "description": "April 1242. Alexander Nevsky's Novgorod militia faces a Livonian Order force on the frozen surface of Lake Peipus. The player commands the Novgorod side and must anchor its flanks against the shoreline so that the Order's armoured wedge drives into the centre and is enveloped.",
+  "scenario_type": "defense",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "northern_europe",
+  "player_civ": "eastern_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_on_the_Ice",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_17ddf3063e8d",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 11,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_battle_on_the_ice.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:00:02Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.667,
+    "setting": 1.667,
+    "events": 3.333,
+    "objective": 3.0,
+    "pedagogy": 3.0,
+    "mean": 2.667,
+    "issues_found": [
+      "Player 2's commander is FREDERICK_BARBAROSSA, a Holy Roman Emperor who died in 1190 — half a century before 1242 and unconnected to the Livonian Order. The engine ships no Livonian/Teutonic commander hero, but a renamed generic Teutonic Knight, Cavalier or even a Knight named 'Andreas von Velven' would have been the correct substitution; casting a famous crusading emperor of the wrong century is avoidable error.",
+      "Both players are set to RANDOM civilization, so the Novgorod side may appear with Frankish, Mayan or Japanese architecture and the Order side likewise; Slavs/Teutons (or at minimum any fixed, plausible pair) were available and would have fixed building sets and unit lines.",
+      "2,866 oak trees dominate a 120x120 map ostensibly set on the open frozen surface of Lake Peipus; the roster shows no ice, snow or water features at all, and the added gold mines, stone mines, deer and sheep are generic random-map furniture rather than a lake battlefield.",
+      "ROMAN_RUINS placed in the Order's camp is anachronistic decoration for a 13th-century Baltic crusader force.",
+      "The narration asserts 'The Grand Master is slain' — no Grand Master of the Order was present or killed at Lake Peipus (the Livonian contingent was led by Andreas von Velven; roughly twenty brother-knights fell).",
+      "The 'Ice Breaks' trigger dramatizes armoured knights drowning as the lake gives way, which derives from later legend and Eisenstein's film rather than the Livonian Rhymed Chronicle or Novgorod First Chronicle.",
+      "The defeat text 'The city of Novgorod burns. The Order has broken through' invents a consequence that never occurred, and the loss condition is a TOWN_CENTER standing in for Novgorod placed on the battlefield itself.",
+      "Force scale is thin and imbalanced against the sources' accounts of a Novgorod militia host plus Suzdalian cavalry: 22 Novgorod combatants versus 16 for the Order, with the crusader side given no Livonian native auxiliaries (Estonian/Chud levies) who formed the bulk of its infantry."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "FREDERICK_BARBAROSSA"
+      ],
+      "unsupported_heroes": [
+        "FREDERICK_BARBAROSSA"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}

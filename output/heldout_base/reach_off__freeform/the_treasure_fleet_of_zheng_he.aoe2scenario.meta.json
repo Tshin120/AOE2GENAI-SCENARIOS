@@ -1,0 +1,70 @@
+{
+  "title": "The Treasure Fleet of Zheng He",
+  "description": "1405. The Ming admiral Zheng He sails from Nanjing with a fleet of treasure ships far larger than anything then afloat, bound for Calicut by way of Southeast Asia. The player escorts the fleet through the Strait of Malacca, where the pirate Chen Zuyi's ships must be cleared before the voyage can continue.",
+  "scenario_type": "escort",
+  "map_size": 144,
+  "players": 3,
+  "difficulty": "medium",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "east_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Zheng_He",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_fb2458e4307e",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 13,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_treasure_fleet_of_zheng_he.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:00:44Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 1.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 2.5,
+    "issues_found": [
+      "A scenario about the largest fleet then afloat contains not one ship: no war galleys, junks, transport ships, cannon galleons, or even a dock appear in any roster. The engine offers all of these, so this is entirely avoidable.",
+      "Both players' civilizations are left RANDOM, despite the engine shipping Chinese (and Malay in the Rise of the Rajas set) — so the architecture, unit lines, and tech of both the Ming fleet and the Palembang pirates are undefined.",
+      "Player 1's Ming force is a generic European feudal army: CAVALIER x3, CROSSBOWMAN x6, PIKEMAN x4 with Barracks/Stable/Blacksmith/Archery Range. A treasure-fleet escort had marines and ships, not heavy shock cavalry.",
+      "Player 2's pirate fleet is likewise a land garrison — 63 STONE_WALL, a GATE, 2 GUARD_TOWERs, spearmen and archers — turning a sea battle in the strait into a walled-castle siege.",
+      "The map is dry land: CLIFF_DEFAULT, TREE_OAK, FORAGE_BUSH, GOLD_MINE x10, STONE_MINE x8, sheep and deer. There is no evidence of a strait, coastline, or water at all.",
+      "Zheng He and Chen Zuyi are both represented by the same generic KING unit, so the admiral and the pirate chief are mechanically and visually identical.",
+      "Chronology is compressed and misdated: the destruction of Chen Zuyi's fleet and his capture occurred at Palembang in 1407 on the first voyage's return leg, not on the 1405 outbound passage as the narration implies.",
+      "The Malaccan third party is only 1 MONASTERY, 1 PAVILION_A and 4 SPEARMEN — a Christian monastery as the seat of the Malaccan envoy is the wrong religious architecture."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}

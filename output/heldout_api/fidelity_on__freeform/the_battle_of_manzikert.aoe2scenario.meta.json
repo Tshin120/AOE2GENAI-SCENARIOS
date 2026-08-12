@@ -1,0 +1,64 @@
+{
+  "title": "The Battle of Manzikert",
+  "description": "August 1071. The Seljuk sultan Alp Arslan confronts a much larger Byzantine army under the emperor Romanos IV Diogenes in eastern Anatolia. The player commands the Seljuk force, whose mounted archers must exhaust the Byzantine line and exploit the defection of its mercenary wing before the emperor can force a decisive engagement.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "middle_east",
+  "player_civ": "middle_eastern",
+  "enemy_civ": "eastern_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Manzikert",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_1a446876136b",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 13,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_battle_of_manzikert.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:02:52Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.667,
+    "objective": 5.0,
+    "pedagogy": 5.0,
+    "mean": 4.417,
+    "issues_found": [
+      "Four CAMEL_RIDERS in the Seljuk host: camelry is not attested in Alp Arslan's Manzikert army, which was overwhelmingly Turkoman horse-archers with a ghulam household guard, and the engine offered light cavalry/cavalry archers instead.",
+      "Byzantine infantry is rendered entirely as PIKEMAN; the engine's spearman line is the natural abstraction, but no attempt is made to distinguish the Varangian/Frankish heavy foot and the Armenian levies that made up Romanos's centre (two-handed swordsmen or militia would have differentiated them).",
+      "Ten GOLD_MINE and eight STONE_MINE tiles are scattered across what should be a battlefield tableau, an economic-map artifact irrelevant to a single-day engagement.",
+      "The mercenary defection and Doukas's withdrawal both fire on bare TIMERs rather than on the player's harassment succeeding, so the historical cause-and-effect (Byzantine exhaustion producing the collapse) is asserted in text but not modelled.",
+      "Player 2 holds two KING objects (Romanos and Doukas), which makes the victory target ambiguous in play even though the trigger path identifies the Emperor."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "TURKS",
+        "2": "BYZANTINES"
+      },
+      "unassigned_players": []
+    }
+  }
+}

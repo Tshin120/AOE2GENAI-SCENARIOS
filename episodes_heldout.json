@@ -1,0 +1,98 @@
+[
+  {
+    "title": "The Battle of Talas",
+    "description": "July 751. An Abbasid army under Ziyad ibn Salih meets a Tang expeditionary force under Gao Xianzhi on the Talas river in Central Asia. The player commands the Tang column and must hold its line long enough to withdraw eastward, while the allied Karluk contingent on its flank changes sides mid-battle and turns the engagement into a rout.",
+    "scenario_type": "battle",
+    "region": "east_asia",
+    "player_civ": "east_asian",
+    "enemy_civ": "middle_eastern",
+    "players": 3,
+    "map_size": 120,
+    "difficulty": "hard",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Talas"
+  },
+  {
+    "title": "The Siege of Baghdad",
+    "description": "January 1258. Hulagu Khan's Mongol army encircles the Abbasid capital, breaches the eastern wall after the caliph refuses terms, and sacks the city within two weeks. The player commands the Mongol siege and must take the caliph's palace before the defenders can organise a relief sortie.",
+    "scenario_type": "conquest",
+    "region": "middle_east",
+    "player_civ": "central_asian",
+    "enemy_civ": "middle_eastern",
+    "players": 2,
+    "map_size": 144,
+    "difficulty": "medium",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Siege_of_Baghdad_(1258)"
+  },
+  {
+    "title": "The Battle of Manzikert",
+    "description": "August 1071. The Seljuk sultan Alp Arslan confronts a much larger Byzantine army under the emperor Romanos IV Diogenes in eastern Anatolia. The player commands the Seljuk force, whose mounted archers must exhaust the Byzantine line and exploit the defection of its mercenary wing before the emperor can force a decisive engagement.",
+    "scenario_type": "battle",
+    "region": "middle_east",
+    "player_civ": "middle_eastern",
+    "enemy_civ": "eastern_european",
+    "players": 2,
+    "map_size": 120,
+    "difficulty": "medium",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Manzikert"
+  },
+  {
+    "title": "The Mongol Invasion of Japan",
+    "description": "Summer 1281. Kublai Khan's second invasion fleet arrives off Hakata Bay, where Japanese defenders have spent years building a stone wall along the shoreline. The player commands the samurai defence and must hold the wall and harass the anchored fleet until the late-summer typhoon destroys it.",
+    "scenario_type": "defense",
+    "region": "east_asia",
+    "player_civ": "east_asian",
+    "enemy_civ": "east_asian",
+    "players": 2,
+    "map_size": 144,
+    "difficulty": "hard",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Mongol_invasions_of_Japan"
+  },
+  {
+    "title": "Mansa Musa's Pilgrimage to Cairo",
+    "description": "July 1324. The emperor of Mali arrives outside Cairo on his pilgrimage to Mecca, accompanied by an enormous caravan and distributing so much gold that its price in Egypt fell for years afterwards. The player escorts the caravan to the Mamluk sultan al-Nasir Muhammad's citadel, managing an audience complicated by the protocol of prostration that Musa was unwilling to perform.",
+    "scenario_type": "diplomacy",
+    "region": "desert",
+    "player_civ": "middle_eastern",
+    "enemy_civ": "middle_eastern",
+    "players": 3,
+    "map_size": 120,
+    "difficulty": "easy",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Mansa_Musa"
+  },
+  {
+    "title": "The Battle of Kulikovo",
+    "description": "September 1380. Dmitry Donskoy's coalition of Russian principalities meets Mamai's Golden Horde army on the upper Don. The player commands the Russian centre, which must absorb the Horde's cavalry assault long enough for the ambush regiment concealed in the treeline to strike its flank.",
+    "scenario_type": "battle",
+    "region": "steppe",
+    "player_civ": "eastern_european",
+    "enemy_civ": "central_asian",
+    "players": 2,
+    "map_size": 120,
+    "difficulty": "medium",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Kulikovo"
+  },
+  {
+    "title": "The Battle on the Ice",
+    "description": "April 1242. Alexander Nevsky's Novgorod militia faces a Livonian Order force on the frozen surface of Lake Peipus. The player commands the Novgorod side and must anchor its flanks against the shoreline so that the Order's armoured wedge drives into the centre and is enveloped.",
+    "scenario_type": "defense",
+    "region": "northern_europe",
+    "player_civ": "eastern_european",
+    "enemy_civ": "western_european",
+    "players": 2,
+    "map_size": 120,
+    "difficulty": "medium",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_on_the_Ice"
+  },
+  {
+    "title": "The Treasure Fleet of Zheng He",
+    "description": "1405. The Ming admiral Zheng He sails from Nanjing with a fleet of treasure ships far larger than anything then afloat, bound for Calicut by way of Southeast Asia. The player escorts the fleet through the Strait of Malacca, where the pirate Chen Zuyi's ships must be cleared before the voyage can continue.",
+    "scenario_type": "escort",
+    "region": "east_asia",
+    "player_civ": "east_asian",
+    "enemy_civ": "east_asian",
+    "players": 3,
+    "map_size": 144,
+    "difficulty": "medium",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Zheng_He"
+  }
+]

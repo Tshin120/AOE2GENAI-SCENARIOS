@@ -1,0 +1,64 @@
+{
+  "title": "The Mongol Invasion of Japan",
+  "description": "Summer 1281. Kublai Khan's second invasion fleet arrives off Hakata Bay, where Japanese defenders have spent years building a stone wall along the shoreline. The player commands the samurai defence and must hold the wall and harass the anchored fleet until the late-summer typhoon destroys it.",
+  "scenario_type": "defense",
+  "map_size": 144,
+  "players": 2,
+  "difficulty": "hard",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "east_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Mongol_invasions_of_Japan",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_db6d2f6d3115",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 14,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_mongol_invasion_of_japan.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:04:15Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 3.333,
+    "setting": 3.667,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.0,
+    "issues_found": [
+      "The Yuan invasion fleet — the central object of the scenario, which the player is told to raid and which the typhoon must destroy — is represented by no ships whatsoever. The engine offers TRANSPORT_SHIP, WAR_GALLEY, FIRE_SHIP and DOCK; the 'anchored fleet' is instead two PAVILION_A tents and two flags, so the 'Raid the Anchored Fleet' and typhoon KILL_OBJECT beats have no visible fleet to act on.",
+      "Mongol landing force is cavalry-heavy (CAVALRY_ARCHER x9, LIGHT_CAVALRY x4) for a beachhead where the Yuan army was overwhelmingly disembarked infantry and crossbowmen crammed onto a narrow strand; a larger proportion of SPEARMAN/ARCHER and fewer horse would have been closer to the sources.",
+      "CLIFF_DEFAULT_3 x480 dominates the map, but Hakata Bay's Genko Borui was built along a low sandy shoreline; the cliff-walled terrain misrepresents the geography that made the stone wall necessary in the first place.",
+      "The [Bonus] trigger and its text assert 'Fan Wenhu has fallen!' — Fan Wenhu survived the campaign, abandoned his troops and fled home, and was later disgraced. Rewarding the player for killing him invents a death the sources deny.",
+      "Only 19 samurai and 14 archers stand for the assembled Kyushu gokenin levies; the defence reads as a garrison skirmish rather than a mobilized provincial host, and no dock/naval element exists for the Japanese small-boat raiders either."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "JAPANESE",
+        "2": "MONGOLS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

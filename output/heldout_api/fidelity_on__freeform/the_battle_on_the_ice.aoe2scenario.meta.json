@@ -1,0 +1,65 @@
+{
+  "title": "The Battle on the Ice",
+  "description": "April 1242. Alexander Nevsky's Novgorod militia faces a Livonian Order force on the frozen surface of Lake Peipus. The player commands the Novgorod side and must anchor its flanks against the shoreline so that the Order's armoured wedge drives into the centre and is enveloped.",
+  "scenario_type": "defense",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "northern_europe",
+  "player_civ": "eastern_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_on_the_Ice",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_eafbba5299c3",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 11,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_battle_on_the_ice.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:07:35Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 3.333,
+    "objective": 4.0,
+    "pedagogy": 3.333,
+    "mean": 3.833,
+    "issues_found": [
+      "Victory requires slaying 'Andreas von Velven' (a renamed Cavalier); the historical Livonian vice-master Andreas von Felben survived the battle and by most accounts was not even present in the front line, so the scenario's decisive event is invented.",
+      "The [Event] The Ice Cracks trigger and the accompanying line ('Weighed down by their armor... it gives way!') asserts the ice-collapse as fact; this is a 20th-century embellishment popularised by Eisenstein's film, not something the Novgorod First Chronicle or the Livonian Rhymed Chronicle support.",
+      "Player 1 fields ten LIGHT_CAVALRY and ten CAVALRY_ARCHER against only ten Cavaliers, six Crossbowmen and four Spearmen; the Novgorod force is thereby more mobile and mounted than the 'peasant militia' the text describes, and the Order's side lacks any representation of its numerous Estonian/Chud infantry levies (Spearmen or Militia would have covered this).",
+      "Player 2 is given a CASTLE and two GUARD_TOWERs for an encounter fought on open lake ice with no fortifications on either side; Watch Towers/palisade or nothing at all would have been less anachronistic for a field battle.",
+      "Nevsky is represented by a CHAMPION (dismounted heavy infantry) though the prince fought mounted with his druzhina; a renamed Cavalier or Knight would have been the closer substitution.",
+      "Forest cover is 1040 TREE_OAK only; the Peipus shoreline is pine/birch/spruce country, a small but avoidable flavour error."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "SLAVS",
+        "2": "TEUTONS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

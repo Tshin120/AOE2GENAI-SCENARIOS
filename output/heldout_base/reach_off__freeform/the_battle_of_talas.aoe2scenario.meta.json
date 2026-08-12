@@ -1,0 +1,75 @@
+{
+  "title": "The Battle of Talas",
+  "description": "July 751. An Abbasid army under Ziyad ibn Salih meets a Tang expeditionary force under Gao Xianzhi on the Talas river in Central Asia. The player commands the Tang column and must hold its line long enough to withdraw eastward, while the allied Karluk contingent on its flank changes sides mid-battle and turns the engagement into a rout.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 3,
+  "difficulty": "hard",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Talas",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_d138fa72cc6c",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 14,
+  "output_path": "output/heldout_base\\reach_off__freeform\\the_battle_of_talas.aoe2scenario",
+  "timestamp_utc": "2026-08-12T05:56:38Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.333,
+    "objective": 5.0,
+    "pedagogy": 4.333,
+    "mean": 3.333,
+    "issues_found": [
+      "SALADIN is placed as the Abbasid commander Ziyad ibn Salih — Saladin is a late 12th-century Ayyubid figure, over four centuries after 751, and the engine offers plenty of generic cavalry or camel units that could have been renamed 'Ziyad ibn Salih' instead. An avoidable, major casting error.",
+      "All three players are assigned civilization RANDOM, so Tang, Abbasid and Karluk architecture, unit bonuses and building sets are left to chance; the engine ships Chinese, Saracen and Mongol/Turkic-flavoured civs that would have fit the three parties.",
+      "Gao Xianzhi is represented by the KING unit — a non-combatant escort piece rather than a mounted commander, which misrepresents a Tang general who fought and rode out of the field; a renamed cavalry or general-type unit was available.",
+      "The Tang column includes a MONASTERY-less but otherwise generic European-style barracks/stable/archery-range camp with GUARD_TOWERs for a mobile expeditionary force far from home; permanent fortification is out of place for a column on the march in the Talas valley.",
+      "1,740 CLIFF_DEFAULT_3 objects turn the Talas valley into a mountain maze; the historical field was open steppe river ground where the Karluk cavalry could envelop a flank.",
+      "The Abbasid roster is a generic Saracen mix (archers, camel riders, cavalry archers) with no representation of the Khurasani heavy infantry/cavalry core that formed Ziyad's line.",
+      "The 480-second window compresses an engagement the sources describe as lasting several days, and no text acknowledges the multi-day stalemate before the Karluk defection."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM",
+        "3": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}

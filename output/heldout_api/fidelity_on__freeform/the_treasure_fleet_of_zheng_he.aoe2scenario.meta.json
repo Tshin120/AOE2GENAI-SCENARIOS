@@ -1,0 +1,65 @@
+{
+  "title": "The Treasure Fleet of Zheng He",
+  "description": "1405. The Ming admiral Zheng He sails from Nanjing with a fleet of treasure ships far larger than anything then afloat, bound for Calicut by way of Southeast Asia. The player escorts the fleet through the Strait of Malacca, where the pirate Chen Zuyi's ships must be cleared before the voyage can continue.",
+  "scenario_type": "escort",
+  "map_size": 144,
+  "players": 3,
+  "difficulty": "medium",
+  "region": "east_asia",
+  "player_civ": "east_asian",
+  "enemy_civ": "east_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Zheng_He",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_version": "v2",
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_02ea22b9245b",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 16,
+  "output_path": "output/heldout_api\\fidelity_on__freeform\\the_treasure_fleet_of_zheng_he.aoe2scenario",
+  "timestamp_utc": "2026-08-12T06:08:25Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 3.333,
+    "objective": 5.0,
+    "pedagogy": 3.667,
+    "mean": 4.083,
+    "issues_found": [
+      "The Palembang action against Chen Zuyi occurred in 1407, on the return leg of the first voyage, not on the outbound passage of 1405 as the narration and mission structure assert; the scenario compresses and reorders the voyage so the pirate battle gates the trip to Calicut.",
+      "Chen Zuyi's pirate force includes SCOUT_CAVALRY x4 - mounted troops are an odd and avoidable inclusion for a riverine/estuarine pirate stronghold at Palembang, where the engine's infantry and ships would have sufficed.",
+      "A MONASTERY in the pirate camp is an unmotivated European-Christian building choice for a Chinese-expatriate pirate settlement in Sumatra; a dock, market or house would have been more plausible.",
+      "Zheng He is represented by a KING, a slow, non-combat unit that reads as a monarch rather than a fleet commander; a renamed Champion or a named flagship would have been a closer generic stand-in (though the engine ships no Chinese admiral hero).",
+      "Shi Jinqing's faction (Player 3) has no civilization listed among active players, leaving his market and pavilion architecturally unanchored.",
+      "Fleet scale is drastically reduced (4 galleons, 4 war galleys, 2 transports) against a historical armada of 60+ large ships and ~27,000 men - largely a limit of the medium, but no attempt is made to suggest mass."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "CHINESE",
+        "2": "CHINESE"
+      },
+      "unassigned_players": []
+    }
+  }
+}

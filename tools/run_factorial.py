@@ -107,7 +107,9 @@ def main():
     ap.add_argument("--no-introspection", dest="introspection", action="store_false",
                     help="Run every cell with introspection-guided repair disabled")
     ap.add_argument("--cells", default="all",
-                    help="'all' (2x2), 'reach' (reachability only, templated), "
+                    help="'all' (2x2), 'baseline' (reach_off__freeform alone - the "
+                         "shared baseline of every fidelity arm), "
+                         "'reach' (reachability only, templated), "
                          "'style' (prompt style only, reachability on), "
                          "'rubric' (the v1 fidelity-rubric arm alone; baseline is "
                          "reach_off__freeform), 'fidelity' (the v2 fidelity-prompt arm; "
@@ -152,7 +154,12 @@ def main():
         {"name": "fidelity_on__reach_on__freeform", "reachability": True,
          "prompt_style": "freeform", "fidelity_prompt": True},
     ]
-    if args.cells == "reach":
+    if args.cells == "baseline":
+        # The shared baseline of every fidelity arm, on its own. `all` would run
+        # the full 2x2 to get it, which is 4x the generation cost when a paired
+        # comparison only needs this one cell.
+        cells = [c for c in all_cells if c["name"] == "reach_off__freeform"]
+    elif args.cells == "reach":
         cells = [c for c in all_cells if c["prompt_style"] == "templated"]
     elif args.cells == "style":
         cells = [c for c in all_cells if c["reachability"]]

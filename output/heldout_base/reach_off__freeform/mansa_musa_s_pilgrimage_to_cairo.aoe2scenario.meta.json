@@ -1,0 +1,72 @@
+{
+  "title": "Mansa Musa's Pilgrimage to Cairo",
+  "description": "July 1324. The emperor of Mali arrives outside Cairo on his pilgrimage to Mecca, accompanied by an enormous caravan and distributing so much gold that its price in Egypt fell for years afterwards. The player escorts the caravan to the Mamluk sultan al-Nasir Muhammad's citadel, managing an audience complicated by the protocol of prostration that Musa was unwilling to perform.",
+  "scenario_type": "diplomacy",
+  "map_size": 120,
+  "players": 3,
+  "difficulty": "easy",
+  "region": "desert",
+  "player_civ": "middle_eastern",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Mansa_Musa",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": false,
+  "fidelity_prompt_version": null,
+  "fidelity_prompt_hash": null,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_1be7e3721c9a",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 15,
+  "output_path": "output/heldout_base\\reach_off__freeform\\mansa_musa_s_pilgrimage_to_cairo.aoe2scenario",
+  "timestamp_utc": "2026-08-12T05:59:08Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "rubric_hash": "c51d48535325f97f",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.333,
+    "objective": 4.0,
+    "pedagogy": 3.667,
+    "mean": 2.833,
+    "issues_found": [
+      "SALADIN is placed as the Mamluk court figure. Saladin died in 1193 and was the Ayyubid founder; the scenario's own text names al-Nasir Muhammad, a Bahri Mamluk sultan reigning in 1324. This is an avoidable 130-year anachronism, especially since the defeat trigger ('Sultan's Wrath') is keyed to a generic KNIGHT that could simply have been renamed to the sultan.",
+      "Both active players are set to RANDOM civilization, so Cairo's citadel, walls and market may render as Britons, Teutons, Vikings, etc. Saracen/Berber assignment was available and would have fixed architecture for Egypt and West Africa.",
+      "The desert raider ambush and the killing of a 'Raider Chief' are invented; no source records Musa's caravan being attacked en route to Cairo, and victory partly depends on this fictional kill.",
+      "The prostration episode is resolved incorrectly: the text has the Mamluk court waive the custom out of awe, whereas Ibn Fadl Allah al-Umari records that Musa resolved it by prostrating to God rather than to the sultan.",
+      "The Mamluk garrison is composed of ARCHER/SPEARMAN infantry with a single KNIGHT; the Mamluk sultanate's defining arm was heavy horse-archer cavalry, and Camel Riders/Cavalry Archers were available in the engine.",
+      "Mali's escort is only 6 CAMEL_RIDER and 6 villagers, a very thin representation of a caravan the sources describe as thousands of retainers with 80–100 camel-loads of gold; the 'treasury' is one VILLAGER_MALE."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  }
+}
