@@ -12,6 +12,13 @@ The research question is **historical fidelity**: can a model turn a real histor
 scenario that is both playable and faithful? This repo covers the *playable* half end to end and
 covers the *faithful* half with an LLM fidelity judge scored against a fixed rubric.
 
+The method is an iterative loop — write a rubric, put it in the generator's system prompt, measure
+whether quality moves, revise, repeat — run to find the **residual**: what a model fails to improve
+at even when handed the exact grading criteria. What that loop has produced so far is in
+[Experiment record](#experiment-record); the short version is that the largest single effect came
+from three lines of **extracted API fact**, not from better instructions, and it holds on episodes
+the facts were never derived from.
+
 ---
 
 ## Quick start
@@ -50,25 +57,39 @@ run_experiment.py      Control vs. treatment runner (reachability-prompting abla
 scenario_inspect.py    Reads a built .aoe2scenario back into a structured summary
 reachability_audit.py  Static unwinnability audit of built scenarios (no API)
 failure_modes.py       Detectors for the four failure modes the reachability prompt names
-fidelity_judge.py      LLM rubric scoring of historical fidelity
+fidelity_judge.py      LLM rubric scoring of historical fidelity (--rubric v1|v2|v2.1|v3|v3.1)
+
+rubric_v2.py           FROZEN v2 instrument. One source of truth for both sides: the
+                       generator-side block and the judge-side anchors, so they cannot drift
+rubric_v3.py           FROZEN v3 instrument. Splits `setting` into civilization + terrain,
+                       and carries the terrain digest. Defines its OWN objective anchor
+rubric_v2_1.py         The objective-anchor revision. Splices a new OBJECTIVE section into a
+                       copy of each frozen text, so everything else stays byte-identical
 
 tools/                 view_scenario.py, extract_campaign.py, test_api.py,
                        run_factorial.py (experiment driver), analyze.py (result tables),
-                       dedupe_fidelity.py (collapse duplicate judgements in a fidelity log)
+                       dedupe_fidelity.py (collapse duplicate judgements in a fidelity log),
+                       heldout_analysis.py (paired held-out generalization test),
+                       topography_prior.py (blind episode ratings for the terrain analysis)
 examples/              david&goliath_scenario1.py (hand-written), example_usage.py (library API)
 batches/               JSONL batch specs (batch_ablation.jsonl = 8 episodes x 2 prompt styles)
 campaigns/             Official .aoe2campaign files + campaign JSON, used as reference material
 samples/               A couple of checked-in .aoe2scenario artifacts for inspection
 docs/                  Analysis notes
 reachability_research/ FROZEN original control/treatment generators — do not edit
-output/                Generated scenarios, .meta.json sidecars, results.jsonl,
-                       factorial/ (the committed experiment record), reachability.jsonl,
-                       fidelity.jsonl, tables.tex
+output/                Generated scenarios, .meta.json sidecars, results.jsonl, and one dir +
+                       fidelity log per arm (factorial/, fidelity_v2_arm*/, fidelity_v3_arm/,
+                       heldout_base/, heldout_api/), reachability*.jsonl, tables.tex
+
+episodes_heldout.json  The 8 held-out episodes, no overlap with the original corpus
+predictions_v3.md      Pre-registration for the v3 run — falsified, kept as the record
+falsification_v3.md    What the v3 rule firing does and does not license
+NEXT_STEPS.md          Where the loop stands and what runs next
 ```
 
 Everything at the root is importable; `tools/` and `examples/` hold scripts, run from the repo root.
-`output/*.aoe2scenario` is gitignored — the sidecars, `results.jsonl`, `reachability.jsonl`, and
-`fidelity.jsonl` are committed, because they are the experiment record.
+`output/*.aoe2scenario` is gitignored — the sidecars, `results.jsonl`, the reachability rows, and
+every fidelity log are committed, because they are the experiment record.
 
 ---
 
@@ -151,7 +172,9 @@ Each attempt ends in exactly one outcome: `success`, `validation_failure`, `exec
 
 ## Experiments
 
-Two prompt conditions are built into the generator and can be ablated independently.
+Four prompt levers are built into the generator and can be ablated independently. Each is off by
+default, and each off-path is byte-identical to the prompt before that lever existed, so earlier
+runs stay comparable.
 
 **Reachability prompting** (`--reachability` / `--no-reachability`). The treatment appends guidance
 covering four failure modes — resource dead end, composition imbalance, positional trap, timing
@@ -163,6 +186,19 @@ victory can become permanently unreachable if one enemy garrisons, converts, or 
 ("EXACTLY 25–30 TRIGGERS"); `freeform` sends a short generic instruction and lets the model choose
 its own trigger structure and count. Everything else is identical, so the ablation isolates the
 template alone.
+
+**Fidelity rubric, v1** (`--fidelity-rubric`). Restates the judged fidelity dimensions as generation
+*instructions*, never as scoring anchors. Deliberately sized to the reachability block (5744 vs 5877
+chars) so an A/B cannot be confounded with prompt length. Its text is frozen — it produced the
+published rubric-arm scores.
+
+**Fidelity rubric, v2/v3** (`--fidelity-prompt on|off`, `--fidelity-prompt-version v2|v3`). The
+paper's rubric text verbatim, from `rubric_v2.py` / `rubric_v3.py`, so the generator-side instruction
+and the judge-side criterion cannot drift apart. Since generator 2.4 this arm also ships
+`FIDELITY_API_SUPPORT_BLOCK` — the verified `Civilization` / rename API the rubric's requirements
+need. **The two are attached together and cannot currently be separated**: `--fidelity-prompt on`
+gives rubric *and* API facts, so any run of this arm measures the combined effect. Reproducing the
+rubric-only condition means pinning generator 2.3.
 
 ```bash
 python run_experiment.py                              # control + treatment, default model
@@ -199,9 +235,25 @@ run id, candidate/attempt counts, trigger count, and outcome.
 
 ```bash
 python tools/run_factorial.py --episodes output/_episodes.json --workers 8   # 8 episodes x 4 cells
-python tools/run_factorial.py --cells reach     # reachability only, templated
+python tools/run_factorial.py --cells reach       # reachability only, templated
 python tools/run_factorial.py --no-introspection  # every cell with introspection-guided repair off
 ```
+
+`--cells` selects which arm to run. Each of the one-factor arms is scored against its own baseline,
+one factor apart:
+
+| `--cells` | Cell(s) | Baseline it pairs against |
+|---|---|---|
+| `all` (default) | the 2×2 reachability × prompt-style factorial | — |
+| `baseline` | `reach_off__freeform` alone | — (this *is* the shared baseline) |
+| `reach` / `style` | one factor of the 2×2 | the opposite cell |
+| `rubric` | `rubric_on__freeform` (v1 fidelity rubric) | `reach_off__freeform` |
+| `fidelity` | `fidelity_on__freeform` (v2 rubric + API facts) | `reach_off__freeform` |
+| `fidelity_v3` | `fidelity_v3__freeform` | `reach_off__freeform` |
+| `fidelity_reach` | `fidelity_on__reach_on__freeform` | `reach_on__freeform` |
+
+Use `baseline` rather than `all` when a paired comparison only needs that one cell — it is a quarter
+of the generation cost.
 
 ---
 
@@ -244,21 +296,48 @@ ambiguous. Each row of `reachability.jsonl` carries `failure_modes`, `failure_mo
 ### LLM fidelity judge
 
 ```bash
-python fidelity_judge.py --scan output/factorial --update-sidecars
-python fidelity_judge.py --scan output/factorial --repeats 3        # judge self-consistency
+python fidelity_judge.py --scan output/factorial --rubric v2.1 --repeats 3 --update-sidecars
+python fidelity_judge.py --scan output/factorial --rubric v1        # the frozen published instrument
 python fidelity_judge.py --scan output/factorial --mismatch-control # discriminant validity
 ```
 
-Scores five dimensions 1–5 (`combatants`, `material`, `events`, `anachronism`, `pedagogy`) against a
-fixed rubric. The judge sees only a content digest of the built scenario — rosters, trigger
-structure, in-game text — never the generating code, the model, or the prompt condition, so it
-cannot infer which arm produced what. Defaults to Opus 5, a different model family from the default
-generator, so it is not grading its own output.
+Scores each dimension 1–5 against a fixed rubric. The judge sees only a content digest of the built
+scenario — rosters, trigger structure, in-game text — never the generating code, the model, or the
+prompt condition, so it cannot infer which arm produced what. Defaults to Opus 5, a different model
+family from the default generator, so it is not grading its own output.
+
+**Five instruments ship, and their scores are never pooled.**
+
+| `--rubric` | Dimensions | Overall score | Rubric hash |
+|---|---|---|---|
+| `v1` | combatants, material, events, anachronism, pedagogy | mean of all 5 | *(predates hashing)* |
+| `v2` | combatants, setting, events, objective, pedagogy | mean of first 4 | `675888722d2d3786` |
+| **`v2.1`** | same as v2 | mean of first 4 | `c51d48535325f97f` |
+| `v3` | combatants, civilization, terrain, events, objective, pedagogy | mean of first 5 | `dcfc95e1f8ba8c98` |
+| `v3.1` | same as v3 | mean of first 5 | `02346252f802005e` |
+
+`v2.1` / `v3.1` are point revisions that change one anchor's wording and nothing structural. Every
+row records both the version *and* the hash of the exact grading text, because a bare version label
+is not enough to attribute a score — the v2 text was once revised in place, and rows on both sides of
+that edit carry the same `"v2"`. Two rows are comparable when their hashes match; `--resume` and
+`tools/analyze.py` both refuse to pool across a mismatch.
+
+`pedagogy` is scored and reported but excluded from every mean from v2 onward, being largely
+predicted by the others. `objective` is scored from the victory and defeat conditions **extracted
+from the trigger graph**, not from the objectives text — that separation is what stops it collapsing
+into a second narration score. Two static preconditions run before the judge and are reported beside
+the scores without being shown to it: every placed named hero must appear in the brief, and every
+active player must have a civilization assigned.
 
 `--mismatch-control` scores each scenario against a *different* episode's brief. A judge with real
 discriminant validity should rate those far lower than matched pairs; the gap is the judge's
-validation. Results append to `output/fidelity.jsonl`; `--update-sidecars` merges the aggregate into
-each `.meta.json` under a `fidelity` key.
+validation. Results append to the `--out` log; `--update-sidecars` merges the aggregate into each
+`.meta.json` under a per-instrument key (`fidelity` for v1, `fidelity_v2`, `fidelity_v2_1`, …), so
+re-scoring under one instrument never overwrites another.
+
+The sidecar aggregate is built from the whole log rather than from the current invocation, since a
+sweep is normally several passes (one per directory, then a `--resume` top-up for failures). That
+also makes `--update-sidecars --resume` with nothing left to score a zero-cost repair.
 
 `scenario_inspect.py` is the shared reader behind both (`python scenario_inspect.py <file>` prints
 the digest a judge would see).
@@ -280,7 +359,7 @@ path, so one row is one (episode, cell) pair and every metric lines up:
 ```bash
 python tools/analyze.py --root output/factorial \
     --reachability output/reachability.jsonl \
-    --fidelity output/fidelity.jsonl \
+    --fidelity output/fidelity.jsonl,output/fidelity_v2_rev2.jsonl,output/fidelity_v2_1.jsonl \
     --latex output/tables.tex
 ```
 
@@ -288,27 +367,94 @@ It prints build outcomes by cell (Table 1), the reachability audit (2) and failu
 (2b), fidelity by cell (3) and on matched pairs only (3b), judge validation (4), and self-repair
 behaviour (5). `--latex` also writes the same tables as LaTeX.
 
+`--fidelity` is repeatable (or comma-separated) — pass several logs to render every instrument side
+by side. Each distinct (rubric version, rubric hash) gets **its own table** and they are never
+pooled; an unknown version aborts rather than silently rendering one instrument's numbers under
+another's column headers.
+
 ---
 
 ## Experiment record
 
-`output/factorial/` holds the committed run: **8 episodes × 4 cells** (reachability on/off ×
-templated/freeform), 48 generation attempts, a reachability audit of every built scenario, and 124
-fidelity judgements. Reproduce the tables with the `tools/analyze.py` command above. Headline
-numbers from that record:
+Every arm below is committed — sidecars, results logs, and fidelity logs — so the tables regenerate
+from the repo. **All of it is n=8 per cell, one model.** Treat effect sizes as exploratory.
 
-- **Build**: 31/32 scenarios built (the one miss was `reach_off__templated`); 7 episodes needed at
-  least one repair and all 7 were rescued by it.
+### The factorial (the original pilot)
+
+`output/factorial/` — **8 episodes × 4 cells**, reachability on/off × templated/freeform.
+
+- **Build**: 31/32 built; 7 episodes needed at least one repair and all 7 were rescued.
 - **Reachability**: no scenario had *every* victory path fragile. Fragile-but-redundant and
-  timer-only victories showed up only under the templated style (which emits ~35 triggers and 2+
-  victory paths); freeform cells were 100% clean at ~13 triggers and ~1 path.
-- **Fidelity**: freeform scored higher than templated on matched pairs — +0.39 with reachability on
-  (6/8 episodes), +0.60 with it off (6/7) — on the 1–5 rubric mean.
-- **Judge validation**: matched briefs mean 2.79 vs mismatched 1.04, a separation of +1.75; mean
-  within-scenario range across repeats was 0.21.
+  timer-only victories appeared only under the templated style (~35 triggers, 2+ victory paths);
+  freeform cells were 100% clean at ~13 triggers and ~1 path.
+- **Prompt style** was the larger effect; the reachability arm did not separate cleanly at this n.
 
-The reachability arm did not separate cleanly on this n — prompt style is the larger effect in this
-record. Treat all of it as a pilot: 8 episodes per cell, one model, wide confidence intervals.
+### The API-facts result — the headline
+
+Three lines of extracted `Civilization` / rename API fact, shipped with the v2 rubric arm. Paired
+per-episode against the shared baseline, scored under v2.1:
+
+| | delta | 95% CI |
+|---|---:|---|
+| **MEAN4** | **+0.89** | [+0.51, +1.26] |
+| setting | +1.83 | [+1.49, +2.18] |
+| combatants | +1.08 | [+0.36, +1.80] |
+| events | +0.12 | [−0.34, +0.59] |
+
+The **static preconditions** are the cleanest part, being pass/fail with no judge noise: civilization
+assigned went **0/8 → 8/8**, and every-placed-hero-in-the-brief **4/8 → 8/8**. The dissociation is
+the finding — `setting` was mostly API knowledge, `combatants` mostly instruction. The
+unset-civilization defect that ran through all 31 baseline scenarios was never a modelling failure;
+three lines of API fact fixed it.
+
+### Held-out generalization
+
+The API facts were derived from the original eight episodes' failures, so the standing objection was
+that they are eight patches. `episodes_heldout.json` is eight unseen episodes covering configuration
+space the original never used — `conquest` and `diplomacy` types, `east_asia` / `middle_east`
+regions, three 3-player scenarios — and several stress exactly what the facts address: figures with
+no AoE2 hero unit, polities with no clean `Civilization` enum match.
+
+```bash
+python tools/run_factorial.py --episodes episodes_heldout.json --root output/heldout_base --cells baseline
+python tools/run_factorial.py --episodes episodes_heldout.json --root output/heldout_api  --cells fidelity
+python fidelity_judge.py --scan output/heldout_base --rubric v2.1 --repeats 3 --out output/fidelity_heldout.jsonl
+python tools/heldout_analysis.py
+```
+
+| | original 8 | held-out 8 |
+|---|---|---|
+| MEAN4 delta | +0.89 [+0.51, +1.26] | **+1.18 [+0.88, +1.47]** |
+| setting delta | +1.83 | +2.08 |
+| combatants delta | +1.08 | +1.79 |
+| civilization precondition | 0/8 → 8/8 | **0/8 → 8/8** |
+| hero precondition | 4/8 → 8/8 | **2/8 → 8/8** |
+
+**It generalizes.** The held-out effect is at least as large on episodes the facts never saw, from a
+*lower* baseline, with all 8 per-episode deltas positive. Difference of deltas +0.29 (SE 0.20), not
+distinguishable from zero.
+
+Two caveats that belong with the number. The held-out arm measures rubric **and** API facts together,
+because generator 2.4 attaches them as a unit. And the separate "first-attempt builds 0/8 → 8/8"
+claim is a *different* contrast — rubric-only (generator 2.3) → rubric+API (2.4), not baseline →
+rubric+API — which cannot be tested on held-out episodes, since the 2.4 baseline is already 8/8.
+
+### The v3 run — a recorded falsification
+
+`predictions_v3.md` pre-registered *terrain moves more than 0.5 → hypothesis wrong.* Terrain moved
+**+0.75**; the rule fired and is recorded as fired. But the result is carried by one episode
+(Hastings contributes +3.00 of +6.00; the other seven average +0.43), the discriminating prediction
+failed on all three clauses, and 1 of 5 predicted ranges was hit — the one that was the control.
+A follow-up ruled out prior strength as the explanation (ρ = −0.35, p = 0.39).
+
+Full accounting in `falsification_v3.md`. It is kept because a pre-registration is only worth what it
+costs to honour.
+
+### Judge validation
+
+Matched briefs mean **4.20** vs mismatched **1.03** on the v2 arm — a separation of **+3.17**.
+Within-scenario SD of the overall score is 0.07–0.09 across repeats, roughly a tenth of the
+between-scenario spread.
 
 ---
 
@@ -354,6 +500,18 @@ and will 404 today. Any raw slug not in the registry is passed through unchanged
 over timers), wall/gate ownership constraints for AI players, and the full config/provenance schema.
 Read it before touching prompt text in `generator.py`.
 
-`reachability_research/` holds the frozen pre-merge generators. They are superseded by the top-level
-`generator.py` plus the `reachability_prompting` flag and are no longer imported by anything — keep
-them byte-identical for reproducibility.
+**Frozen means frozen.** `rubric_v2.py` and `rubric_v3.py` have judgements hashed against their exact
+text (138 and 48 respectively), and `reachability_research/` holds the pre-merge generators. Editing
+any of them orphans the rows that cite them. To revise a rubric, do what `rubric_v2_1.py` does:
+splice the new section into a *copy* of the frozen text, so every other dimension stays
+byte-identical and the change earns a fresh hash. `FIDELITY_RUBRIC_BLOCK` (the v1 generator-side
+block) is frozen for the same reason — it produced the published rubric-arm scores.
+
+**Pre-register before running.** `predictions_v3.md` says it on its own first line, and it was
+nevertheless committed after the run it predicts — the record notes that, because an mtime is weaker
+evidence than a commit. Write and commit `predictions_v<n>.md` first; a prediction recorded after the
+result is not a prediction.
+
+**Do not pool across instruments.** Scores carry a rubric version *and* a text hash. v1/v2/v3 measure
+different dimension sets, and a `.1` revision measures the same set differently. `tools/analyze.py`
+renders one table per (version, hash) and aborts on an unknown version rather than guessing.
