@@ -42,5 +42,92 @@
       "SHEEP x6 standing in for the caravan's pack animals when TRADE_CART and camel units were available and far more representative of a Silk Road caravan",
       "CASTLE/KEEP used to represent Shangdu, giving the Khan's summer palace generic European stone-fortress architecture; a Wonder or pagoda-style structure would have read better"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 3.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero unit — a named eleventh-century Norman standing in for a thirteenth-century Venetian; the victory and defeat triggers key off him by that name, so the substitution is structural, not cosmetic. Renaming a generic unit was available.",
+      "Niccolo Polo is represented by the EL_CID hero — an eleventh-century Castilian, again a named figure from the wrong century and culture.",
+      "GENGHIS_KHAN is placed at the destination as the Khan the caravan is travelling to meet, but the Polos were received by Kublai Khan; Genghis died in 1227, 44 years before the journey's start. The engine ships no Kublai hero, so a renamed generic (or the Khan of the Mongol civ) was the correct fallback.",
+      "Both active players are left as civilization RANDOM, so architecture set, unit roster and language are unassigned — Shangdu may be rendered in Teutonic or Frankish stonework at random.",
+      "Shangdu is built from a CASTLE and two KEEPs, European fortification models rather than anything suggesting the Khan's summer palace; a walled compound of Mongol/Chinese-flavoured buildings was possible.",
+      "The escort is CROSSBOWMAN and KNIGHT — Western European heavy cavalry and crossbows for a merchant caravan that in fact travelled with local guides, camels and Mongol-issued safe-conduct; camels or trade carts existed in the catalogue.",
+      "Pack animals are modelled as SHEEP, which are herdable food rather than laden beasts; trade carts or camels would have carried the 'caravan goods' idea the defeat text asserts."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "GENGHIS_KHAN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.333,
+    "events": 4.0,
+    "objective": 4.667,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Marco Polo is represented by the WILLIAM_THE_CONQUEROR hero — an 11th-century Norman duke standing in for a 13th-century Venetian teenager; a renamed generic villager/trade cart/militia would have been the correct abstraction, so this is avoidable cross-culture, cross-century casting.",
+      "Niccolo Polo is represented by EL_CID, an 11th-century Castilian warlord — again a wrong-culture, wrong-era hero model where a renamed generic unit was available.",
+      "GENGHIS_KHAN is placed (in GAIA) to stand for Kublai Khan at Shangdu; right culture but the wrong Khan, dead 44 years before the scenario's arrival date.",
+      "Both players' civilizations are left RANDOM, so architecture for the Venetian caravan, the bandit camp and Shangdu is undefined — no Chinese or Central Asian architecture set is guaranteed, and Shangdu itself is rendered only as a Castle plus two Keeps.",
+      "The escort is composed of KNIGHTs and CROSSBOWMEN — a European men-at-arms escort rather than the hired local guides and guards a Venetian merchant caravan would have used across Persia and the Pamir.",
+      "The bandit force is entirely mounted (cavalry archers, light cavalry, scouts) plus an ARCHERY_RANGE, giving raiders a permanent military production building rather than a camp.",
+      "The 'Defeat Caravan Lost' condition counts player 1 objects across the whole 120x120 map rather than the pack animals specifically, so its parameters do not actually track the sheep it claims to."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "GENGHIS_KHAN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "GENGHIS_KHAN",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

@@ -40,5 +40,89 @@
       "18 TREE_PALM_FOREST tiles plus ROMAN_RUINS/TEMPLE_RUIN dressing give a Near-Eastern desert look rather than the Ebro valley and Levantine huerta of Zaragoza and Valencia.",
       "Minaya Alvar Fanez speaks throughout the dialogue but no unit represents him; conversely no representation at all of Alfonso VI, al-Mutamin of Zaragoza, Berenguer Ramon II of Barcelona, or al-Qadir/Ibn Jahhaf of Valencia, the actual named parties of 1081-1094."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 2.0,
+    "objective": 3.0,
+    "pedagogy": 2.0,
+    "mean": 2.25,
+    "issues_found": [
+      "The enemy commander is the SALADIN hero — a Kurdish sultan of Egypt/Syria active c. 1169-1193 in the Levant, with no connection to Iberia. The opponents of El Cid's exile years were al-Mundhir of Lerida/Denia, the Count of Barcelona Berenguer Ramon II, the Almoravids under Yusuf ibn Tashfin, and the Valencian qadi Ibn Jahhaf. Since the engine offers no Iberian-Muslim hero, a renamed generic Camel Rider or Cavalier would have been the correct stand-in; placing a different named historical hero is avoidable error.",
+      "Both players are set to civilization RANDOM, so architecture, unit sets and language are unassigned — Spanish for El Cid's retinue and Saracens (or Berbers) for the taifa/Almoravid side were both available.",
+      "37 CAMEL_RIDERs dominate the enemy army; Andalusi and Almoravid forces in eleventh-century Spain fought as light horse (jinetes) and Berber lancers, not massed camelry.",
+      "18 TREE_PALM_FOREST tiles give a Saharan/Levantine look rather than the Ebro valley and Levantine huerta around Zaragoza and Valencia.",
+      "El Cid's captain Minaya Alvar Fanez appears only in dialogue; the only representation is an unnamed generic KNIGHT whose death triggers defeat — a named or at least distinguished unit was trivially available.",
+      "The narrative spine is invented generic questing: a 'deeper plot against Zaragoza's throne', an 'Ambush Leader', a 'Traitor' who reveals himself, a 'Rescued Ally', and a 'Villain Confrontation' with 'Villain Speech'. None of this corresponds to the documented campaigns of 1081-94 (Almenar, Morella, the defeat and capture of Berenguer Ramon II at Tevar, the twenty-month blockade of Valencia).",
+      "The 1093-94 siege of Valencia is compressed into a single fortress storm with a duel against the enemy leader; in fact the city fell to a long starvation blockade and negotiated surrender, and the Almoravid relief army withdrew without battle.",
+      "Primary victory is the assassination of SALADIN, so the encoded goal rewards killing a man who was never in Spain rather than taking the city."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 2.667,
+    "objective": 3.0,
+    "pedagogy": 3.0,
+    "mean": 2.417,
+    "issues_found": [
+      "Player 2's commander is the SALADIN hero — an Ayyubid Kurdish sultan of 12th-century Egypt/Syria, a century later and from an entirely different theatre than the Taifa/Almoravid lords of Zaragoza's rivals or Valencia. The engine offers generic Saracen/Berber units that could have been renamed 'al-Qadir', 'Ibn Jahhaf' or 'Berenguer Ramon II', so this was avoidable.",
+      "Both players' civilizations are set to RANDOM, so architecture, unit skins and tech tree may render as Britons, Japanese, Aztecs, etc.; Spanish for El Cid and Saracens/Berbers for the opposition were both available.",
+      "Enemy army is 37 Camel Riders out of ~61 units — camel cavalry was not the mainstay of Andalusi or Almoravid armies in Valencia; Berber light cavalry/knights and infantry would be far closer and are all in the engine.",
+      "The historical turning points are absent: no Almenar (1082), no capture of Berenguer Ramon II at Tevar (1090), no two-year blockade of Valencia (1093-94). Instead the middle acts are generic filler — an 'Ambush Leader', an unnamed 'Traitor', an 'Enemy Warlord' taunt, a rescue side-quest.",
+      "TREE_PALM_FOREST used as the dominant vegetation (18 objects) reads as a Saharan/Levantine desert rather than the Ebro valley and Valencian huerta.",
+      "Defeat condition on a generic KNIGHT labelled only 'Key Ally Dies' — Minaya Alvar Fanez is named in dialogue but the death condition is not identified with him, so it encodes an arbitrary unit-preservation rule.",
+      "Valencia is described as 'breached' and stormed; in fact El Cid took it after a long starvation blockade and a negotiated surrender in June 1094."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

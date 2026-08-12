@@ -40,5 +40,84 @@
       "GUARD_TOWER x2 and PALISADE_WALL/GATE fortifications for a nomadic steppe camp — stone guard towers are inappropriate for the 12th-century Merkit/Naiman, who moved with felt tents and had no masonry defences",
       "Jamukha, a central figure named repeatedly in the text, is represented by no hero or distinct player at all — his 'gifts and warriors' and his betrayal are just CREATE_OBJECT spawns from the same generic Player Two roster"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 3.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the architecture set, unit bonuses and tech tree of a Mongol steppe war are left to chance despite the engine shipping a Mongols civ (and Huns) with the appropriate look and Mangudai.",
+      "Player 2 fields CAMEL_RIDER x3 — camel cavalry is wrong for the Mongolian steppe of 1186-1206, where Merkit, Jadaran and Naiman forces were horse archers and light horse; the engine's LIGHT_CAVALRY/CAVALRY_ARCHER already available make this an avoidable error.",
+      "Jamukha, named repeatedly in the narration as blood-brother and then betrayer, has no representation at all: his 'aid' and his attack are just CREATE_OBJECT spawns of generic cavalry under the same Player 2, so the pivotal Temujin-Jamukha rivalry is invisible in the placed content.",
+      "Toghrul (Wang Khan) and the Kereit are entirely absent, yet the Kereit alliance was what made the rescue of Borte possible and the Kereit war of 1203 was the decisive step before the Naiman campaign.",
+      "The Merkits, Jamukha's Jadaran, and the Naiman confederation are all collapsed into a single Player 2, so the shifting alliances the brief centres on cannot actually shift; there is no diplomacy change trigger.",
+      "Historically Jamukha (with Toghrul) helped Temujin recover Borte; here the alliance is triggered only after the Merkit chieftain dies, reversing the order.",
+      "Merkit/Naiman camps are ringed with PALISADE_WALL x10, a GATE and GUARD_TOWER x2 — fixed fortification for nomadic steppe encampments; the yurts are right but the wall circuit is not.",
+      "Tayang Khan and the Merkit chieftain are both plain KING units with no distinguishing treatment beyond the trigger text, and the victory condition on 'KING (player 2)' does not distinguish between the two.",
+      "The Death-of-Temujin trigger fires DECLARE_VICTORY, so the loss text is paired with a win — the player is told the tribes remain divided while being credited with victory."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.417,
+    "issues_found": [
+      "Both active players are assigned civilization RANDOM, so the Merkit/Naiman and Mongol camps may render with any architecture set and receive any tech tree - avoidable, since Mongols (and e.g. Huns/Tatars) are available and would fix both look and unit access.",
+      "Player 2 fields CAMEL_RIDER x3; camel cavalry belongs to Saracen/desert rosters, not Merkit or Naiman steppe tribes, and light cavalry or cavalry archers were available substitutes.",
+      "Both enemy leaders (the Merkit chieftain and Tayang Khan) are the generic KING unit - a European crowned monarch model - rather than a renamed mounted unit, which would read far better as a steppe chieftain.",
+      "Jamukha, named repeatedly in the narration as blood-brother and then betrayer, exists only as CREATE_OBJECT spawns; no unit stands in for him, so the scenario's central personal rivalry has no on-map embodiment.",
+      "Toghrul/Wang Khan of the Kereits is entirely absent, yet he was Temujin's principal patron in the Borte rescue and the decisive 1203 war immediately preceding the Naiman campaign - the unification is therefore compressed to Merkit, Jamukha, Naiman only.",
+      "The alliance with Jamukha is triggered after the Merkit chieftain's death, whereas in the sources Jamukha (with Toghrul) fought alongside Temujin in the raid that recovered Borte.",
+      "A single ARCHERY_RANGE and STABLE are the only military production buildings - with random civs their appearance and available units are unconstrained for a nomadic camp of yurts.",
+      "The victory trigger fires on destruction of a KING owned by player 2, but player 2 owns two KINGs, so the intended target (Tayang Khan rather than the Merkit chieftain) is not pinned by the condition itself."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

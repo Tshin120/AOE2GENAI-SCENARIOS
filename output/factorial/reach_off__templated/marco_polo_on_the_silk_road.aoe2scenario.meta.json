@@ -42,5 +42,87 @@
       "No trade carts, camels-as-pack-animals, or caravan objects despite the brief's claim that 'the caravan's pack animals must survive' — the four CAMEL_RIDERs are combat cavalry, not baggage",
       "Niccolo Polo is named in dialogue but exists only as an unnamed VILLAGER_MALE, if at all"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 1.0,
+    "setting": 2.0,
+    "events": 2.0,
+    "objective": 4.0,
+    "pedagogy": 2.0,
+    "mean": 2.25,
+    "issues_found": [
+      "Marco Polo is represented by the RICHARD_THE_LIONHEART hero object — a named twelfth-century English crusader king standing in for a thirteenth-century Venetian merchant. The engine offers no Polo hero, but a renamed generic villager, trade cart or camel would have been the correct substitution; using a different real historical figure is avoidable error.",
+      "Niccolo and Maffeo Polo have no representation on the map at all despite Niccolo being given dialogue lines; Player 1 has exactly one VILLAGER_MALE and no second hero or named companion.",
+      "Kublai Khan is entirely absent — there is no Khan unit, no Genghis/Khan hero, and no palace at the destination area (100,50)-(110,70); Shangdu is an empty patch of map.",
+      "The 'trade caravan' contains no trade carts and no pack animals whatsoever, though the brief states 'the caravan's pack animals must survive' and the engine ships TRADE_CART and CAMEL objects. The escort is instead 5 KNIGHTS, 5 CROSSBOWMEN and a CAVALIER — a Western European field detachment, not a merchant party.",
+      "Player 3 fields a BERSERK (Viking infantry) as the 'bandit chief' at a Central Asian oasis, and Players 3/4 use MILITIA and PIKEMEN — European foot troops for what should be Persian/Turkic/Karaunas raiders (Mamluk, camel, or cavalry-archer types were available).",
+      "Both active players are set to RANDOM civilization, so architecture and unit skins for the Mongol side are not guaranteed to be Mongol or Central Asian at all.",
+      "The scenario makes the Mongols the principal enemy — 'Ambush! The Khan's riders were waiting for us in the dunes!' — inverting the history: the Polos travelled under Kublai Khan's protection carrying his golden paiza, and Mongol patrols were their guarantors, not their attackers.",
+      "The journey's actual documented waypoints (Acre, Ayas, Hormuz, the Pamirs, the Gobi crossing, the three-and-a-half-year duration) are reduced to five anonymous 'D1–D5' area triggers with generic 'Halfway across the Silk Road' text."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "RICHARD_THE_LIONHEART"
+      ],
+      "unsupported_heroes": [
+        "RICHARD_THE_LIONHEART"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 1.333,
+    "setting": 2.667,
+    "events": 2.333,
+    "objective": 4.667,
+    "pedagogy": 2.667,
+    "mean": 2.75,
+    "issues_found": [
+      "Marco Polo is represented by the RICHARD_THE_LIONHEART hero — an English crusader king who died in 1199, of an unrelated culture and the wrong century. The engine ships no Marco Polo hero, but a renamed generic villager, trade cart or Jaguar-less generic unit was available, so this substitution is avoidable error.",
+      "Kublai Khan is named repeatedly in the text and is the destination of the mission, yet no unit represents him at Shangdu — the Khan's court is an empty area trigger.",
+      "Niccolo Polo speaks in dialogue but the only candidate unit is a single unnamed VILLAGER_MALE; no distinguished companion or Maffeo Polo is placed.",
+      "The brief states 'the caravan's pack animals must survive', but no TRADE_CART, pack animal, or trade-goods object exists anywhere in the roster; the 'caravan' is 5 Knights, 5 Crossbowmen and a Cavalier — a Frankish battle escort, not a Venetian merchant train.",
+      "Both active players are set to RANDOM civilization, so Mongol and Venetian/Latin architecture is left to chance despite the scenario turning on the Mongol steppe.",
+      "The bandit force is led by a BERSERK (Norse) with Militia — Scandinavian infantry as Central Asian desert raiders where Camel Riders, Light Cavalry or Mameluke-adjacent options were available.",
+      "The narration invents sustained Mongol hostility ('The Mongol riders draw near!', 'Ambush! The Khan's riders were waiting for us in the dunes!'); the Polos travelled under Kublai's safe-conduct passport and were welcomed, not hunted, by Mongol forces.",
+      "PIKEMAN x6 (Player 4) as the allied caravan guards is a European anti-cavalry line unit with no basis in the Silk Road escort described."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "RICHARD_THE_LIONHEART"
+      ],
+      "unsupported_heroes": [
+        "RICHARD_THE_LIONHEART"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

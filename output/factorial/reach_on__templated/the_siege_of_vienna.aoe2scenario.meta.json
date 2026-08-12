@@ -42,5 +42,89 @@
       "GUARD_TOWER x8 and a CASTLE represent Vienna's defences, but Vienna in 1529 was notoriously defended by an outdated single medieval curtain wall hastily earth-backed — the fortified castle-and-towers layout overstates the defences.",
       "3083 oak trees blanket a 144x144 map for a scenario set in a densely built walled city surrounded by cleared glacis and suburbs the defenders had burned down before the siege."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 2.75,
+    "issues_found": [
+      "The Ottoman commander is the hero SALADIN — a 12th-century Ayyubid sultan — standing in for Suleiman the Magnificent (1529). The engine ships no Suleiman hero, so a renamed generic elite unit (e.g. a Janissary or Elite Mameluke) was the correct choice; using a different named historical figure is avoidable error.",
+      "The garrison contains no Landsknechts despite the brief naming them; the engine offers the Teutonic Landsknecht explicitly. Instead the defence is MAN_AT_ARMS x8 and CROSSBOWMAN x7.",
+      "No Spanish arquebusiers: the engine's Hand Cannoneer (and Spanish Conquistador) exist and would represent 1529 firearms; crossbowmen misdate the garrison's weaponry by a century.",
+      "Player 1's commander is a bare KING object rather than a renamed hero/unit for Niklas Graf Salm, so the dialogue's 'Commander Salm' has no on-map referent.",
+      "Both players' civilizations are RANDOM — architecture set, and thus whether Vienna looks Central European or e.g. Meso-American, is left to chance, and the Ottoman side is not assigned Turks.",
+      "3,083 oak trees on a 144x144 map make the setting a forest, not the Danube plain and suburbs before a walled imperial city; no river, no Ottoman siege camp/trench works are represented.",
+      "The brief's central mechanic — countermining the Ottoman sappers, the actual decisive fighting at Vienna — is entirely absent; there is no mining/countermining representation of any kind.",
+      "The siege is compressed to a 10-minute 'survive until dawn' with four assault waves; the historical siege ran roughly three weeks and ended with a general assault on 14 October followed by withdrawal, so 'until dawn' misframes the timescale and the cause of relief.",
+      "Only one Ottoman object is actually placed (the Saladin hero); the entire besieging host exists solely as trigger-spawned CREATE_OBJECT calls of unspecified type, so no Janissary/Ottoman force composition is verifiable on the map."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 1.667,
+    "setting": 1.667,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 2.583,
+    "issues_found": [
+      "The Ottoman besieger is represented by the hero SALADIN, a 12th-century Ayyubid sultan, standing in for Suleiman the Magnificent (1529) — a ~350-year era error that was avoidable, since a renamed generic unit or a Janissary/Turkish elite would have served",
+      "Player 2's roster contains literally nothing but the Saladin hero; the entire Ottoman host exists only as unspecified CREATE_OBJECT spawns, so the janissaries, sipahi cavalry and sapper/artillery train central to the brief are not authored as placed content",
+      "Both civilizations are left RANDOM, so Viennese/Central European architecture and the Ottoman opponent's building set and unit access are unassigned — the one setting choice the editor makes trivially available is skipped",
+      "The garrison is Man-at-Arms and Crossbowmen: no gunpowder units at all, despite the brief's 'Spanish arquebusiers', and Two-Handed Swordsmen/Champions (the natural Landsknecht stand-in) are absent",
+      "Niklas Graf Salm is represented by the KING unit rather than a renamed infantry hero, making the defending commander a non-combatant piece rather than the fighting officer who was mortally wounded on the walls",
+      "Map is 3,083 oak trees with forage bushes, sheep and gold/stone mines — a wilderness clearing, not the Danube bank and glacis-cleared suburbs of Vienna",
+      "The historically decisive countermining war beneath the Carinthian Gate is only mentioned in the brief and never mechanically or spatially represented",
+      "The 'hold until dawn (10:00)' framing recasts a three-week siege broken by autumn rain and supply failure as a single night's defence",
+      "The 'VC Eliminate' path lets the player win by wiping the besieging army off the map, which the Vienna garrison never attempted and could not have done"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

@@ -1,0 +1,104 @@
+{
+  "title": "The Battle of Tours",
+  "description": "October 732. Charles Martel's Frankish infantry must hold the wooded high ground between Tours and Poitiers against the Umayyad cavalry of Abd al-Rahman. A third force of Aquitanian allies under Duke Odo can be rallied to strike the enemy camp. Victory requires repelling the cavalry charges and forcing the invaders' withdrawal.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 3,
+  "difficulty": "hard",
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Tours",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.3",
+  "outcome": "success",
+  "run_id": "run_59dadcd8aeb4",
+  "candidate": 1,
+  "attempts": 4,
+  "trigger_count": 14,
+  "output_path": "output/fidelity_v2_arm\\fidelity_on__freeform\\the_battle_of_tours.aoe2scenario",
+  "timestamp_utc": "2026-08-11T12:17:24Z",
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.75,
+    "issues_found": [
+      "All three players are assigned RANDOM civilization, so Frankish, Umayyad and Aquitanian architecture, unit skins and bonuses are left to chance — avoidable, since the engine ships Franks, Saracens/Berbers and could differentiate the Aquitanians",
+      "Player 2's strike arm includes 4 CAMEL_RIDER against only 3 SCOUT_CAVALRY: the Umayyad host at Tours was a horse-cavalry army, and the engine offers ample light/heavy horse alternatives, so the camels are an avoidable misrepresentation",
+      "Frankish force is only 5 MAN_AT_ARMS + 6 SPEARMAN + 6 ARCHER — an extremely thin 'shield-wall' for a battle whose defining feature was a deep, immovable infantry mass; archers were also a marginal element of Martel's army",
+      "Wave 3 'Third Charge' fires only a DISPLAY_INSTRUCTIONS with no PATROL actions, so the narrated third charge never actually occurs on the map",
+      "Leaders are represented by the generic KING unit (renamed), which is a non-combat, easily-killed piece; victory hinging on killing a KING makes Abd al-Rahman trivially fragile rather than a figure who fell in the melee",
+      "No explicit elevation or terrain data supporting the 'wooded high ground'; the woods are conveyed almost entirely by 4,720 oak trees"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM",
+        "3": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 2.0,
+    "events": 4.667,
+    "objective": 5.0,
+    "pedagogy": 4.667,
+    "mean": 3.833,
+    "issues_found": [
+      "All three players are set to RANDOM civilization, so Frankish, Umayyad, and Aquitanian architecture and unit bonuses are left to chance; the engine offers Franks and Saracens/Berbers explicitly, so this is avoidable.",
+      "The Umayyad strike force is built around CAMEL_RIDER x4 as its shock arm; the army at Tours fought as Arab and Berber horse cavalry, and the engine offers knights, light cavalry and cavalry archers as better fits.",
+      "Umayyad SPEARMAN x4 in the raiding host is an odd inclusion for a force the narration explicitly characterises as all-cavalry.",
+      "Heroes are represented by KING units, which are unarmed and non-combatant; a renamed generic unit is acceptable in principle, but a KING cannot 'fall in the melee' in any meaningful way and makes the victory condition trivially achievable once reached.",
+      "'Wave 3: Third Charge' fires narration only with no PATROL or unit actions, so the third charge described in the text never actually happens on the map.",
+      "Force scale is very small (17 Frankish combatants versus 15 Umayyads) for an engagement described as a host raiding deep into Francia; the Frankish player also holds a full Town Center, Monastery, Blacksmith and production buildings, which reads as a settlement rather than a field position on wooded high ground."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM",
+        "3": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}

@@ -42,5 +42,89 @@
       "Shangdu represented by a plain European TOWN_CENTER plus two Gaia yurts; the Khan's summer palace could have been suggested with East Asian-style buildings, a Wonder, or Mongol/Chinese architecture set pieces",
       "Kublai Khan himself is entirely absent from the objects despite the victory text describing Marco standing before him"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 3.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Marco Polo is represented by the EL_CID hero unit — a Castilian warlord who died in 1099, nearly two centuries before the journey; a renamed generic unit (or the Mongol/Persian civilian-style hero) would have avoided placing a different named historical figure on the map.",
+      "Niccolo Polo is represented by FREDERICK_BARBAROSSA, the 12th-century Holy Roman Emperor — again a wrong named figure where a renamed generic unit was available.",
+      "Kublai Khan, the destination and the second principal of the story, is never placed; Shangdu is only a Gaia TOWN_CENTER plus two yurts and flags, with no Khan figure or court at all.",
+      "Both active players are set to RANDOM civilization, so the Venetian party and the Central Asian bandits may render in any architecture set — Teutonic, Japanese, Mesoamerican — undoing the yurt/tent dressing.",
+      "The Polo escort is built as a feudal European war band (2 KNIGHT, 2 CROSSBOWMAN, 2 SPEARMAN); the historical party was a tiny merchant family group travelling with guides, not a mounted lance detachment.",
+      "Trade goods and pack animals are modelled as SHEEP when the engine ships TRADE_CART (and camels), which would represent a Silk Road caravan far more legibly — an avoidable choice.",
+      "The two bandit ambushes are generic invented set-pieces; the specific hazards the Polos recorded (the Karaunas raiders of Persia, the Gobi crossing, Niccolo's brother Maffeo's presence in the party) are absent, and Maffeo Polo is simply omitted."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "FREDERICK_BARBAROSSA"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "FREDERICK_BARBAROSSA"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 1.667,
+    "setting": 2.333,
+    "events": 3.667,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.167,
+    "issues_found": [
+      "Marco Polo is represented by the EL_CID hero — an 11th-century Castilian warlord — and Niccolo Polo by FREDERICK_BARBAROSSA, a 12th-century Holy Roman Emperor. Both are figures of unrelated culture and century; the engine ships no Marco Polo hero, but a renamed generic unit (villager, trade cart escort, or even a monk) was available and would have been correct.",
+      "Kublai Khan, the destination and the man the whole journey is about, is not represented by any unit at all — the Khan's court at Shangdu is a single GAIA TOWN_CENTER with two flags, and no ruler figure or Mongol court retinue stands there.",
+      "Both active players are set to RANDOM civilization, so the architecture of Player 1's Venetian caravan and Player 2's Central Asian raiders is left to chance rather than assigned (Italians/Mongols or Tatars/Cumans were all available).",
+      "The caravan's pack animals are SHEEP. The engine offers trade carts and camel units, which would represent Silk Road pack animals and trade goods far more faithfully; the narration even speaks of 'trade goods' that are nowhere placed.",
+      "The escort force is KNIGHT, CROSSBOWMAN and SPEARMAN — a Western European field detachment. The historical Polos travelled as a tiny merchant party of three with local guides, not with heavy cavalry and crossbowmen.",
+      "TREE_PALM_FOREST used throughout, including in the stretch narrated as the Pamir foothills, where palms are geographically impossible.",
+      "The raiders occupy ARCHERY_RANGE buildings and a dozen yurts, giving the 'bandits' a fixed settlement and military infrastructure they would not have had as caravan robbers."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "FREDERICK_BARBAROSSA"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "FREDERICK_BARBAROSSA"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

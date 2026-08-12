@@ -1,0 +1,66 @@
+{
+  "title": "The Rise of Temujin",
+  "description": "1186-1206. Follow Temujin's unification of the Mongol tribes on the steppe: rescue his wife Borte from the Merkits, forge and then break the alliance with Jamukha, defeat the Naiman confederation, and be proclaimed Genghis Khan at the kurultai. The player begins with a small warband and must grow through raids, alliances, and decisive battles.",
+  "scenario_type": "story",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "steppe",
+  "player_civ": "central_asian",
+  "enemy_civ": "central_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Genghis_Khan",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_4e42ebd68664",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 12,
+  "output_path": "output/fidelity_v2_arm_api\\fidelity_on__freeform\\the_rise_of_temujin.aoe2scenario",
+  "timestamp_utc": "2026-08-11T14:18:04Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 3.333,
+    "objective": 4.0,
+    "pedagogy": 3.667,
+    "mean": 3.833,
+    "issues_found": [
+      "Tayang Khan of the Naiman is represented by a CAVALIER and Jamukha apparently by a KNIGHT — heavy Western-style shock cavalry for steppe khans, avoidable when the engine offers Mongol cavalry archers, light cavalry or Mangudai as a renamed stand-in",
+      "All three distinct opponents (Merkits, Jamukha's Jadaran, Naimans) are collapsed into a single Turks player, so the shifting tribal alignments that define the period are flattened; Jamukha's 'betrayal' is only a CHANGE_OWNERSHIP within the same enemy force",
+      "Toghrul (Wang Khan) of the Kereits is entirely absent, though he and Jamukha were the allies who actually made the rescue of Borte possible, and the 1203 Kereit war is the missing hinge between Jamukha's betrayal and the Naiman campaign",
+      "The narration asserts Toghtoa Beki was slain in the Borte rescue (c. 1184-86); the Merkit chief escaped and was not killed until roughly 1208",
+      "Timeline compression is presented as continuous: the Jamukha rupture (Dalan Baljut, c. 1187) and the Naiman defeat at Chakirmaut (1204) are shown as consecutive marches east",
+      "Only 94 objects on a 120x120 map leaves the steppe nearly empty; the Merkit and Naiman 'camps' are three or four yurts each",
+      "The trigger path 'Naiman Defeated - Kurultai' names the faction and the outcome rather than Tayang Khan himself, leaving the keyed target slightly under-labelled"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "MONGOLS",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

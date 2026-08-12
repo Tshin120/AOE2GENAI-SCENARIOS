@@ -1,0 +1,65 @@
+{
+  "title": "The Battle of Hastings",
+  "description": "October 1066. William of Normandy's invasion army faces King Harold's Anglo-Saxon shield wall on Senlac Hill. The player commands the Norman force and must break the shield wall through feigned retreats and combined cavalry-archer assaults before nightfall ends the battle.",
+  "scenario_type": "battle",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Battle_of_Hastings",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_35b8094634a8",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 10,
+  "output_path": "output/fidelity_v2_arm_api\\fidelity_on__freeform\\the_battle_of_hastings.aoe2scenario",
+  "timestamp_utc": "2026-08-11T14:13:34Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.667,
+    "setting": 3.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.333,
+    "mean": 4.167,
+    "issues_found": [
+      "GAIA roster places 2,400 oak trees on a 120x120 map, making Senlac an enclosed forest; the battlefield was an open ridge with the Andredsweald only at the Norman rear, and heavy woodland undercuts the cavalry-charge/feigned-retreat premise the text builds the mission on",
+      "Economic furniture inappropriate to a single-day pitched battle: Town Centers, 7 Houses, Barracks, Stable, Archery Range, Monastery, 10 gold mines, 8 stone mines, sheep and forage bushes for a battle that involved no settlement or production",
+      "Norman infantry is badly under-weighted (6 spearmen against 10 knights and 6 light cavalry); at Hastings the Norman line was mostly infantry with cavalry as the exploiting arm",
+      "No terrain elevation or marsh is evidenced in the placed content, so the defensive advantage of the hill named in the narration is asserted in text only",
+      "The 'Feigned Retreat' and 'Fyrd Lured' triggers only fire DISPLAY_INSTRUCTIONS; the decisive tactic of the battle is narrated rather than mechanically rewarded",
+      "Closing text 'William's claim to the English throne stands unopposed' overstates the outcome — Dover, London and the northern earls submitted only after further campaigning, and rebellions followed for years"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "BRITONS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

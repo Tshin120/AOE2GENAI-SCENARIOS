@@ -1,0 +1,65 @@
+{
+  "title": "The Exile of El Cid",
+  "description": "1081-1094. Banished from Castile by King Alfonso VI, Rodrigo Diaz de Vivar must survive as a mercenary captain: serve the Muslim king of Zaragoza against his rivals, win battles that restore his reputation, and finally conquer Valencia in his own name. The player's small retinue grows through victories; losing El Cid himself means defeat.",
+  "scenario_type": "story",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": null,
+  "player_civ": null,
+  "enemy_civ": null,
+  "wikipedia_url": null,
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_8b01a2f53285",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 11,
+  "output_path": "output/fidelity_v2_arm_api/fidelity_on__freeform/the_exile_of_el_cid.aoe2scenario",
+  "timestamp_utc": "2026-08-11T14:22:56Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.333,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.083,
+    "issues_found": [
+      "All three opponents — the Muslim rivals of Zaragoza, Berenguer Ramon II of Barcelona, and the defenders of Valencia — are collapsed into a single SARACEN player, so the Christian Catalan army at Tevar fights with Saracen architecture and CAMEL_RIDER units. Barcelona could and should have been a separate Spanish (or Frankish/Teutonic) player.",
+      "Berenguer Ramon II appears only as a renamed generic unit inside a Saracen roster; the engine ships no hero for him, but placing him under a Muslim civilization compounds the substitution with a cultural error.",
+      "The first mission, 'drive off the raiders threatening Zaragoza', is a generic invented engagement in place of a documented episode such as Almenar (1082) or Morella, where El Cid actually fought for al-Mu'tamin against al-Mundir and Berenguer Ramon II.",
+      "El Cid's ally, the Hudid king of Zaragoza (al-Mu'tamin/al-Musta'in), is never placed as a unit or player at all — the patron whose service defines 1081-1086 exists only in narration text.",
+      "The defeat condition kills El Cid in battle, whereas he died of natural causes in Valencia in 1099; acceptable as a campaign stake but not a historical outcome.",
+      "Only 107 objects on a 120x120 map: Zaragoza, Tevar and Valencia are all represented by the single Player 2 town centre/castle complex rather than as distinct locations, so the geography of the exile is not really depicted."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "EL_CID"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "SPANISH",
+        "2": "SARACENS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

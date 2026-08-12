@@ -42,5 +42,79 @@
       "CROSSBOWMAN x6: Norman crossbows at Hastings are only weakly attested and the AoE2 Crossbowman represents a later, heavier weapon; ARCHER alone would have been safer",
       "4,480 TREE_OAK on a 120x120 map: Senlac was open downland with the ridge as the decisive terrain feature; blanketing the map in oak forest misrepresents the ground on which the cavalry charges and feigned retreats occurred"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 5.0,
+    "objective": 5.0,
+    "pedagogy": 5.0,
+    "mean": 4.0,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the Norman and Anglo-Saxon sides may render with Mesoamerican, East Asian or Middle Eastern architecture and unit skins — an avoidable error since Franks/Britons/Teutons were available and would give period-plausible European buildings.",
+      "Player 1 fields CROSSBOWMAN x6 alongside archers; the crossbow is essentially absent from the 1066 Norman host (the Bayeux Tapestry shows self-bows), and plain ARCHER units were already available for the whole contingent.",
+      "Player 2 has a MONASTERY and GUARD_TOWER x2 on Senlac Hill; Harold's army arrived after a forced march and fortified nothing there — no towers or religious houses stood on the ridge.",
+      "4,480 oak trees on a 120x120 map makes the field a near-continuous forest, whereas the decisive ground was an open ridge and slope; the Andredsweald lay behind the Saxon line, not across the battlefield.",
+      "Harold's KING unit is a bare generic king rather than a renamed stand-in identified as Harold Godwinson in the object list, so his identity rests entirely on dialogue rather than placement.",
+      "No Anglo-Saxon missile troops or thegn-quality axemen distinct from the fyrd beyond CHAMPION x6; the housecarl/fyrd distinction is thin, and the deaths of Gyrth and Leofwine are absent."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 5.0,
+    "objective": 5.0,
+    "pedagogy": 5.0,
+    "mean": 4.0,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so architecture, unit skins and bonuses could resolve to Aztec, Japanese or Mongol styling for the Normans and Anglo-Saxons alike — an entirely avoidable omission given Franks/Britons/Teutons are available.",
+      "4,480 TREE_OAK on a 120x120 map makes Senlac Hill a dense forest; the historical field was an open slope with the Andredsweald woodland only behind the Saxon line.",
+      "GOLD_MINE x5, STONE_MINE x4, FORAGE_BUSH x8, SHEEP x6 and a TOWN_CENTER for each side import economic furniture into what was a single-day set-piece battle with no settlement present.",
+      "CROSSBOWMAN x6 for the Norman side overstates the crossbow at Hastings; the sources describe bowmen, and the engine's ARCHER already covers them.",
+      "PIKEMAN x16 in the Saxon shield wall is a late-medieval unit where SPEARMAN/MILITIA-line units would have represented the fyrd and housecarls without anachronism.",
+      "Harold is represented by the generic KING unit rather than a renamed infantry unit; the king unit is unarmed and non-combatant, so the man who died fighting in the line cannot fight."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

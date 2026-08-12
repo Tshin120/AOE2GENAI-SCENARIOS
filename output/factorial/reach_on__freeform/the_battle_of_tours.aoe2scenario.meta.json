@@ -43,5 +43,95 @@
       "KNIGHT x9 as the core of the Umayyad army — the fully-armoured Frankish-style knight is a poor stand-in when the engine offers LIGHT_CAVALRY/CAMEL_RIDER and Saracen-style raiders",
       "MONASTERY in the Frankish camp is a generic Western European chapel building rather than anything tied to the 732 field position, and El Cid's STABLE for the Aquitanians duplicates the Umayyad cavalry theme"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 5.0,
+    "objective": 5.0,
+    "pedagogy": 3.0,
+    "mean": 3.5,
+    "issues_found": [
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero unit — a named figure from 1066, three centuries later. The engine has no Martel hero, but a renamed generic Champion or Teutonic/Frankish infantry hero stand-in was available, so this is avoidable error.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, a named 12th-century Ayyubid sultan; the victory condition literally reads 'DESTROY_OBJECT on SALADIN'.",
+      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian figure — and one associated with the opposing (Iberian/Muslim-adjacent) side, compounding the confusion.",
+      "Both active players are set to civilization RANDOM, so Frankish and Umayyad architecture, unit availability, and bonuses are left to chance rather than assigned (Franks and Saracens/Berbers were all available).",
+      "Player 3 (the Aquitanians, nominally Frankish allies) is a purely cavalry force (6 Knights, 4 Scout Cavalry) with a Stable, while the Umayyad player fields Knights rather than any Frankish-side counterpart — the visual distinction between the sides is muddled.",
+      "Player 1's roster includes an ARCHERY_RANGE, CROSSBOWMAN x2 and a MONASTERY — crossbows are several centuries premature for an 8th-century Frankish host, and there is no reason to place them when spearmen/champions already carry the shield-wall role.",
+      "5,306 oak trees on a 120x120 map is a blunt-instrument representation of 'wooded high ground'; no elevation or terrain differentiation is evident from the placed content.",
+      "Force scale is tiny (roughly 17 Frankish and 16 Umayyad combatants) for an engagement of this reputation."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero — a Norman duke of 1066, over three centuries after Tours; a renamed generic Champion or Teutonic-style infantry hero was available and would have been correct.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN — a late-12th-century Kurdish Ayyubid sultan, wrong dynasty, wrong region and wrong era for an 8th-century Umayyad wali of al-Andalus.",
+      "Duke Odo of Aquitaine is represented by EL_CID — an 11th-century Castilian, again the wrong person and century.",
+      "Both active players are set to RANDOM civilization, so Frankish and Andalusian architecture and unit sets are left to chance rather than assigned (Franks and Saracens/Berbers were both available).",
+      "Player 2's Umayyad force fields CAMEL_RIDER units; the Andalusian army at Tours was overwhelmingly horse cavalry, and the engine's Knight/Light Cavalry mix already covered it.",
+      "The 'hidden Aquitanians under Odo who must be rallied by a messenger' is an invention — Odo's forces were already operating with Charles, not concealed off-map awaiting a signal.",
+      "Force scale is very thin (17 Frankish and 16 Umayyad combatants) for an engagement described as repeated mass cavalry charges against a shield wall.",
+      "The 'ford' the cavalry crosses in the narration is not represented by any terrain or water feature in the placed objects."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

@@ -39,5 +39,82 @@
       "Narration calls Charles the 'boy-king'; the Dauphin was 26 in July 1429 and had been a functioning claimant for years — a factual mislabel, not an engine limit.",
       "Troyes and Châlons are labelled purely 'England's' with an 'English Garrison Commander'; both towns were held by Anglo-BURGUNDIAN garrisons under Burgundian civic authority, and no Burgundian player or unit appears anywhere in the roster."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 3.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 3.0,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the French escort column and the Anglo-Burgundian garrisons may appear with entirely wrong architecture and unit sets (e.g. Meso-American or East Asian buildings for Champagne towns) — the engine offers Britons and Franks/French, so this is avoidable.",
+      "The garrison commanders at Troyes and Chalons are unnamed generic units (a CHAMPION and a CAVALIER); no attempt is made to represent or rename any historical figure, and no French captains (La Hire, Duke d'Alencon, Poton de Xaintrailles — all available as renamed generics) accompany Joan, though they led the march.",
+      "Troyes and Chalons were held largely by Anglo-Burgundian garrisons, and both yielded by negotiation — Chalons opened its gates without a fight and Troyes capitulated once assault was prepared. The scenario's only encoded path is killing the enemy commander, so the brief's promise that garrisons 'can be fought or persuaded to surrender' is not implemented at all.",
+      "Terrain furnishing is generic random-map economy: 640 oak trees, 5 gold mines, 4 stone mines, 8 forage bushes and grazing sheep, with no roadway, river (the Seine/Marne), or town fabric linking Auxerre-Troyes-Chalons-Reims; the route the mission is about is not legible on the map.",
+      "Reims cathedral is represented only by a single GAIA MONASTERY with no surrounding city, which understates the coronation site that is the scenario's whole point.",
+      "Narration calls Charles 'the boy-king' — he was 26 in 1429; the boy-king of the period was Henry VI of England.",
+      "Auxerre, which also had to be passed and negotiated with on this march, is absent."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.333,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 3.083,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the French escort and the English garrisons may appear with Aztec, Japanese or Turkish architecture and unit skins — Franks/Britons were both available and this is entirely avoidable.",
+      "The English garrison archery contingent is nine CROSSBOWMEN with an ARCHERY_RANGE; the engine ships the Longbowman as the Briton unique unit, the signature English arm of the Hundred Years' War, and it was not used.",
+      "No Burgundian presence at all, although the garrisons of Troyes and Chalons in July 1429 were Anglo-Burgundian and Burgundian loyalties were the reason the towns could be talked into opening their gates.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but the only implemented path is killing the CHAMPION and CAVALIER standing in for the two commanders — no negotiation, tribute, or monk/conversion mechanic exists, so the historically decisive diplomatic outcome is unreachable.",
+      "Historically Troyes capitulated after a short siege and a negotiated agreement, and Chalons opened its gates without a fight; the dialogue ('Then we shall take the gate by God's grace', 'Break their line!') asserts two storming assaults that did not happen.",
+      "Auxerre, the first town on the march that also came to terms, is omitted entirely from a route scenario whose whole subject is the sequence of towns.",
+      "Charles VII is called a 'boy-king' in the ambient text; he was 26 in 1429.",
+      "Force scale is tiny even by scenario convention — 15 combat units for an army that numbered many thousands on the Reims march."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

@@ -41,5 +41,91 @@
       "No Ottoman material culture is placed at all: no Janissaries, no mounted archers/Mamelukes as stand-ins, no siege camp, no bombard cannon or trebuchet on the map (only trigger-spawned unknowns).",
       "Victory condition 'survive until dawn (10:00)' and 'Protect the Castle' compress a three-week siege into a one-night castle defence; Vienna's defence centred on the Carinthian Gate curtain and countermines, not a keep."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 1.0,
+    "setting": 2.0,
+    "events": 2.0,
+    "objective": 4.0,
+    "pedagogy": 2.0,
+    "mean": 2.25,
+    "issues_found": [
+      "The Ottoman commander is represented by the hero SALADIN, a 12th-century Ayyubid sultan, standing in for Suleiman the Magnificent — a wrong named figure roughly 350 years out of period, and avoidable since a renamed generic (e.g. a Janissary or cavalry unit) would have served.",
+      "In-game text compounds the error: 'OPTIONAL: Slay the enemy commander, Saladin's heir to the campaign' asserts a fictitious link between Saladin and the 1529 Ottoman army.",
+      "Niklas Graf Salm speaks in dialogue but is not placed as any unit; the garrison has no representative leader figure at all.",
+      "The garrison is 12 CROSSBOWMAN and 7 MAN_AT_ARMS — the brief's German Landsknechts and Spanish arquebusiers are both directly available in the engine (Landsknecht, Hand Cannoneer) and were not used.",
+      "Both players are set to RANDOM civilization, so architecture and unit sets for the Habsburg garrison and the Ottoman besiegers are unassigned and may render as anything.",
+      "Terrain is 6,667 oak trees on a 144x144 map — a dense forest, not the Danube floodplain and cleared glacis outside Vienna's walls.",
+      "The brief's distinctive features — countermining Ottoman sappers, the mines under the Carinthian Gate, supply failure — appear nowhere in triggers; the four waves are generic infantry/cavalry/siege sets.",
+      "The siege is compressed into 'survive until dawn (10:00)', misrepresenting a three-week autumn siege as a single night action, while dialogue simultaneously invokes 'the autumn rains'.",
+      "An alternative victory path awards the win for eliminating all player 2 objects, i.e. destroying the entire Ottoman army in the field, which never happened."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 1.0,
+    "setting": 1.333,
+    "events": 2.333,
+    "objective": 4.0,
+    "pedagogy": 2.0,
+    "mean": 2.167,
+    "issues_found": [
+      "The Ottoman commander is the hero SALADIN — a 12th-century Kurdish Ayyubid sultan standing in for Suleiman the Magnificent, four centuries and a different dynasty removed; the engine offers no Suleiman, but a renamed generic Elite Janissary/cavalry unit was available and would have been correct.",
+      "The objective text compounds the error by inventing a relationship: 'Slay the enemy commander, Saladin's heir to the campaign' — an assertion no source supports.",
+      "Player 2 has no placed army at all beyond the hero; the entire besieging force exists only as trigger CREATE_OBJECT calls, so no identifiable Ottoman order of battle (janissaries, akinci, sappers, heavy guns) is visible in the roster.",
+      "The garrison is CROSSBOWMAN x12 and MAN_AT_ARMS x7 — no gunpowder units whatever, although the brief specifies Spanish arquebusiers and the engine ships Hand Cannoneers; the Landsknecht pike-and-halberd blocks are likewise absent when Pikemen/Two-Handed Swordsmen were available.",
+      "Niklas Graf Salm exists only in a dialogue line; no unit, renamed or otherwise, represents the defending commander.",
+      "Both players' civilizations are RANDOM, so Viennese/German architecture and Ottoman architecture are left to chance rather than assigned.",
+      "The map is 6,667 oak trees with deer and sheep — a wilderness forest, not the Vienna glacis, suburbs (which the defenders burned) and Danube frontage.",
+      "The countermining duel against Ottoman sappers, the single most distinctive feature of the 1529 defence and named in the brief, appears nowhere in the triggers or roster.",
+      "'Survive the Ottoman assault until dawn (10:00)' recasts a six-week autumn siege as a single night's fight.",
+      "The 'Wave 1 Announce' text has enemies approaching from the north and cavalry 'from the east', with no reference to the Carinthian Gate sector southwest of the city where the real breaches were made, despite the dialogue naming it.",
+      "'The garrison prepares for a fair fight' is a placeholder line at odds with a 17,000-man garrison facing an army many times its size."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

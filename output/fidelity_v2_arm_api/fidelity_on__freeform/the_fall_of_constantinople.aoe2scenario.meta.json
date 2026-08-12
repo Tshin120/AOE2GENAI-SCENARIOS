@@ -1,0 +1,64 @@
+{
+  "title": "The Fall of Constantinople",
+  "description": "April-May 1453. The player commands the last defenders of Byzantium under Constantine XI. Hold the Theodosian Walls against Mehmed II's siege: repair breaches from bombard fire, guard the sea walls along the Golden Horn, and survive repeated assaults. Defeat comes if the Hagia Sophia district falls; victory means holding until the final assault is broken.",
+  "scenario_type": "defense",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "hard",
+  "region": "mediterranean",
+  "player_civ": "eastern_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Fall_of_Constantinople",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_e29a7f0ef1c0",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 22,
+  "output_path": "output/fidelity_v2_arm_api\\fidelity_on__freeform\\the_fall_of_constantinople.aoe2scenario",
+  "timestamp_utc": "2026-08-11T14:14:25Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 3.333,
+    "events": 4.0,
+    "objective": 4.667,
+    "pedagogy": 4.0,
+    "mean": 3.917,
+    "issues_found": [
+      "Player 2 (Turks) fields no Janissaries, the engine's Turkish unique unit and the iconic core of Mehmed II's assault troops; instead the Ottoman host is built from Knights, Cavaliers and Crossbowmen, a generic European composition. This substitution was avoidable.",
+      "Mehmed II is represented by a CAVALIER and Giustiniani by a CHAMPION renamed via triggers — acceptable given no engine heroes exist, but the Ottoman commander as a mailed Frankish-style Cavalier reads as a Latin knight rather than a Sultan.",
+      "No third player for the Genoese/Venetian contingent, even though the narration turns on Giustiniani's Genoese wavering after his fall; his soldiers are indistinguishable from Byzantine line troops.",
+      "TREE_PALM_FOREST x10 is botanically wrong for the Bosphorus in spring 1453 and an avoidable choice given the engine's oak/pine sets.",
+      "The Golden Horn strand is narrated (ships dragged overland, sea walls to be guarded) but implemented purely as land-unit spawns: no docks, warships, transports or any naval object appears anywhere in the roster, so the outflanking of the sea walls is asserted rather than shown.",
+      "Only 2 gates and 78 stone wall segments stand in for the triple Theodosian line; there is no outer wall/moat layering, so the 'repair the breach' mechanic plays out on a single curtain.",
+      "The victory narration ('Constantinople stands, and the Empire endures') asserts a counterfactual outcome for the historical event the scenario names."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "BYZANTINES",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

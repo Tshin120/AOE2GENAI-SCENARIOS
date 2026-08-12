@@ -1,0 +1,98 @@
+{
+  "title": "The Road to Reims",
+  "description": "June-July 1429. After the victory at Orleans, Joan of Arc must escort the Dauphin Charles through English-held territory to the cathedral at Reims for his coronation. English garrisons at Troyes and Chalons block the route and can be fought or persuaded to surrender. Victory requires the Dauphin reaching Reims cathedral alive; his death means defeat.",
+  "scenario_type": "escort",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "western_european",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Joan_of_Arc",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.3",
+  "outcome": "success",
+  "run_id": "run_d9dc88a6e9b6",
+  "candidate": 1,
+  "attempts": 4,
+  "trigger_count": 16,
+  "output_path": "output/fidelity_v2_arm\\fidelity_on__freeform\\the_road_to_reims.aoe2scenario",
+  "timestamp_utc": "2026-08-11T12:22:48Z",
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.25,
+    "issues_found": [
+      "Troyes and Chalons were held by Anglo-Burgundian garrisons loyal to Philip the Good as much as to Henry VI; assigning them wholly to a BRITONS player and having them shout 'Champagne remains loyal to King Henry' erases the Burgundian dimension that actually made the towns negotiable.",
+      "No named commander on either side except Joan: the French column has no Duke d'Alencon, La Hire or Dunois although the engine ships heroes for all three and all three rode with the Reims column, so their absence is avoidable.",
+      "The brief's 'can be fought or persuaded to surrender' mechanic is not implemented: the only garrison triggers are TIMER-driven PATROL sorties and DESTROY_OBJECT checks, so Troyes is 'fallen' and Chalons 'taken' by force, whereas historically Troyes capitulated after negotiation and a bluffed assault and Chalons opened its gates without a fight.",
+      "Force scale is very thin for the event: 12 French combat units (4 knights, 4 crossbowmen, 4 spearmen) stand in for an army of some ten thousand, and each 'garrison' is 2 castles with about 8 defenders.",
+      "7,574 oak trees dominate a 120x120 map representing the open chalk plains and vineyards of Champagne; the route Auxerre-Troyes-Chalons-Reims was notably open country, not near-continuous forest.",
+      "The 'English rider spurs for Troyes' warning is invented flavour with no source basis."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "BRITONS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 3.333,
+    "events": 3.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.833,
+    "issues_found": [
+      "The English side has no named commander at all; Troyes and Chalons speak as anonymous 'Captains'/'Garrison', and no French captain of the march (Dunois, the Duke of Alencon, La Tremoille) appears alongside Joan, leaving the royal column a bare escort of 4 knights, 4 crossbowmen and 4 spearmen.",
+      "The garrisons are cast as purely English (Britons) with no Burgundian element; Troyes in July 1429 was held by an Anglo-Burgundian garrison and Champagne's towns were Burgundian-allegiant, so 'Champagne remains loyal to King Henry' misstates whose banner actually flew there.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but as built the only outcomes encoded are DESTROY_OBJECT on the Troyes and Chalons castles - the negotiated capitulations that actually occurred (Troyes surrendered on terms after Joan drew up for assault; Chalons opened its gates and its bishop came out to Charles) have no representation.",
+      "Auxerre, the first town of the march to be brought over by negotiation, is omitted entirely from the route.",
+      "7,574 oak trees on a 120x120 map turns the open, chalky, vineyard country of Champagne into a forest corridor; the terrain of the march is the least forested part of the route.",
+      "Player 2's missile arm is generic ARCHER x7 rather than the Briton longbowman the engine offers for English garrison troops."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "BRITONS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

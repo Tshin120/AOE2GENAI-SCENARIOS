@@ -41,5 +41,80 @@
       "'Norman Reinforcements' trigger creating fresh riders 'from the coast' — William committed his whole force; no reinforcement column arrived during the battle",
       "2560 oak trees on a 120x120 map produces a heavily forested field, whereas Senlac was an open ridge with cultivated slopes and only marshy ground and scattered woodland (the Malfosse) at the flanks"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.75,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so Norman/Anglo-Saxon architecture and unit bonuses are unassigned — a Frankish (Norman) vs Briton/Celt (Saxon) pairing was available and avoidable",
+      "2,560 oak trees on a 120x120 map turns Senlac into dense forest; the historical field was open downland with a ridge and marshy ground, and heavy woods contradict the cavalry manoeuvre and feigned-retreat tactics the brief centres on",
+      "Both armies are given permanent economic/production bases (TOWN_CENTER, BARRACKS, STABLE, ARCHERY_RANGE, BLACKSMITH, MONASTERY) for a single-day set-piece battle where neither side built anything",
+      "The 'Norman Reinforcements' trigger invents fresh riders arriving from the coast; William received no reinforcements at Hastings — his whole force was committed from the start",
+      "Force ratio is inverted: 30 Norman units (only 10 knights) against 51 Saxons, whereas the armies were roughly equal in size and the Norman advantage lay in its large mounted and archer contingents",
+      "Harold is represented by an unrenamed generic KING unit; since the engine ships no Harold hero this is an acceptable stand-in, but leaving it unnamed weakens identification",
+      "No archer arm for the Saxons is correct, but the Saxon SKIRMISHER count (10) reads as missile troops the shield wall largely lacked"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.75,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so Norman and Anglo-Saxon architecture and unit bonuses are left to chance — the engine offers Franks/Britons (or Vikings/Celts) as obvious, avoidable choices for 1066 Normandy and England.",
+      "2,560 TREE_OAK on a 120x120 map turns Senlac Hill into dense forest; Hastings was fought on an open ridge above a shallow valley, and heavy woods also make the scripted downhill pursuit/feigned-retreat manoeuvre geographically implausible.",
+      "Harold Godwinson is represented by a KING unit — a non-combatant with no attack — rather than a renamed CHAMPION or a Teutonic/Frankish infantry hero; the historical Harold fought and died in the shield wall.",
+      "Player 2 receives 10 SKIRMISHERS; Anglo-Saxon missile troops were negligible at Hastings, and the engine's spearmen/champions alone would have represented the housecarl-and-fyrd shield wall more faithfully.",
+      "The 'Norman Reinforcements' trigger inventing 'fresh Norman riders arrive from the coast' is not attested; no reinforcements reached William during the battle — his whole force was already engaged.",
+      "Gold mines, stone mines, forage bushes and a full economic building set (Town Center, Blacksmith, Stable, Archery Range, Monastery) for both sides imply a settled base-building contest rather than a single-day pitched battle between an invasion camp and a marching army."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

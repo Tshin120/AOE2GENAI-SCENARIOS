@@ -41,5 +41,82 @@
       "Player TWO's MONASTERY placed inside the hostile Troyes/Chalons fortifications rather than a church/cathedral at the Reims goal, so the coronation site itself has no ecclesiastical building",
       "TREE_OAK x2400 blanketing a 120x120 map — the Champagne route from Gien through Auxerre, Troyes and Chalons is open chalk farmland, not dense forest"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 3.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Both active players are set to RANDOM civilization, so the French escort and the English garrison may appear as Aztecs, Mongols, Japanese, etc., with wholly wrong architecture and unit skins for 1429 Champagne.",
+      "The English garrison at Troyes fields CROSSBOWMAN and PIKEMAN only; the defining English arm of the Hundred Years' War, the longbowman, is available in the engine (Britons) and was avoidable to omit, especially since civ assignment was left random.",
+      "Player 3's raider chief is a BERSERK, a Viking unit five centuries out of place in 1429 France, alongside MILITIA (a Dark Age unit) rather than the engine's brigand-appropriate options.",
+      "No named commander besides Joan: the Duke of Alencon, Dunois, or La Tremoille accompanied the march and could have been represented by renamed heroes/units; the English side has no named captain either.",
+      "The brief's central mechanic - garrisons that can be 'persuaded to surrender' (Troyes and Chalons in fact capitulated after negotiation and a show of force) - is absent; the only trigger path is 'Gate Breached'/destruction, converting a largely bloodless political progress into a fighting march.",
+      "No cathedral or church structure is placed at the Reims victory area; the only Monastery in the scenario belongs to the hostile English player, so the coronation goal has no built referent.",
+      "Invented content: two timed 'Pursuit Wave' English cavalry attacks, a scripted pikeman 'Ambush', and a raider-chief side quest that unlocks allied pikemen - none of which correspond to the June-July 1429 march, which met almost no field opposition.",
+      "2,400 oak trees on a 120x120 map produce dense forest, whereas the Reims route crossed the open, cultivated plains of Champagne."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 5.0,
+    "pedagogy": 3.667,
+    "mean": 3.25,
+    "issues_found": [
+      "Both active players are set to civilization RANDOM, so the French escort and the English garrisons may render with Japanese, Aztec or Mongol architecture and unit skins — entirely avoidable, since Franks/Britons exist in the engine.",
+      "The English garrison at Troyes is armed with CROSSBOWMAN and PIKEMAN only; the defining English arm of the period, the Longbowman (available in the engine to a Briton player), is absent, and no English commander (Bedford, Talbot) is represented in any form.",
+      "Player 3's raider chief is a BERSERK — a Norse unit centuries and a culture removed from 1429 Champagne; a Militia-line or Woad-free generic unit, or a renamed Condottiero/Militia, would have been the correct stand-in for a French brigand captain.",
+      "The 'raiders plague our fields, slay their chief and our pikemen will join you' side quest is invented; nothing in the march to Reims corresponds to it.",
+      "No Reims cathedral is placed at the victory area — the only Monastery on the map belongs to Player 2 (the English garrison), so the coronation church the brief names as the goal has no physical representation.",
+      "The brief's key historical nuance — that Troyes and Chalons could be persuaded to surrender (Chalons opened its gates without a fight) — has no mechanic: only a 'Gate Breached' destroy trigger exists, so the towns can only be stormed.",
+      "Forces are token-sized (5 knights, 5 crossbowmen, 6 pikemen per garrison) rather than an army-scale royal progress."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

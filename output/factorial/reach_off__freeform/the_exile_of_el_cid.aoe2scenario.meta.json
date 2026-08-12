@@ -40,5 +40,86 @@
       "CAMEL_RIDER x3 in an Iberian setting: camel cavalry was essentially absent from Andalusi and Taifa field armies; light javelin cavalry (jinetes) would be the regional norm, and the engine's Light Cavalry/Cavalry Archer units cover this better.",
       "Al-Mu'tamin of Zaragoza, El Cid's actual employer and the pivot of the whole 1081-1086 period, exists only as a text line with no allied player or units, so the 'mercenary in Muslim service' premise is never enacted on the map."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 3.0,
+    "pedagogy": 3.0,
+    "mean": 2.75,
+    "issues_found": [
+      "Player 2's leader is the SALADIN hero — Saladin was a late-12th-century Ayyubid sultan in Egypt/Syria, a century after El Cid's death and 3,000 km away. The engine offers renamable generic units (and other Middle Eastern/Iberian heroes) that could have stood in for al-Qadir/Ibn Jahhaf of Valencia or the raider chief; using a famous hero from the wrong century and region is avoidable error.",
+      "Both active players are set to RANDOM civilization, so the architecture, unit roster and language of El Cid's Castilians and the Andalusi defenders are undefined at runtime — Spanish and Saracens were both available and obvious.",
+      "A single enemy player represents both Al-Mu'tamin's northern rivals (Aragon / al-Hayib of Lérida, who were Christian-allied Zaragozan enemies) and the city of Valencia, so the north-eastern 'raider camp' fields camel riders and cavalry archers under Saladin rather than anything resembling Aragonese or Lleidan troops.",
+      "Al-Mu'tamin of Zaragoza, El Cid's actual employer for most of the exile, exists only as dialogue text — no allied player, units or city, so the mercenary-service relationship that defines the period is never represented on the map.",
+      "The Almoravid intervention (Sagrajas 1086, Cuarte 1094) — the decisive military context of El Cid's Valencian years — is entirely absent, and the 1093-94 blockade/starvation of Valencia is reduced to a wall-breach assault.",
+      "El Cid's retinue is 4 knights with a Town Center and full building set, implying a settled lordship rather than the landless exile band described in the narration."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.0,
+    "issues_found": [
+      "SALADIN is placed as the enemy hero standing for the Governor of Valencia (and apparently also the Zaragozan rivals): Saladin was a Kurdish Ayyubid sultan active c. 1169-1193 in Egypt/Syria, an unrelated culture roughly a century after 1094. A renamed generic unit (e.g. a Camel Rider, Sultan, or King) or an Andalusi-flavoured stand-in was available and would have been correct.",
+      "Both players are set to RANDOM civilization, so architecture, unit lines and tech are unassigned; Spanish for El Cid's retinue and Saracens for Zaragoza/Valencia were obvious available choices for Iberia c. 1081-1094.",
+      "A single enemy player (Player 2) doubles as al-Mu'tamin's northern rivals AND the defenders of Valencia, collapsing two distinct, chronologically separated opponents into one force with one hero.",
+      "Valencia is represented only by a Castle, two Guard Towers and a stone wall line with 9 Cavalry Archers and 3 Camel Riders; the historical fall of Valencia was a nearly two-year blockade and starvation siege, not a mobile cavalry-archer defence, and no siege/starvation mechanic or timer represents that.",
+      "The 'rival raider camp' is an invented generic objective in place of the documented engagements of the Zaragoza service (Almenar 1082, Morella, the defeat of al-Mundhir and the Count of Barcelona).",
+      "TREE_PALM_FOREST across the map is a stylistic gesture toward the Mediterranean but reads as North African/desert rather than the Ebro valley terrain the narration places the first battle in."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

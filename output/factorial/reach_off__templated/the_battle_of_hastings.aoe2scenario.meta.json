@@ -41,5 +41,83 @@
       "Anglo-Saxon STABLE building implies mounted forces; Harold's housecarls dismounted to fight and the shield wall was entirely on foot",
       "4174 TREE_OAK tiles render Senlac as dense forest; the ridge itself was open ground with the Andredsweald at the Saxon rear only"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.5,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the architecture set and unit bonuses are unpredictable — Britons/Franks (or Byzantines for Norman knights) were available and would have fixed Anglo-Saxon and Norman visual identity.",
+      "Harold Godwinson is represented by the generic KING unit, a non-combat, near-defenceless piece; the man who reportedly fought on foot in the shield wall until struck down is thus a passive object rather than a fighting champion-class stand-in.",
+      "Player 2 holds 44 STONE_WALL segments, a GATE and 4 GUARD_TOWERs. Harold's army fought on an unfortified ridge with no masonry whatsoever; the shield wall as stone curtain plus towers turns Senlac Hill into a castle-town siege.",
+      "4,174 oak trees smother a 120x120 map; the ridge above the Hastings marsh was open downland with the Andredsweald behind, not near-continuous forest, and heavy woods make the cavalry envelopment the brief promises impossible to stage.",
+      "Both sides have TOWN_CENTER, MILL, HOUSE, MONASTERY, BARRACKS, STABLE, ARCHERY_RANGE etc. — a settled economy neither invasion army nor the hastily assembled Saxon host possessed on the field.",
+      "16 SKIRMISHERs on the Saxon side overstates Anglo-Saxon missile troops, whose near-absence at Hastings was a decisive weakness; the Normans' archer arm (10 ARCHER vs 21 KNIGHT) is correspondingly underweighted.",
+      "Secondary victory VC2 awards the Norman player the battle simply for having a unit alive after 600 seconds — the nightfall deadline historically favoured Harold, whose army only had to hold until dark, so this inverts the clock.",
+      "Defeat on loss of the player's TOWN_CENTER is a generic AoE2 condition with no counterpart at Hastings; the Normans had no base to lose beyond the Pevensey/Hastings camp, which was never threatened.",
+      "The signature feigned retreats are only narrated in text; no trigger (PATROL/TASK_OBJECT) models a Norman withdrawal drawing the fyrd off the ridge, so the player never performs the tactic the brief centres on."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.5,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so Norman and Anglo-Saxon architecture and unit bonuses are left to chance (Franks/Britons were the obvious, available choices).",
+      "Player 2 (the Saxons) is given 44 STONE_WALL segments, a GATE_NORTH_TO_SOUTH and 4 GUARD_TOWERs. Harold's army fought a field battle behind a shield wall of men on an open ridge; there were no fortifications at Senlac, and the walls flatly contradict the scenario's own narration about breaking a shield wall.",
+      "4,174 TREE_OAK objects dominate a 120x120 map; the Hastings battlefield was an open slope with marshy ground below the ridge, not dense forest, and heavy woods make cavalry envelopment and the feigned-retreat pursuit unrepresentable.",
+      "Both sides own TOWN_CENTER, STABLE, ARCHERY_RANGE, BLACKSMITH and MONASTERY - base furniture for a one-day pitched battle where neither army had a settlement; a Norman TOWN_CENTER loss is even wired as a defeat condition, an event with no historical counterpart.",
+      "The Saxon force includes 16 SKIRMISHERs; Harold's army was notably short of missile troops, and this over-arms the shield wall with skirmishers while the Normans get only 10 archers.",
+      "Secondary victory 'VC2' awards the win merely for having one unit alive anywhere on the map at 600 seconds, so a passive player can win without ever engaging the shield wall.",
+      "Dialogue line 'The Duke has fallen! Normandy's cause dies with him!' fires on William's death - a counterfactual outcome presented without flagging that William in fact survived (only rumours of his death circulated)."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

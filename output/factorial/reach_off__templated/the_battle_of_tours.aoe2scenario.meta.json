@@ -42,5 +42,94 @@
       "The Umayyad camp is a stone CASTLE with 60 STONE_WALL segments and 4 GUARD_TOWERS - the historical raiders had a wagon-and-plunder field camp, not masonry fortification, and the victory text calls it a 'stronghold'",
       "PAVILION_A / TENT_A for Odo's Aquitanians gives a Middle-Eastern nomad camp look to a Gallo-Roman Christian duchy"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 3.0,
+    "issues_found": [
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero unit — a figure from 1066, over three centuries later. Renaming a generic Militia/Man-at-Arms or Frankish Paladin would have avoided this.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, a 12th-century Ayyubid sultan — the wrong figure by 400 years, and one strongly associated with a different theatre entirely.",
+      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian — again a wrong named hero where a renamed generic cavalry unit would have served.",
+      "Both active players are set to civilization RANDOM, so architecture, unit skins and tech tree are arbitrary; Franks and Saracens (or Byzantines/Berbers) were available and would have been correct.",
+      "The Umayyad position is built as a CASTLE with 60 STONE_WALL segments, a GATE and four GUARD_TOWERs — Abd al-Rahman's force was a mobile raiding army with a wagon/booty camp, not a fortified stone stronghold.",
+      "Player 1 (Franks) is given a TOWN_CENTER whose destruction triggers defeat, and the enemy taunt speaks of 'the Frankish stronghold' — Martel's army held a wooded ridge in the open field, not a settlement.",
+      "14 CAMEL_RIDERs for a Umayyad army campaigning in Gaul overstates camelry; the invaders fought as horse cavalry.",
+      "Total combatant counts (roughly 42 Franks vs 49 Umayyads) are tiny against dialogue claiming Umayyad horsemen 'thousands strong'."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.333,
+    "pedagogy": 4.0,
+    "mean": 3.083,
+    "issues_found": [
+      "Charles Martel is represented by the WILLIAM_THE_CONQUEROR hero — a Norman duke of 1066, three centuries after Tours; the defeat trigger is even keyed to this object. A renamed generic Militia/Man-at-Arms would have been correct.",
+      "Abd al-Rahman al-Ghafiqi is represented by SALADIN, an Ayyubid Kurdish sultan of the 1180s — wrong dynasty, wrong region, wrong century for an 8th-century Umayyad governor of al-Andalus.",
+      "Duke Odo of Aquitaine is represented by EL_CID, an 11th-century Castilian — wrong era and wrong polity for a Merovingian-era Aquitanian duke.",
+      "Both active players are set to civilization RANDOM, so architecture and unit skins for the Frankish and Umayyad sides are left to chance rather than assigned (Franks and, e.g., Saracens were available).",
+      "Player 2's Umayyad camp uses a Castle, stone walls and Guard Towers — a permanent fortress rather than the marching camp the sources describe as the object of the raid.",
+      "CAMEL_RIDER x14 for the Andalusian Umayyad host is a questionable choice; the invading force was primarily Berber and Arab horse, and Knights/Cavalry Archers already covered it.",
+      "The Umayyad taunt 'The Frankish stronghold falls! Gaul lies open before us!' fires on the defeat path, asserting an outcome contrary to the event, though as a defeat line it is acceptable framing."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

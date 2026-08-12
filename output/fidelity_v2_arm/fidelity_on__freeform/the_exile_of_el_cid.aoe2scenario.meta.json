@@ -1,0 +1,100 @@
+{
+  "title": "The Exile of El Cid",
+  "description": "1081-1094. Banished from Castile by King Alfonso VI, Rodrigo Diaz de Vivar must survive as a mercenary captain: serve the Muslim king of Zaragoza against his rivals, win battles that restore his reputation, and finally conquer Valencia in his own name. The player's small retinue grows through victories; losing El Cid himself means defeat.",
+  "scenario_type": "story",
+  "map_size": 100,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "mediterranean",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/El_Cid",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.3",
+  "outcome": "success",
+  "run_id": "run_83468d4e0e22",
+  "candidate": 1,
+  "attempts": 2,
+  "trigger_count": 11,
+  "output_path": "output/fidelity_v2_arm\\fidelity_on__freeform\\the_exile_of_el_cid.aoe2scenario",
+  "timestamp_utc": "2026-08-11T12:23:51Z",
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.0,
+    "issues_found": [
+      "El Cid himself is placed as a generic CHAMPION even though the engine ships a dedicated 'El Cid' hero unit (used in the official El Cid campaign) — an avoidable substitution, and the defeat trigger fires on the death of an anonymous Champion",
+      "Player 1 is assigned FRANKS rather than SPANISH, despite the Spanish civilisation existing and being the obvious fit for a Castilian retinue (Franks give French castle/architecture and Throwing Axemen availability)",
+      "Player 2 civilisation is left as RANDOM, so Zaragoza/Barcelona/Valencia architecture (mosque, Middle-Eastern building set) is not guaranteed — the taifa cities may render with any civ's buildings",
+      "All three distinct antagonists — al-Mutamin's Zaragoza (ally), Berenguer Ramon II of Barcelona (enemy), and Ibn Jahhaf's Valencia (target) — are collapsed into a single Player 2 roster, so the player's Muslim patron is indistinguishable from his Muslim and Christian enemies",
+      "Berenguer Ramon II, named and given dialogue, has no unit representing him; his 'defeat' is a DESTROY_OBJECT on an unnamed KING, so the historically notable capture (not death) of the Count of Barcelona at Tébar is misrepresented as a kill",
+      "Force scale is token: a 141-object map with 8 Player 1 units and 12 Player 2 units for a thirteen-year mercenary career and a two-year siege; the two-year starvation siege of Valencia is reduced to breaking one gate",
+      "TREE_PALM_FOREST across the map suits coastal Valencia but not the Ebro valley around Zaragoza and Almenar"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.667,
+    "pedagogy": 4.0,
+    "mean": 3.167,
+    "issues_found": [
+      "El Cid is represented by a generic CHAMPION (infantry) even though the engine ships a dedicated El Cid Campeador hero unit (mounted) — an entirely avoidable substitution, and it also misrepresents Rodrigo as a foot soldier rather than the mounted captain of the sources",
+      "Player 1 is assigned FRANKS; the Spanish civilization exists in the engine and is the obvious fit for a Castilian exile's retinue (Franks gives Frankish architecture and no Spanish unique units)",
+      "Player 2's civilization is left RANDOM, so the architecture and unit set of the taifa/Valencian defenders is unpredictable and may render as anything from Britons to Mongols",
+      "Berenguer Ramon II of Barcelona (a Catalan Christian count) and Ibn Jahhaf's Valencia are merged into the single Player 2 slot, whose roster mixes CAMEL_RIDERs and CAVALRY_ARCHERs with the Barcelona coalition — the Christian coalition of Almenar/Tébar is thereby given a Muslim army",
+      "Al-Mutamin ibn Hud of Zaragoza, El Cid's employer and a speaking character in the text, has no player slot at all; the only stand-in is a GAIA KING, so the patron-mercenary relationship that defines 1081-1090 is not actually playable",
+      "Berenguer Ramon II was historically captured, not killed, at Tébar; the trigger 'Barcelona Defeated' fires on DESTROY_OBJECT, so play kills a man the narration correctly says was taken alive",
+      "Ibn Jahhaf's death is placed at the moment of the city's fall in 1094; he was in fact executed some months afterward"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "FRANKS",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        2
+      ]
+    }
+  }
+}

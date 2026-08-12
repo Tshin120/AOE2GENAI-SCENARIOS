@@ -1,0 +1,93 @@
+{
+  "title": "Marco Polo on the Silk Road",
+  "description": "1271-1275. Escort the young Marco Polo, his father Niccolo, and their trade caravan across the deserts and mountain passes of Central Asia to the court of Kublai Khan. Bandit raiders and harsh terrain threaten the route; the caravan's pack animals must survive. Victory requires bringing Marco alive to the Khan's summer palace at Shangdu.",
+  "scenario_type": "escort",
+  "map_size": 120,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "desert",
+  "player_civ": "western_european",
+  "enemy_civ": "central_asian",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Marco_Polo",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.3",
+  "outcome": "success",
+  "run_id": "run_99383c2824ba",
+  "candidate": 1,
+  "attempts": 4,
+  "trigger_count": 11,
+  "output_path": "output/fidelity_v2_arm\\fidelity_on__freeform\\marco_polo_on_the_silk_road.aoe2scenario",
+  "timestamp_utc": "2026-08-11T12:22:53Z",
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 4.25,
+    "issues_found": [
+      "Marco Polo is represented by a KNIGHT and Niccolo/Maffeo by MAN_AT_ARMS — heavily armoured European military types for Venetian merchants; a Trade Cart, Villager, or even Monk-escorted civilian would have been a less misleading generic given the engine's catalogue (renaming is done correctly, however)",
+      "The caravan's 'pack animals' are SHEEP. The engine ships Trade Carts (and camel-riding units) that would represent a Silk Road pack train far better; sheep read as livestock, not freight, and the whole loss condition hangs on them",
+      "Shangdu is built as a GAIA CASTLE + TOWN_CENTER — a European donjon-and-town-centre silhouette for Kublai Khan's summer palace. A Mongol- or Chinese-owned set of buildings (Wonder, or Chinese/Mongol-architecture Town Center and walls) was available and would not have looked Frankish",
+      "Kublai Khan is a GAIA KING (renamed). Acceptable as a stand-in, but he is unowned and inert, so the Khan's court is scenery rather than a party to the event",
+      "Mongols are cast as the bandit raiders that ambush the caravan, which inverts the Pax Mongolica the Polos actually travelled under — Mongol authority is what made the route passable; the raiders on that stretch were local brigands, not the Khan's own people",
+      "Only 12 combat-capable units exist on a 120x120 map; the 'harsh terrain' threat named in the brief is represented purely by cliff decoration with no attrition or hazard mechanic"
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "ITALIANS",
+        "2": "MONGOLS"
+      },
+      "unassigned_players": []
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 4.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.333,
+    "mean": 4.25,
+    "issues_found": [
+      "The caravan's pack animals are represented by SHEEP (four owned by Player 1, plus GAIA sheep) when the engine offers Trade Carts and Camels, either of which would read as a merchant caravan's baggage train; this is an avoidable substitution.",
+      "Marco Polo is cast as a KNIGHT and Niccolo and Maffeo as MAN_AT_ARMS — armoured Latin men-at-arms for Venetian merchants; renaming is permitted, but a Trade Cart/Cart-style or civilian-coded stand-in was available for the merchants.",
+      "The bandit raiders are given the MONGOLS civilization and Mongol cavalry archers/light cavalry, which conflates the caravan's predators with Kublai Khan's own regime; under the Pax Mongolica the Mongol state was the guarantor of the road, and the Polos' recorded dangers were local robbers (Kerman, the Karakoram approaches) and terrain.",
+      "Shangdu is rendered as a GAIA CASTLE plus TOWN_CENTER — European donjon architecture for the Khan's summer palace, where Mongol/East Asian building sets were available in the same editor.",
+      "Only one bandit ambush event fires (D2), so the multi-year, multi-stage hardship of the crossing is compressed into a single skirmish; the Pamir and Taklamakan legs are text-only with no gameplay threat besides the single patrol."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "ITALIANS",
+        "2": "MONGOLS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

@@ -40,5 +40,88 @@
       "CAMEL_RIDER x4 in the Ottoman siege line: the 1453 besieging army was built around janissary infantry, azaps, sipahi horse and the great bombard; camels were baggage animals, not a shock arm. HAND_CANNONEER/JANISSARY was available in the engine and unused.",
       "No Wonder placed for Hagia Sophia — the Byzantine Wonder in the engine literally IS Hagia Sophia, yet the church is apparently represented by a plain MONASTERY, undercutting the scenario's own central objective."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 2.0,
+    "pedagogy": 2.0,
+    "mean": 2.25,
+    "issues_found": [
+      "Player 2's commander is the SALADIN hero — a Kurdish sultan who died in 1193 — standing in for Mehmed II, some 260 years out of period; the engine ships no Mehmed hero, so a renamed generic Champion/Cavalier or Turkish elite unit was the correct choice and this substitution was entirely avoidable",
+      "Both players are set to RANDOM civilization, so the defenders may not render as Byzantines nor the besiegers as Turks; architecture set, unit roster flavour and the iconic Byzantine/Turkish tech are all left to chance",
+      "Ottoman force includes 4 CAMEL_RIDER — desert cavalry inappropriate for the 1453 Thracian siege lines and not a Turkish unit in the engine; sipahi cavalry are better served by the Cavalier/Knight already present",
+      "No water tiles or ships anywhere on the map, yet Wave 3 narrates Mehmed's fleet being dragged overland into the Golden Horn and the objectives demand guarding the sea walls; the naval flanking threat is pure text with nothing placed",
+      "TREE_PALM_FOREST as the map's only woodland is wrong for the Thracian/Bosphorus environment",
+      "Victory is coded as DESTROY_OBJECT on the enemy leader — the defenders sallying out to kill the Sultan is the opposite of the historical situation, in which Mehmed survived and the garrison could only try to outlast the assaults; a timer-survival victory was the correct encoding",
+      "The victory narration ('Constantinople stands - the walls of Rome hold once more!') asserts a counterfactual outcome as the reward state, teaching the player that the City held",
+      "Hagia Sophia is represented by an ordinary MONASTERY with no distinguishing marker; a Wonder or a walled precinct would have read as the great church",
+      "Only 8 villagers and no stone-repair economy support the repeatedly stated 'repair the breaches' mechanic; the Wall Breached trigger merely CREATE_OBJECTs rather than enabling meaningful repair"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.333,
+    "objective": 2.0,
+    "pedagogy": 3.0,
+    "mean": 2.333,
+    "issues_found": [
+      "SALADIN is placed as the Ottoman commander for Mehmed II — a Kurdish Ayyubid sultan of the 1180s standing in for an Ottoman sultan of 1453, an avoidable cross-culture and cross-era error when a renamed generic unit (or a Janissary/Champion named 'Mehmed II') was available",
+      "Both players' civilizations are left RANDOM, so architecture sets and unit bonuses may render Byzantines and Ottomans as, e.g., Celts and Vikings; the engine ships both Byzantines and Turks and neither was assigned",
+      "The Ottoman assault force uses CHAMPION x6 and CAMEL_RIDER x4 rather than the Turkish Janissary the engine actually ships — janissaries were the signature assault troops of the 1453 storm, and camel riders were not part of the army before Constantinople",
+      "The Golden Horn sea-wall theme is narrated ('Mehmed's fleet, dragged overland past Galata... now floats upon the Golden Horn') but there is no water, no dock, and not a single ship placed anywhere on the 120x120 map; Wave 3 is delivered by the same land patrol as the other waves",
+      "TREE_PALM_FOREST x6 as the map's only vegetation is wrong for Thrace and the Bosphorus",
+      "Only ONAGER x1 and SCORPION x2 plus a Siege Workshop for the defenders, and no Byzantine-specific defensive flavour (e.g., Sea Walls/Harbour, cataphract-type troops); STONE_WALL x124 with GUARD_TOWER x5 and a single KEEP is a thin abstraction of the triple Theodosian line — the inner/outer wall and moat structure is not represented",
+      "Victory fires on the death of the enemy commander, producing the counterfactual 'the Ottoman host breaks and flees. Constantinople stands' — the City fell on 29 May 1453 and Mehmed II survived to reign for 28 more years",
+      "Hagia Sophia is represented by a MONASTERY that must be destroyed for defeat, but historically Hagia Sophia was never destroyed — it was converted, and the City's fall turned on the breach at the Gate of St. Romanus, not on the church burning"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

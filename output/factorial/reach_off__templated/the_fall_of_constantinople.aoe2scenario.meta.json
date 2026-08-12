@@ -41,5 +41,94 @@
       "No gunpowder siege whatsoever among placed objects, despite the brief promising 'repair breaches from bombard fire'; the engine has Bombard Cannons and Great Bombards (the Ottoman signature weapon of 1453)",
       "Free-standing GOLD_MINE x11, STONE_MINE x4, FORAGE_BUSH x8 and SHEEP inside/around a besieged imperial capital — random-map economic furniture, not a walled metropolis under blockade"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 1.0,
+    "setting": 1.0,
+    "events": 2.0,
+    "objective": 4.0,
+    "pedagogy": 2.0,
+    "mean": 2.0,
+    "issues_found": [
+      "Player 1's hero is RICHARD_THE_LIONHEART standing in for Constantine XI Palaiologos, and Player 2's is SALADIN standing in for Mehmed II — two named Third Crusade figures transplanted into 1453. The engine ships no Constantine or Mehmed hero, so the correct choice was a renamed generic unit (e.g. a renamed Byzantine cataphract or an elite Janissary), not a different named hero.",
+      "Both active players are set to civilization RANDOM. The engine ships Byzantines and Turks; leaving the defenders and besiegers unassigned means the architecture set, unique units and bonuses are arbitrary — the walls may render as Japanese or Meso buildings.",
+      "Player 1's army is CROSSBOWMAN x10 and MAN_AT_ARMS x6 — a generic Feudal/Castle European garrison. No Byzantine-flavoured troops, no Genoese contingent under Giustiniani, and no gunpowder on either side.",
+      "Player 2 consists of a single hero unit at scenario start; the entire Ottoman army of some 60,000–80,000 exists only as timed CREATE_OBJECT waves, with no camp, no Ottoman siege park, and no bombard (the engine's BOMBARD_CANNON was available and is the single most iconic element of this siege — Orban's guns).",
+      "TREE_PALM_FOREST x20 for the Bosphorus shore; palms are wrong for Thrace.",
+      "The brief promises sea walls along the Golden Horn and a Hagia Sophia district, but nothing in the placed roster represents water, harbour, chain, ships, or a monumental church — the MONASTERY x1 is a generic production building, and the defeat condition keys on the CASTLE and TOWN_CENTER instead.",
+      "Assault waves come 'from the north', 'from the east', and 'from the south' — the Theodosian land walls face west; the historic breach was at the Mesoteichion/St Romanus gate on the western landward front.",
+      "The scenario's outcome inverts history: victory is holding until 'dawn' and Mehmed II saying 'their attack falters'. Constantinople fell on 29 May 1453 and Constantine XI died in the breach; a playthrough teaches the opposite.",
+      "GOLD_MINE x11, STONE_MINE x4, FORAGE_BUSH x8 and SHEEP x4 inside a besieged city are standard-random-map economy furniture, not a blockaded metropolis under famine."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "RICHARD_THE_LIONHEART",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "RICHARD_THE_LIONHEART",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 1.0,
+    "setting": 1.667,
+    "events": 2.333,
+    "objective": 4.0,
+    "pedagogy": 2.333,
+    "mean": 2.25,
+    "issues_found": [
+      "Richard the Lionheart is placed as the defenders' hero while the dialogue calls him Constantine XI — a 12th-century English crusader king standing in for the last Byzantine emperor, an avoidable error since any generic unit could have been renamed",
+      "Saladin is placed as the besieging commander while the text names Mehmed II — a 12th-century Ayyubid sultan substituting for a 15th-century Ottoman, and the victory condition is keyed to that wrong-era hero",
+      "Both players are left as RANDOM civilization, so neither Byzantine nor Turkish architecture, unit rosters, or bonuses are guaranteed; the Theodosian Walls may render in any regional style",
+      "TREE_PALM_FOREST x20 gives a tropical/desert vegetation set inappropriate to the Thracian/Marmara littoral",
+      "No water at all is placed: the Golden Horn, the sea walls, the Ottoman fleet and the chain across the harbour — all explicitly promised in the brief — are entirely absent, and the 'guard the sea walls' task cannot exist",
+      "The Ottoman side has zero gunpowder artillery placed; the brief's central mechanic of repairing breaches from Orban's bombards is reduced to unspecified 'siege weapons' spawned by triggers",
+      "No Hagia Sophia district exists; defeat is keyed to a generic Castle and Town Center instead of the landmark the brief names",
+      "Defender garrison of 6 Men-at-Arms, 10 Crossbowmen and 10 villagers with a Market, University, Monastery and Stable is a generic town start, not the ~7,000 mixed Greek/Genoese/Venetian garrison; no Genoese contingent (Giustiniani) is represented even by a renamed unit",
+      "The narrative asserts a counterfactual outcome — 'their attack falters', 'the final assault is broken' — as the win state, when the historically decisive Kerkoporta/Lycus valley breach and the city's fall are never modelled",
+      "A 10-minute hold labelled 'until dawn' compresses a 53-day siege (April 6 – May 29) without acknowledging it, and the assault waves come from north, east and south rather than concentrating on the Mesoteichion"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "RICHARD_THE_LIONHEART",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "RICHARD_THE_LIONHEART",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

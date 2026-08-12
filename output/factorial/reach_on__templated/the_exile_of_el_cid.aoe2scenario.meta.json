@@ -41,5 +41,92 @@
       "KING units in both Player Two and Player Three rosters represent nobody in the historical situation (al-Mutamin is voiced in text but never placed as a distinct figure), and give a European monarch model to Muslim taifa rulers.",
       "A single monolithic 'Almoravid emir' enemy for the whole 1081-1094 span: the Almoravids only crossed to Iberia in 1086 and El Cid's Zaragoza-era opponents were Christian (Aragon, Berenguer Ramon II of Barcelona) as often as Muslim; none of those belligerents appear at all."
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 2.0,
+    "objective": 2.0,
+    "pedagogy": 2.0,
+    "mean": 2.0,
+    "issues_found": [
+      "SALADIN is placed as the antagonist and is the primary victory target. Saladin (1137-1193, Egypt/Syria) has nothing to do with 11th-century Iberia; the historical opponents were the taifa of Lerida/Al-Mundir, Berenguer Ramon II of Barcelona, and later the Almoravid emir Yusuf ibn Tashufin. The engine ships no Almoravid hero, but a renamed generic King/Cavalry unit was available and would have been correct; importing a different named hero from the wrong century and region is avoidable error.",
+      "In-game text names 'Saladin's Emir' and 'the emir of the Almoravids' interchangeably, conflating two unrelated dynasties.",
+      "Both active players are set to RANDOM civilization, so architecture and unit rosters are not anchored to Iberian/Moorish appearance at all — an avoidable omission given Spanish and Saracen/Berber-flavoured civs exist.",
+      "Enemy composition is 28 Camel Riders plus 31 Cavalry Archers; Andalusi and Almoravid armies in Iberia fought as Berber light horse and jinetes, not camel cavalry, and mass cavalry archers are equally out of place for the peninsula.",
+      "None of the campaign's actual turning points appear: the victory at Almenar (1082) for Al-Mutamin, the defeat of Sancho Ramirez, the Battle of Tevar/Morella (1084) against Berenguer Ramon II, or the two-year siege and capture of Valencia in 1094.",
+      "The plot substitutes invented generic beats — 'raider outpost', 'bandits', 'Ambusher', 'Traitor King', an unnamed fortress — for documented campaigns.",
+      "Valencia, the stated goal of the brief, exists nowhere as a placed settlement; there is no city to conquer, only a Castle/Keep/stone-wall compound belonging to Saladin.",
+      "Victory is DESTROY_OBJECT on Saladin (or destroying a gate), i.e. decapitating an anachronistic enemy leader, rather than taking possession of Valencia — El Cid's actual and defining achievement.",
+      "Defeat on the death of Player 3's KING (standing in for Al-Mutamin) misrepresents history: Al-Mutamin died of natural causes in 1085 and El Cid's career continued regardless.",
+      "GAIA decoration includes ROMAN_RUINS and a SKELETON as the 'old ruins' clue site — generic dungeon-crawl set dressing rather than anything Iberian."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 2.333,
+    "objective": 2.667,
+    "pedagogy": 2.333,
+    "mean": 2.25,
+    "issues_found": [
+      "SALADIN is placed as the enemy hero and the primary victory target; Saladin (d. 1193, Ayyubid Egypt/Syria) never fought in Iberia and belongs to a different culture and a century later than the Almoravid emirs (Yusuf ibn Tashfin) or the taifa rivals El Cid actually faced. The engine offers other Muslim/Iberian-appropriate heroes or a simple renamed generic unit, so this was avoidable.",
+      "Both active players are set to civilization RANDOM, so architecture and unit sets are not fixed as Spanish and Saracen/Berber; the Iberian setting is left to chance.",
+      "Al-Mutamin of Zaragoza, El Cid's actual patron, exists only as a dialogue line and an anonymous KING; Alfonso VI and Yusuf ibn Tashfin are absent entirely.",
+      "Player 2's army is 28 camel riders and 31 cavalry archers with no infantry — a steppe/Saracen composition rather than Almoravid Berber infantry-and-lancer forces, and vastly outnumbering any force El Cid faced at this stage.",
+      "Central plot beats are invented: a 'Traitor King' betrayal, a generic raider outpost, and a rescued ally, none of which correspond to the Zaragoza campaigns (Almenar, Morella) or the 1094 siege of Valencia.",
+      "Valencia — the stated culmination of the brief — is nowhere in the victory conditions; the campaign instead ends at a generic 'enemy fortress' with an Almoravid/Saladin emir.",
+      "Alternative victory fires on destroying a GATE_NORTH_TO_SOUTH inside an arbitrary map area, an objective the history does not single out.",
+      "Defeat is tied to the death of a nameless Player 3 KING labelled 'key ally'; El Cid's fortunes never hinged on protecting a Muslim king's life in this way."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

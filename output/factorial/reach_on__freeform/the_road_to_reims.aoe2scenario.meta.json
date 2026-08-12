@@ -40,5 +40,89 @@
       "English garrison armed with CROSSBOWMAN only: the engine provides the Longbowman, the signature English unit of the Hundred Years' War, so the crossbow-only garrison is an avoidable mismatch",
       "PAVILION_A in the French camp is a decorative Asian/tent-style object rather than European campaign architecture"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 3.0,
+    "mean": 3.25,
+    "issues_found": [
+      "The garrison commanders of Troyes and Chalons are EL_CID (Rodrigo Diaz, an 11th-century Castilian, on the English side no less) and WILLIAM_THE_CONQUEROR (d. 1087) — both are named heroes from the wrong century placed as 1429 English/Burgundian captains, an avoidable error since the editor offers generic units that can be renamed (and AoE2's Joan of Arc content ships English figures such as Sir John Fastolf)",
+      "Both players are assigned civilization RANDOM, so architecture, unit skins and tech could render as Aztec, Japanese, Mongol etc. — nothing anchors the map to 15th-century Champagne, and the French/English contrast is lost",
+      "The English garrisons are armed with CROSSBOWMAN and PIKEMAN only; the defining English arm of the period, the longbow (Briton Longbowman / archer line), is entirely absent",
+      "Troyes and Chalons are labelled purely 'English' garrisons ('sworn to King Henry'); in fact both were Burgundian-held towns of the Anglo-Burgundian alliance, and Troyes yielded after a short siege and negotiation with Robert le Macon rather than to a slain 'garrison commander'",
+      "The '[Ambush] Forest Ambush' by 'English Scouts' is invented — no such attack on the Reims progress is recorded",
+      "Reims cathedral is represented only by a GAIA MONASTERY and flags; the text promises 'twin towers' that nothing on the map supplies (a Wonder or castle-scale structure was available)"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "JOAN_OF_ARC",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 5.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Player 2 (the English garrisons of Troyes and Chalons) is led by EL_CID and WILLIAM_THE_CONQUEROR — an 11th-century Castilian and the Norman conqueror of 1066, neither English nor of the 1429 era. This was avoidable: the editor ships Hundred Years War heroes (e.g. Sir John Fastolf, Duke of Bedford-era generics) or a renamed generic knight/champion would have served.",
+      "Both players' civilizations are set to RANDOM, so architecture, unit skins and tech could render as Aztec, Japanese or Mongol — the French escort and English garrison have no assigned Frankish/Britons identity despite the engine offering both.",
+      "No Burgundian presence at all: Troyes and Chalons in July 1429 were Anglo-Burgundian towns, and the text attributes them solely to 'King Henry'.",
+      "Force scale is very thin for the march: the royal escort is 11 combatants plus Joan and the King, where the historical column was an army of roughly 12,000 that itself intimidated the towns into surrender.",
+      "The 'Forest Ambush' by English scouts on the Troyes-Reims road is invented; the sources record negotiation and submission of towns, not a woodland attack on the Dauphin's column.",
+      "A single MONASTERY stands in for Reims cathedral with no wonder or larger sacred structure, and the coronation site is marked only by a flag/area."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "EL_CID",
+        "JOAN_OF_ARC",
+        "WILLIAM_THE_CONQUEROR"
+      ],
+      "unsupported_heroes": [
+        "EL_CID",
+        "WILLIAM_THE_CONQUEROR"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

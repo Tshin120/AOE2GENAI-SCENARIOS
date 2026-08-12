@@ -43,5 +43,93 @@
       "TREBUCHET and MANGONEL as the Ottoman siege train in 1529, when the Sultan's force relied on gunpowder artillery and mines; only the defenders were given BOMBARD_CANNON",
       "CROSSBOWMAN and SKIRMISHER as tower garrison rather than gunpowder infantry, contradicting the stated 'arquebusiers to the towers'"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 2.0,
+    "pedagogy": 2.0,
+    "mean": 2.25,
+    "issues_found": [
+      "Player 1's commander is FREDERICK_BARBAROSSA, a 12th-century Hohenstaufen emperor, standing in for Niklas Graf Salm; the defeat trigger literally reads 'Salm Falls' on Barbarossa's death. A renamed generic unit (or the Teutonic/Landsknecht-style infantry) was available, so importing a different named historical figure is avoidable error.",
+      "Player 2's Sultan is SALADIN, the Ayyubid sultan of the 1180s, standing in for Suleiman the Magnificent — again a wrong-century named hero where a renamed generic cavalry unit would have been correct.",
+      "Both civilizations are left as RANDOM, so architecture set, tech tree and unique units are undefined; the Ottomans could have been assigned Turks (Janissaries, hand cannoneers) and the defenders Teutons/Spanish/Bohemians for a period-plausible skin.",
+      "The brief's 'German Landsknechts and Spanish arquebusiers' are represented by 6 crossbowmen and 4 skirmishers plus 2 bombard cannon — the engine's Hand Cannoneer exists and is the obvious stand-in for arquebusiers, so the garrison's defining firearm troops are absent.",
+      "Ottoman roster is 5 camel riders and 6 champions rather than janissary-analogue gunpowder infantry; the narration announces 'his janissaries at his back' while the placed units are melee champions and camels, which never featured in the 1529 Vienna army.",
+      "Suleiman is made to lead a final charge and be 'struck down' — he neither led an assault in person nor died; the withdrawal came from rain, disease, supply failure and the closing campaign season.",
+      "Artillery is inverted: the Ottomans in 1529 had left their heavy siege guns behind in the Danube mud, yet Player 2 gets trebuchet/mangonels while the garrison is handed 2 bombard cannon.",
+      "1,756 oak trees dominate a map depicting a walled Danube city and its siege lines; the besieging camp and river frontage are effectively replaced by forest.",
+      "Defeat is keyed to the commander's death, but Salm's mortal wound came from a bombardment splinter late in the siege and Vienna still held — the historical failure condition was the city falling, not Salm dying."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "FREDERICK_BARBAROSSA",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "FREDERICK_BARBAROSSA",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 1.667,
+    "events": 3.0,
+    "objective": 2.0,
+    "pedagogy": 2.667,
+    "mean": 2.167,
+    "issues_found": [
+      "SALADIN is placed as Suleiman the Magnificent: a 12th-century Kurdish/Ayyubid sultan standing in for a 16th-century Ottoman, an unrelated era and dynasty. The engine offers renameable generics (Janissary, Champion, Elite Janissary in the Turkish roster) that would have been correct.",
+      "FREDERICK_BARBAROSSA stands in for Niklas Graf Salm - a Hohenstaufen emperor of the 1180s substituted for a 1529 Landsknecht commander; a renamed Two-Handed Swordsman or Champion was available.",
+      "Both players are set to RANDOM civilization, so the architecture, unit lines and language of the Ottoman besiegers and the Imperial garrison are arbitrary rather than Turkish/Teutonic-Spanish.",
+      "No gunpowder infantry anywhere: the brief's Spanish arquebusiers are represented by CROSSBOWMAN and SKIRMISHER although HAND_CANNONEER exists in the engine.",
+      "The defenders are given 2 BOMBARD_CANNON and 4 KNIGHT while the Ottomans get only a TREBUCHET and MANGONEL - inverting the actual artillery situation and adding a knightly cavalry arm the Vienna garrison did not field.",
+      "CAMEL_RIDER x5 in the Ottoman siege lines is an Egyptian/Levantine flavour unit with no place before Vienna in 1529.",
+      "The narration and victory trigger assert that Suleiman personally led the final charge and was killed ('Suleiman's banner falls') - he was never at the breach and withdrew alive to reign another 37 years.",
+      "Victory is keyed to killing the sultan, whereas the historical garrison had only to survive until the campaign season closed; the encoded goal is a decapitation raid, not a hold.",
+      "The 'Salm Falls' defeat text has him mortally wounded on the ramparts, which conflates his March 1530 death from wounds with an immediate collapse of the garrison."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "FREDERICK_BARBAROSSA",
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "FREDERICK_BARBAROSSA",
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

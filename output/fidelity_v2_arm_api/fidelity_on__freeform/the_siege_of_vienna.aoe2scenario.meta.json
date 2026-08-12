@@ -1,0 +1,64 @@
+{
+  "title": "The Siege of Vienna",
+  "description": "September-October 1529. Suleiman the Magnificent's army arrives before Vienna's medieval walls. The player commands the garrison of German Landsknechts and Spanish arquebusiers under Niklas Graf Salm: countermine the Ottoman sappers, repel assaults on the Carinthian Gate, and hold until autumn rains and supply failure force the Ottoman withdrawal.",
+  "scenario_type": "defense",
+  "map_size": 144,
+  "players": 2,
+  "difficulty": "medium",
+  "region": "northern_europe",
+  "player_civ": "western_european",
+  "enemy_civ": "middle_eastern",
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Siege_of_Vienna_(1529)",
+  "reachability_prompting": false,
+  "fidelity_rubric": false,
+  "fidelity_prompt": true,
+  "fidelity_prompt_hash": "131776fb33b105c4",
+  "prompt_style": "freeform",
+  "use_introspection": true,
+  "best_of": 1,
+  "max_repair_attempts": 3,
+  "model": "anthropic/claude-sonnet-5-20260630",
+  "temperature": 0.0,
+  "max_tokens": 32000,
+  "generator_version": "2.4",
+  "outcome": "success",
+  "run_id": "run_b90a7a06baa5",
+  "candidate": 1,
+  "attempts": 1,
+  "trigger_count": 17,
+  "output_path": "output/fidelity_v2_arm_api\\fidelity_on__freeform\\the_siege_of_vienna.aoe2scenario",
+  "timestamp_utc": "2026-08-11T14:14:22Z",
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.0,
+    "setting": 4.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.75,
+    "issues_found": [
+      "No Janissaries: the Ottoman storming force consists entirely of Camel Riders, Cavalry Archers and Light Cavalry plus artillery, yet the Janissary is in the editor's Turkish roster and was the actual assault infantry at the Carinthian Gate. Cavalry charging a walled breach is historically backwards.",
+      "The Ottoman side has no infantry at all and no Villager-type sappers beyond a single VILLAGER_MALE, so the mining/countermining that the narration makes central is represented by one unit against a force of horsemen.",
+      "'Spanish arquebusiers' are rendered as CROSSBOWMAN x8 when the editor offers Hand Cannoneers (and Turkish/Teutonic gunpowder units) — an avoidable substitution given the text explicitly names firearms.",
+      "Garrison strength is token (1 Champion, 8 Pikemen, 8 Crossbowmen, 4 Spearmen) for a defence of roughly 17-20,000 men behind Vienna's walls; the wall circuit (192 stone wall segments) is far better represented than the men on it.",
+      "Salm is said to be wounded on 11 October; he was struck by stone splinters during the final assault of 14 October.",
+      "ONAGER x2 alongside MANGONEL x3 is an odd choice for 1529 — the Ottoman siege was dominated by cannon and mines, and only 2 Bombard Cannon are placed.",
+      "The 300-second victory timer compresses three dated assaults, a mine, and the autumn rains into five minutes, making the 'hold out' far shorter than the three-week hold the brief describes."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": true,
+      "player_civilizations": {
+        "1": "TEUTONS",
+        "2": "TURKS"
+      },
+      "unassigned_players": []
+    }
+  }
+}

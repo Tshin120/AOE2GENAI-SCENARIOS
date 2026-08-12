@@ -40,5 +40,82 @@
       "The player hero is the GENGHIS_KHAN unit from 1186 onward, yet the narrative correctly states the title was only conferred at the 1206 kurultai — a self-contradiction in the scenario's own framing (engine-forced, so minor)",
       "ARCHERY_RANGE and STABLE structures for both sides imply fixed military-production architecture that steppe warbands did not possess"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 3.0,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the Mongols are never actually assigned; the player's roster of CAVALRY_ARCHER and LIGHT_CAVALRY may be delivered by a Frankish or Teutonic tech tree with European architecture, undoing the steppe flavour the yurts establish.",
+      "Three distinct historical opponents — the Merkits, Jamukha's Jadaran, and the Naiman confederation — are all collapsed into a single Player 2 whose assets simply change ownership, so the player never faces them as separate powers and the shifting alliance structure of the steppe is invisible.",
+      "Jamukha, the blood-brother whose betrayal is the emotional centre of the brief, has no representative object at all: only a generic KING (Tayang Khan) and a VILLAGER_FEMALE (Borte) stand in for named figures. There is no evidence the KING was renamed, and a European crowned monarch is an odd stand-in for a Naiman khan when the engine offers cavalry-hero graphics.",
+      "Toghrul/Wang Khan of the Kereit, without whose army the rescue of Borte and much of Temujin's early rise is unintelligible, is entirely absent from both roster and narration.",
+      "Player 2 is given GUARD_TOWER x2 — permanent stone fortification is out of character for a nomadic Naiman camp, and avoidable given yurts and palisade options exist.",
+      "Narration places the alliance with Jamukha after Borte's rescue ('Her rescue binds the tribes closer... Jamukha rides to his side'), whereas the sources have Jamukha and Toghrul allied with Temujin for the Merkit campaign itself.",
+      "Jamukha's actual fate (defeat, capture and execution) is never resolved; his 'attack' is a single PATROL trigger with no objective attached."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 2.0,
+    "events": 4.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.417,
+    "issues_found": [
+      "Both players are set to RANDOM civilization, so the Mongols civ (which the engine ships, with its own architecture and cavalry-archer bonuses) is not used; the archery ranges, stables and guard towers may render as West European or Middle Eastern buildings on a Mongolian steppe map.",
+      "Three historically distinct opponents — the Merkits, Jamukha's Jadaran, and the Naiman confederation — are collapsed into a single Player 2 whose roster never changes, so the player fights the same warband under three different names.",
+      "Jamukha, the blood-brother whose betrayal is the emotional core of the brief, exists only as dialogue and a CHANGE_OWNERSHIP trigger; no unit (not even a renamed cavalry archer) represents him, though the engine allows exactly that.",
+      "Tayang Khan of the Naiman is represented by the KING unit, a sceptred European monarch on foot; a renamed cavalry archer or light cavalry would have been the more plausible steppe khan.",
+      "Toghrul / Wang Khan of the Kereit is entirely absent, yet his patronage of Temujin and the 1203 war against him were the decisive step before the Naiman campaign — the narration jumps straight from Jamukha to Tayang Khan.",
+      "The alliance with Jamukha is triggered AFTER Borte's rescue; in the sources Jamukha and Toghrul supplied the army that carried out the rescue, so the causal order is inverted.",
+      "All the dialogue beats and enemy attacks fire on TIMERs rather than on player accomplishment, so the 1186-1206 arc plays out on a clock regardless of what the player does.",
+      "Only one female villager on Player 2's side stands for Borte, and nothing marks her; the BRING_OBJECT_TO_AREA rescue works but relies on the player guessing which unit she is."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "GENGHIS_KHAN"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

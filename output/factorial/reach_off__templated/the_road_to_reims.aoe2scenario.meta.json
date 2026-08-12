@@ -40,5 +40,82 @@
       "Reims Cathedral, the entire objective of the campaign, is represented only by a GAIA MONASTERY; a Wonder or a walled town centre was available and would have read far better",
       "Player THREE 'English-loyal raiders' are CHAMPION + MILITIA, i.e. the plain infantry line, which gives no cultural read at all for Anglo-Burgundian routiers"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 4.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 4.0,
+    "mean": 3.25,
+    "issues_found": [
+      "Both active players are set to RANDOM civilization, so the Anglo-French architecture and unit skins are undetermined at load; a Frankish/Briton assignment was trivially available and would have fixed the look of Champagne and of the English garrison.",
+      "The English garrison of Troyes is built from CROSSBOWMAN, when the engine ships both Archer and the Briton Longbowman — the signature English missile arm — making the choice an avoidable mis-characterisation.",
+      "The escort column consists of 5 knights and 5 crossbowmen; the historical march to Reims was an army of roughly ten to twelve thousand, and no French captains of the march (Dunois, Alençon, La Hire, La Trémoille) appear even as renamed generics.",
+      "The 'ambush at the river crossing' near Chalons is invented: Chalons opened its gates to Charles without a fight, as did Troyes after negotiation.",
+      "The 'raider chief' side quest (Player 3 Champion + Militia, Player 4 pikemen villagers) is wholly fictional and has no counterpart in the June-July 1429 march.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender', but the only implemented resolution is a Gate Breached destroy-trigger — the actual historical outcome at Troyes (capitulation after Joan's assault preparations) is not modelled.",
+      "Victory is gated on JOAN_OF_ARC entering the Reims area rather than on the KING (the Dauphin), inverting the stated and historical requirement that Charles reach the cathedral.",
+      "2,880 oak trees blanket a map representing the open chalk plains and vineyards of Champagne."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 3.667,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.667,
+    "mean": 3.167,
+    "issues_found": [
+      "Both active players are set to RANDOM civilization, so the architecture set, unit skins and bonuses of the French escort and the Anglo-Burgundian garrison of Troyes are undetermined at load time; Franks and Britons were both available and would have fixed this.",
+      "The Troyes/Chalons garrison is armed with Crossbowmen and Pikemen; the engine ships the Longbowman, the obvious and available representation of an English garrison of 1429, and the Anglo-Burgundian character of the Champagne garrisons is not signalled at all.",
+      "The brief promises garrisons that 'can be fought or persuaded to surrender' — historically Troyes capitulated after negotiation and a show of assault preparations, and Chalons simply opened its gates — but the only encoded interaction is the 'Gate Breached' destroy trigger. There is no surrender or diplomacy path.",
+      "The 'Ambush at the river crossing' near Chalons and the raider-chief side quest that recruits French villager pikemen are inventions; the march from Gien to Reims was notable precisely for its near-absence of fighting.",
+      "Victory fires on JOAN_OF_ARC reaching Reims, not on the KING (Dauphin Charles), directly contradicting the brief's own statement that 'Victory requires the Dauphin reaching Reims cathedral alive'.",
+      "None of the captains who actually accompanied the march (Alencon, Dunois, La Hire, La Tremoille) are represented even as renamed generics; the royal army of roughly twelve thousand is reduced to five Knights and five Crossbowmen.",
+      "Reims cathedral is a MONASTERY and Troyes is a single CASTLE with sixteen wall segments and two guard towers — acceptable abstraction, but the Roman Ruins and Pavilion/Tent decorations are the only civic dressing on a 120x120 map otherwise filled with 2,880 oak trees."
+    ],
+    "combatants_precondition": {
+      "passed": true,
+      "placed_heroes": [
+        "JOAN_OF_ARC"
+      ],
+      "unsupported_heroes": []
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }

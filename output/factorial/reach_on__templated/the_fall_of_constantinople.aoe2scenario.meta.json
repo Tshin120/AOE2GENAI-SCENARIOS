@@ -40,5 +40,87 @@
       "The besieger has no actual army placed at all (only the wrong-century hero), so the Ottoman force's material culture is entirely undefined at scenario start; no janissary/hand-cannon or bombard cannon presence represents Mehmed's famous artillery train",
       "Player One's defenders are a generic Frankish/Western mix (MAN_AT_ARMS, CROSSBOWMAN, BARRACKS/STABLE/ARCHERY_RANGE) rather than anything evoking Byzantine or Genoese (Giustiniani's) contingents"
     ]
+  },
+  "fidelity_v2": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2",
+    "n_judgements": 1,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 3.0,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 2.75,
+    "issues_found": [
+      "Player 2's only named commander is SALADIN, the 12th-century Ayyubid sultan, standing in for Mehmed II — a different historical figure entirely; the engine ships no Mehmed hero, so a renamed generic Janissary/Sultan-type unit was the correct choice, making this avoidable error",
+      "Both players' civilizations are left RANDOM; Byzantines and Turks are both in the catalogue, so the Theodosian Walls and Ottoman camp may render in, e.g., Japanese or Mesoamerican architecture and carry the wrong bonuses",
+      "No water and no ships anywhere on the 120x120 map, so the Golden Horn sea walls named in the brief and in the objective text simply do not exist; the naval dimension (the chain, the Genoese relief squadron, Ottoman ships hauled overland) is absent",
+      "TREE_PALM_FOREST as the map's only vegetation is wrong for the Thracian shore of the Bosphorus",
+      "Ottoman gunpowder is missing from the placed roster — no BOMBARD_CANNON, and the brief's central mechanic of 'repair breaches from bombard fire' is nowhere encoded (only generic 'siege weapons from the south' text); the Basilica/Orban great cannon was the defining feature of this siege",
+      "Player 1's garrison is 12 crossbowmen and 8 men-at-arms with no representation of Giovanni Giustiniani Longo's Genoese contingent or the distinct Latin/Byzantine split of the defence",
+      "Assault waves are generic compass-point spawns (north infantry, east cavalry, south siege) rather than the historical pattern of concentrated attacks on the Mesoteichion and the St Romanus Gate, and there is no Kerkoporta postern breach",
+      "Constantine XI is represented by a bare KING unit with no rename evident in the placed roster; he is only identified in dialogue text"
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
+  },
+  "fidelity_v2_1": {
+    "judge_model": "anthropic/claude-opus-5",
+    "rubric_version": "v2.1",
+    "n_judgements": 3,
+    "combatants": 2.0,
+    "setting": 2.0,
+    "events": 2.333,
+    "objective": 4.0,
+    "pedagogy": 3.0,
+    "mean": 2.583,
+    "issues_found": [
+      "Mehmed II is represented by the SALADIN hero — a 12th-century Kurdish Ayyubid sultan standing in for a 15th-century Ottoman. The engine ships no Mehmed, but a renamed generic Janissary, Champion or Cavalry Archer would have been the correct substitution; this is an avoidable ~270-year, wrong-dynasty error.",
+      "Both players are set to RANDOM civilization, so neither Byzantine nor Turkish architecture, unit bonuses or wonder are guaranteed — the Theodosian Walls and Hagia Sophia may render as any culture's buildings.",
+      "TREE_PALM_FOREST is used as the map's vegetation; palm forest is wrong for Thrace/the Bosphorus.",
+      "No water at all is placed: the Golden Horn, the sea walls, the boom chain and the Ottoman fleet's transfer of ships overland are entirely absent despite the brief promising 'guard the sea walls along the Golden Horn'.",
+      "The defenders' roster is generic Western European (MAN_AT_ARMS, CROSSBOWMAN) with no representation of Giustiniani's Genoese contingent or the Byzantine garrison's character; no Ottoman units are pre-placed at all, only the misplaced hero.",
+      "The signature historical element — Orban's great bombards battering the Mesoteichion and the resulting breaches — is not modelled; siege appears only as generic 'siege weapons from the south' text.",
+      "Attack directions (north, east, south) are arbitrary; the historical assaults concentrated on the Lycus valley/St Romanus gate sector on the land wall to the west.",
+      "The scenario's canonical outcome is a Byzantine victory with Mehmed's commander slain, which inverts the historical fall of the city on 29 May 1453; the 10-minute 'survive until dawn' compresses a 53-day siege without acknowledging it."
+    ],
+    "combatants_precondition": {
+      "passed": false,
+      "placed_heroes": [
+        "SALADIN"
+      ],
+      "unsupported_heroes": [
+        "SALADIN"
+      ]
+    },
+    "setting_precondition": {
+      "passed": false,
+      "player_civilizations": {
+        "1": "RANDOM",
+        "2": "RANDOM"
+      },
+      "unassigned_players": [
+        1,
+        2
+      ]
+    }
   }
 }
