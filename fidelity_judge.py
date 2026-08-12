@@ -12,18 +12,43 @@ never the generating code, the model name, or the prompt condition. The arm is
 therefore not recoverable from the judge's input, so scores cannot be biased by
 knowing which condition produced a scenario.
 
-Rubric (each 1-5, integer; see RUBRIC below for anchors):
+Several rubric versions ship, selected with --rubric (default v2). v2.1 and
+v3.1 are point revisions of v2 and v3 that touch only the `objective` anchor
+(see rubric_v2_1.py); every other section is spliced through byte-identical, so
+a vN -> vN.1 comparison isolates that one dimension.
 
-    combatants     the right sides, led by the right people
-    material       terrain / architecture / rosters fit the place and century
-    events         objective sequence tracks what actually happened
-    anachronism    freedom from out-of-period, out-of-region content
+v2 (rubric_v2.py, the current instrument; each 1-5, integer):
+
+    combatants     the right sides and leaders, with a plausible roster
+    setting        civilization / architecture / terrain fit the place and period
+    events         the scenario reproduces what actually happened
+    objective      the encoded victory and defeat conditions are the goal the
+                   history posed
     pedagogy       a player would come away with an accurate impression
+
+    The overall score is the unweighted mean of the FIRST FOUR. Pedagogy is
+    scored and reported but excluded, being largely predicted by the others.
+    v2 scores are NOT comparable to v1 scores: different dimension set,
+    different mean.
+
+v1 (RUBRIC below) is retained verbatim behind --rubric v1. It is the instrument
+that produced the published scores, so its text is frozen.
+
+`objective` is scored from the victory and defeat conditions EXTRACTED from the
+trigger graph by reachability_audit, not from the scenario's objectives text -
+that separation is what stops it collapsing into a second narration score. Two
+static preconditions run before the judge and are reported next to the scores
+without being shown to it: every placed named hero must appear in the brief
+(combatants), and every active player must have a civilization assigned
+(setting).
 
 Usage:
 
-    # score every scenario under a directory tree
-    python fidelity_judge.py --scan output/factorial --out output/fidelity.jsonl
+    # score every scenario under a directory tree (v2 rubric)
+    python fidelity_judge.py --scan output/factorial --out output/fidelity_v2.jsonl
+
+    # re-run the frozen v1 instrument
+    python fidelity_judge.py --scan output/factorial --rubric v1
 
     # judge reliability: same scenarios, repeated independent scorings
     python fidelity_judge.py --scan output/factorial --repeats 3
@@ -37,6 +62,7 @@ trigger_count.
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -47,16 +73,36 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 
 import api_config
+import rubric_v2
+import rubric_v2_1
+import rubric_v3
 from provenance import utc_now_iso, sidecar_path
-from scenario_inspect import summarize, to_digest
+from reachability_audit import extract_objective_conditions
+from scenario_inspect import (summarize, to_digest, placed_hero_names,
+                              terrain_class_counts)
 
 # A capable model by default: the judge is the measuring instrument, so it
 # should not be the cheapest thing available.
 DEFAULT_JUDGE_MODEL = "opus-5"
 JUDGE_TEMPERATURE = 0.0
-JUDGE_MAX_TOKENS = 4000
+# Raised from 4000 when re-scoring under v2.1/v3.1: at 4000 roughly a quarter of
+# replies were cut off mid-JSON and discarded as `judge_failed`, which is paid-for
+# judgements thrown away. The cap only bounds how long a reply may be, so it
+# cannot change a score that already fit under it - it only stops well-formed
+# verdicts being lost. Billing is on tokens emitted, not on the cap.
+JUDGE_MAX_TOKENS = 12000
 
+DEFAULT_RUBRIC_VERSION = "v2"
+
+# v1 dimension set. Frozen: this is what the published scores were computed over.
 DIMENSIONS = ["combatants", "material", "events", "anachronism", "pedagogy"]
+
+# v2 dimension set, from the single source of truth both sides of the pipeline
+# import. All five are scored; only SCORED_DIMENSIONS enter the mean.
+DIMENSIONS_V2 = list(rubric_v2.DIMENSIONS_V2)
+
+# v3 splits v2's `setting` into `civilization` and `terrain`, and means five.
+DIMENSIONS_V3 = list(rubric_v3.DIMENSIONS_V3)
 
 RUBRIC = """\
 Score each dimension 1-5 (integers only).
@@ -130,6 +176,203 @@ Return exactly this JSON shape:
   "justification": "2-4 sentences citing specific content"
 }}"""
 
+# v2 template. The one structural difference from v1 is the objective-facts
+# block: the victory and defeat conditions arrive already extracted from the
+# trigger graph, and the rubric tells the judge to score `objective` from those
+# and nothing else. The digest still carries the objectives text, which is what
+# `pedagogy` is scored on - so the two dimensions are reading different evidence
+# by construction rather than by the judge's discretion.
+USER_TEMPLATE_V2 = """\
+HISTORICAL EVENT THE SCENARIO CLAIMS TO DEPICT
+Title: {title}
+Brief: {description}
+{extra}
+
+SCENARIO CONTENT AS BUILT
+{digest}
+
+{objective_facts}
+
+{rubric}
+Return exactly this JSON shape:
+
+{{
+  "combatants": <1-5>,
+  "setting": <1-5>,
+  "events": <1-5>,
+  "objective": <1-5>,
+  "pedagogy": <1-5>,
+  "issues_found": ["specific item and why it is wrong", ...],
+  "strengths": ["specific accurate detail", ...],
+  "justification": "2-4 sentences citing specific content"
+}}"""
+
+# v3 template. Adds the terrain digest, which is the whole reason a `terrain`
+# dimension is scoreable at all: before it the judge saw rosters, triggers and
+# text but no layout, so it could not have judged geography if asked.
+USER_TEMPLATE_V3 = """HISTORICAL EVENT THE SCENARIO CLAIMS TO DEPICT
+Title: {title}
+Brief: {description}
+{extra}
+
+SCENARIO CONTENT AS BUILT
+{digest}
+
+{objective_facts}
+
+{rubric}
+Return exactly this JSON shape:
+
+{{
+  "combatants": <1-5>,
+  "civilization": <1-5>,
+  "terrain": <1-5>,
+  "events": <1-5>,
+  "objective": <1-5>,
+  "pedagogy": <1-5>,
+  "issues_found": ["specific item and why it is wrong", ...],
+  "strengths": ["specific accurate detail", ...],
+  "justification": "2-4 sentences citing specific content"
+}}"""
+
+
+# Everything that differs between the two instruments, in one place.
+RUBRIC_VERSIONS = {
+    "v1": {
+        "dimensions": DIMENSIONS,
+        "rubric": RUBRIC,
+        "template": USER_TEMPLATE,
+        "issues_key": "anachronisms_found",
+        "wants_objective_facts": False,
+    },
+    "v2": {
+        "dimensions": DIMENSIONS_V2,
+        "rubric": rubric_v2.JUDGE_RUBRIC_V2,
+        "template": USER_TEMPLATE_V2,
+        "issues_key": "issues_found",
+        "wants_objective_facts": True,
+        "wants_terrain": False,
+    },
+    "v3": {
+        "dimensions": DIMENSIONS_V3,
+        "rubric": rubric_v3.JUDGE_RUBRIC_V3,
+        "template": USER_TEMPLATE_V3,
+        "issues_key": "issues_found",
+        "wants_objective_facts": True,
+        "wants_terrain": True,
+    },
+    # v2.1 / v3.1 revise ONE section - the objective anchor, which said
+    # nothing about a victory condition's parameters and so could not tell a
+    # one-second win from a thirty-minute siege hold. Everything else is
+    # spliced through byte-identical from the frozen text, so the dimension
+    # sets, templates and means are shared with the version they revise and
+    # only the rubric string (and hence the rubric_hash) differs.
+    "v2.1": {
+        "dimensions": DIMENSIONS_V2,
+        "rubric": rubric_v2_1.JUDGE_RUBRIC_V2_1,
+        "template": USER_TEMPLATE_V2,
+        "issues_key": "issues_found",
+        "wants_objective_facts": True,
+        "wants_terrain": False,
+    },
+    "v3.1": {
+        "dimensions": DIMENSIONS_V3,
+        "rubric": rubric_v2_1.JUDGE_RUBRIC_V3_1,
+        "template": USER_TEMPLATE_V3,
+        "issues_key": "issues_found",
+        "wants_objective_facts": True,
+        "wants_terrain": True,
+    },
+}
+
+# Which mean each instrument reports, and which sidecar slot it owns. Keeping
+# these keyed off the version rather than off `== "v2"` tests is what stops a
+# new instrument silently inheriting v2's mean or overwriting v2's scores.
+_MEAN_FAMILY = {"v1": "v1", "v2": "v2", "v2.1": "v2", "v3": "v3", "v3.1": "v3"}
+
+
+def sidecar_key(version):
+    """Sidecar slot for one instrument, so re-scoring never clobbers another.
+
+    v1 keeps the historical `fidelity` key; every later version gets its own,
+    `fidelity_v2`, `fidelity_v2_1`, `fidelity_v3`, ...
+    """
+    if version == "v1":
+        return "fidelity"
+    return "fidelity_" + version.replace(".", "_")
+
+
+# ---------------------------------------------------------------------------
+# Rubric identity.
+#
+# A bare version LABEL ("v2") is not enough to attribute a score: the v2 rubric
+# text was revised in place - the hero anchors went from a binary rule to a
+# graded one, and pedagogy stopped re-penalizing substitutions - and every row
+# written before and after carries the same "v2". Nothing in those rows says
+# which text produced them, so the scores could only be dated by an indirect
+# fingerprint. Stamping the exact text ends that: two rows are comparable when
+# their hashes match, and the analysis refuses to average across a mismatch.
+#
+# The hash covers the rubric text pasted into the judge prompt, because that is
+# what determines a score. rubric_module_hash additionally covers the whole
+# rubric_v2 source, so a change to the static preconditions recorded alongside
+# the scores is visible too; it is informational and not a pooling key, since it
+# moves on comment edits that cannot affect a judgement.
+# ---------------------------------------------------------------------------
+def _sha(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+
+
+def _module_hash():
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "rubric_v2.py"), encoding="utf-8") as f:
+            return _sha(f.read())
+    except Exception:
+        return None
+
+
+def _mean_for(version, scores):
+    """Overall score under one instrument.
+
+    v1 averages all five dimensions. v2 averages only the four scored ones -
+    pedagogy is reported but deliberately excluded - via rubric_v2.overall_score,
+    so the definition of the headline number lives with the rubric text it
+    belongs to.
+    """
+    family = _MEAN_FAMILY.get(version, version)
+    if family == "v3":
+        return round(rubric_v3.overall_score_v3(scores), 3)
+    if family == "v2":
+        return round(rubric_v2.overall_score(scores), 3)
+    return round(sum(scores.values()) / len(scores), 3)
+
+
+def static_preconditions(summary, title, description):
+    """The two pass/fail checks that run BEFORE the judge and need no model.
+
+    Reported alongside the scores but never shown to the judge: they are an
+    independent signal, and feeding them in would just be telling the judge what
+    to think about two of the dimensions it is meant to score for itself.
+    """
+    heroes = placed_hero_names(summary)
+    brief = f"{title}\n{description}"
+    comb_ok, unsupported = rubric_v2.check_combatants_precondition(heroes, brief)
+    civs = summary.get("player_civilizations") or {}
+    set_ok, unassigned = rubric_v2.check_setting_precondition(civs)
+    return {
+        "combatants_precondition": {
+            "passed": comb_ok,
+            "placed_heroes": heroes,
+            "unsupported_heroes": unsupported,
+        },
+        "setting_precondition": {
+            "passed": set_ok,
+            "player_civilizations": {str(k): v for k, v in civs.items()},
+            "unassigned_players": unassigned,
+        },
+    }
+
 
 def _extract_json(text):
     """Pull the JSON object out of a model reply that may be fenced or padded."""
@@ -186,23 +429,58 @@ def call_judge(api_key, prompt, model, timeout=api_config.REQUEST_TIMEOUT,
 
 
 def score_scenario(api_key, scenario_path, title, description, model,
-                   extra_context="", repeat_index=1):
+                   extra_context="", repeat_index=1,
+                   rubric_version=DEFAULT_RUBRIC_VERSION):
     """Score one scenario against one historical brief. Returns a result row."""
+    spec = RUBRIC_VERSIONS[rubric_version]
+    dimensions = spec["dimensions"]
     row = {
         "scenario": scenario_path,
         "title": title,
         "judge_model": api_config.resolve_model(model),
+        "rubric_version": rubric_version,
+        # Identity of the exact grading text, so this row can never be pooled
+        # with one graded against different anchors.
+        "rubric_hash": _sha(spec["rubric"]),
+        "rubric_module_hash": _module_hash(),
         "repeat": repeat_index,
         "timestamp_utc": utc_now_iso(),
     }
     try:
-        summary = summarize(scenario_path)
+        # v2 resolves a victory condition's unit_object to the unit it names, so
+        # it needs the placed-object table that include_map carries.
+        summary = summarize(scenario_path,
+                            include_map=spec["wants_objective_facts"])
     except Exception as e:
         return {**row, "ok": False, "error": f"parse_failed: {e}"}
 
-    prompt = USER_TEMPLATE.format(
-        title=title, description=description,
-        extra=extra_context, digest=to_digest(summary), rubric=RUBRIC)
+    extras = {}
+    if spec.get("wants_terrain"):
+        counts = terrain_class_counts(summary)
+        passed, distinct = rubric_v3.check_terrain_precondition(counts)
+        row["terrain_precondition"] = {
+            "passed": passed,
+            "distinct_classes": distinct,
+            "tile_counts": counts,
+            # All-zero elevation is invisible in the class counts but is exactly
+            # the "flat ground where it turned on elevation" the rubric anchors
+            # a 1 on, so it is recorded separately.
+            "uses_elevation": any(v for row_ in (summary.get("elevation_grid") or [])
+                                  for v in row_),
+        }
+    if spec["wants_objective_facts"]:
+        victory, defeat = extract_objective_conditions(summary)
+        extras["objective_facts"] = rubric_v2.format_objective_facts(victory, defeat)
+        row["objective_facts"] = extras["objective_facts"]
+        # Computed here, reported in the row, and deliberately NOT in the prompt.
+        row.update(static_preconditions(summary, title, description))
+
+    prompt = spec["template"].format(
+        title=title, description=description, extra=extra_context,
+        digest=to_digest(summary,
+                         include_civilizations=spec["wants_objective_facts"],
+                         include_terrain=spec.get("wants_terrain", False)),
+        rubric=spec["rubric"], **extras)
 
     # A reply occasionally omits a dimension or returns null for one; re-ask
     # once, naming the offender, before giving up on the judgement.
@@ -210,13 +488,14 @@ def score_scenario(api_key, scenario_path, title, description, model,
     for attempt in range(2):
         ask = prompt if attempt == 0 else (
             prompt + f"\n\nYour previous reply left {err} missing or null. "
-                     "Every one of the five dimensions must be an integer 1-5.")
+                     f"Every one of the {len(dimensions)} dimensions must be "
+                     "an integer 1-5.")
         try:
             verdict = _extract_json(call_judge(api_key, ask, model))
         except Exception as e:
             return {**row, "ok": False, "error": f"judge_failed: {e}"}
         scores, missing = {}, []
-        for dim in DIMENSIONS:
+        for dim in dimensions:
             try:
                 scores[dim] = max(1, min(5, int(verdict[dim])))
             except Exception:
@@ -231,8 +510,13 @@ def score_scenario(api_key, scenario_path, title, description, model,
         **row,
         "ok": True,
         **scores,
-        "mean": round(sum(scores.values()) / len(scores), 3),
-        "anachronisms_found": verdict.get("anachronisms_found") or [],
+        "mean": _mean_for(rubric_version, scores),
+        # v3 splits `setting` in two, so its raw mean is not on the v2 scale.
+        # The bridge recombines the halves into a v2-shaped MEAN4 so the
+        # longitudinal series survives; reported alongside, never instead of.
+        **({"bridge_mean_v2": round(rubric_v3.bridge_score_v2(scores), 3)}
+           if _MEAN_FAMILY.get(rubric_version) == "v3" else {}),
+        spec["issues_key"]: verdict.get(spec["issues_key"]) or [],
         "strengths": verdict.get("strengths") or [],
         "justification": verdict.get("justification", ""),
         "trigger_count": summary["trigger_count"],
@@ -263,15 +547,19 @@ def find_scenarios(root):
     return found
 
 
-def update_sidecar(scenario_path, aggregate):
-    """Merge fidelity scores into the scenario's existing metadata sidecar."""
+def update_sidecar(scenario_path, aggregate, key="fidelity"):
+    """Merge fidelity scores into the scenario's existing metadata sidecar.
+
+    key separates the instruments: v1 keeps `fidelity`, v2 writes `fidelity_v2`,
+    so a scenario can carry both and neither clobbers the other.
+    """
     path = sidecar_path(scenario_path)
     try:
         with open(path, encoding="utf-8") as f:
             meta = json.load(f)
     except Exception:
         return False
-    meta["fidelity"] = aggregate
+    meta[key] = aggregate
     with open(path, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)
     return True
@@ -285,6 +573,14 @@ def main():
     ap.add_argument("--title", help="Override the historical title (single-scenario mode)")
     ap.add_argument("--description", help="Override the brief (single-scenario mode)")
     ap.add_argument("--model", default=DEFAULT_JUDGE_MODEL, help="Judge model")
+    ap.add_argument("--rubric", choices=sorted(RUBRIC_VERSIONS),
+                    default=DEFAULT_RUBRIC_VERSION,
+                    help="Rubric version. v1 is the frozen published instrument; v2 "
+                         "(default) means four dimensions with pedagogy reported but "
+                         "excluded; v3 splits `setting` and means five; v2.1/v3.1 revise "
+                         "only the `objective` anchor of v2/v3. Scores from different "
+                         "versions are NOT comparable, and --resume keys on the rubric "
+                         "hash, so a revision re-scores rather than reusing stale rows")
     ap.add_argument("--out", default="output/fidelity.jsonl", help="Append-only results log")
     ap.add_argument("--repeats", type=int, default=1,
                     help="Independent scorings per scenario (judge self-consistency)")
@@ -325,8 +621,12 @@ def main():
         print(f"No scenario+sidecar pairs found under {args.scan}", file=sys.stderr)
         return 1
 
-    # Already-successful (scenario, repeat, mode) triples, so --resume can skip
-    # them instead of paying for the same judgement twice.
+    current_hash = _sha(RUBRIC_VERSIONS[args.rubric]["rubric"])
+
+    # Already-successful (scenario, repeat, mode, rubric) tuples, so --resume can
+    # skip them instead of paying for the same judgement twice. The rubric
+    # version is part of the key: a v1 row does not satisfy a v2 request, and
+    # rows from both instruments can share one log.
     done = set()
     if args.resume and os.path.exists(args.out):
         with open(args.out, encoding="utf-8") as f:
@@ -339,15 +639,22 @@ def main():
                 except Exception:
                     continue
                 if r.get("ok"):
+                    # The rubric hash is part of the key: a row graded against
+                    # an older revision of the same version does NOT satisfy a
+                    # request under the current text, so --resume re-scores it
+                    # instead of silently keeping a stale judgement.
                     done.add((os.path.normpath(r["scenario"]), r.get("repeat", 1),
-                              bool(r.get("mismatch_control"))))
+                              bool(r.get("mismatch_control")),
+                              r.get("rubric_version", "v1"),
+                              r.get("rubric_hash")))
 
     # In mismatch mode each scenario is paired with the next distinct title's
     # brief, so every pairing is a genuine mismatch.
     jobs = []
     for i, (path, meta) in enumerate(targets):
         for rep in range(1, args.repeats + 1):
-            if (os.path.normpath(path), rep, bool(args.mismatch_control)) in done:
+            if (os.path.normpath(path), rep, bool(args.mismatch_control),
+                    args.rubric, current_hash) in done:
                 continue
             if args.mismatch_control:
                 others = [m for _p, m in targets if m.get("title") != meta.get("title")]
@@ -360,7 +667,8 @@ def main():
 
     mode = "MISMATCH CONTROL" if args.mismatch_control else "matched"
     print(f"Judging {len(targets)} scenario(s) x {args.repeats} repeat(s) = {len(jobs)} calls "
-          f"[{mode}]  judge={api_config.resolve_model(args.model)}", flush=True)
+          f"[{mode}]  rubric={args.rubric} ({current_hash})  "
+          f"judge={api_config.resolve_model(args.model)}", flush=True)
 
     # Append each judgement as it lands rather than buffering to the end: a
     # sweep that dies partway (rate limit, interrupt) then keeps everything it
@@ -371,7 +679,7 @@ def main():
     with open(args.out, "a", encoding="utf-8") as out_f, \
             ThreadPoolExecutor(max_workers=args.workers) as ex:
         futs = {ex.submit(score_scenario, api_key, path, title, desc, args.model,
-                          "", rep): (path, mismatch)
+                          "", rep, args.rubric): (path, mismatch)
                 for path, title, desc, rep, mismatch in jobs}
         for n, fut in enumerate(as_completed(futs), 1):
             path, mismatch = futs[fut]
@@ -386,23 +694,62 @@ def main():
             else:
                 print(f"[{n}/{len(jobs)}] ERROR {row.get('error','')[:90]}  {label}", flush=True)
 
+    spec = RUBRIC_VERSIONS[args.rubric]
+    dimensions = spec["dimensions"]
     good = [r for r in rows if r.get("ok")]
     print(f"\n{len(good)}/{len(rows)} scored in {(time.time()-t0)/60:.1f} min -> {args.out}")
     if good:
-        for dim in DIMENSIONS + ["mean"]:
+        for dim in dimensions:
             vals = [r[dim] for r in good]
-            print(f"  {dim:<14} {sum(vals)/len(vals):.2f}")
+            excluded = (_MEAN_FAMILY.get(args.rubric) == "v2"
+                        and dim not in rubric_v2.SCORED_DIMENSIONS)
+            note = "   (reported, not in the mean)" if excluded else ""
+            print(f"  {dim:<14} {sum(vals)/len(vals):.2f}{note}")
+        means = [r["mean"] for r in good]
+        label = ("mean (4 dims)" if _MEAN_FAMILY.get(args.rubric) == "v2"
+                 else "mean")
+        print(f"  {label:<14} {sum(means)/len(means):.2f}")
+
+    # The static checks are the part of the evaluation that does not depend on
+    # the judge at all, so they get reported whether or not the judging landed.
+    with_pre = [r for r in rows if "combatants_precondition" in r]
+    if with_pre:
+        by_scenario = {}
+        for r in with_pre:
+            by_scenario[os.path.normpath(r["scenario"])] = r
+        n = len(by_scenario)
+        comb = sum(1 for r in by_scenario.values()
+                   if r["combatants_precondition"]["passed"])
+        sett = sum(1 for r in by_scenario.values()
+                   if r["setting_precondition"]["passed"])
+        heroes = sum(len(r["combatants_precondition"]["placed_heroes"])
+                     for r in by_scenario.values())
+        flagged = sum(len(r["combatants_precondition"]["unsupported_heroes"])
+                      for r in by_scenario.values())
+        print(f"\n  Static preconditions over {n} scenario(s)")
+        print(f"    combatants (every placed hero named in the brief): "
+              f"{comb}/{n} pass   [{flagged}/{heroes} placed heroes unsupported]")
+        print(f"    setting (civilization set for every active player): "
+              f"{sett}/{n} pass")
 
     if args.update_sidecars and not args.mismatch_control:
         by_path = {}
         for r in good:
             by_path.setdefault(r["scenario"], []).append(r)
         for path, group in by_path.items():
-            aggregate = {"judge_model": group[0]["judge_model"], "n_judgements": len(group)}
-            for dim in DIMENSIONS + ["mean"]:
+            aggregate = {"judge_model": group[0]["judge_model"],
+                         "rubric_version": args.rubric,
+                         "n_judgements": len(group)}
+            for dim in dimensions + ["mean"]:
                 aggregate[dim] = round(sum(g[dim] for g in group) / len(group), 3)
-            aggregate["anachronisms_found"] = group[0]["anachronisms_found"]
-            update_sidecar(path, aggregate)
+            aggregate[spec["issues_key"]] = group[0][spec["issues_key"]]
+            for key in ("combatants_precondition", "setting_precondition"):
+                if key in group[0]:
+                    aggregate[key] = group[0][key]
+            # v1 wrote its scores at meta["fidelity"]; keep that slot for the
+            # published instrument and give every later instrument its own, so
+            # re-scoring with one never silently overwrites another.
+            update_sidecar(path, aggregate, key=sidecar_key(args.rubric))
         print(f"  updated {len(by_path)} sidecar(s)")
     return 0
 
