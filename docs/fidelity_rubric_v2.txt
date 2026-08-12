@@ -1,0 +1,97 @@
+FIDELITY RUBRIC v2 -- prompt form
+=================================
+
+Same five criteria the judge grades against, phrased as instructions so the
+identical text can condition generation. Paste as FIDELITY_RUBRIC_BLOCK in
+generator.py; keep in sync with tables/rubric_v2.tex in the paper and with
+the rubric text in fidelity_judge.py.
+
+v2 changes from v1:
+  - "anachronism" REMOVED. It correlated 0.76 with combatants and 0.64 with
+    material -- it was re-scoring those dimensions -- and 27% of what it
+    penalized was accepted genre convention.
+  - "objective" ADDED, tying fidelity to the playability level.
+  - "pedagogy" RETAINED but excluded from the overall mean: it is 79%
+    predicted by the other four (residual SD 0.32), the most derivative
+    dimension in the rubric. It is still scored and reported, because it is
+    the only criterion tied to the educational purpose of the work, but no
+    reported comparison depends on it.
+
+Overall score = unweighted mean of combatants, setting, events, objective.
+
+--- block begins ---
+
+HISTORICAL FIDELITY REQUIREMENTS
+
+Your scenario will be graded on five criteria. Satisfy each one directly.
+
+1. COMBATANTS -- the right people.
+   Place the actual parties to this episode, and the actual commanders where
+   history records them. If the engine ships a hero for a figure who was
+   really present, use it. If it does NOT ship one, create a generic unit and
+   RENAME it to the historical figure. Never substitute a different named
+   historical hero: a renamed Spearman called "Abd al-Rahman" is correct,
+   while placing SALADIN to stand in for him is a factual error about who was
+   there. Match force composition to what the sources describe.
+
+2. SETTING -- the right place and period, made visible.
+   Assign every active player an explicit civilization consistent with the
+   episode; do not leave civilization unset, because the game will otherwise
+   choose the architecture, player names, and bonuses at load time and your
+   scenario may render in an unrelated culture. Choose terrain, vegetation,
+   and buildings that belong to the region and century.
+   HARD REQUIREMENT: set player.civilization for each active player.
+
+3. EVENTS -- the right story.
+   Reproduce the shape of what actually happened, including the turning points
+   that decided it and the real outcome. Do not invent reinforcements,
+   battles, or speeches that did not occur, and do not misdate what did.
+   Anything asserted in dialogue or objectives must be true of this episode.
+
+4. OBJECTIVE -- the right problem.
+   Make the victory and defeat conditions name the objective this episode
+   actually posed, in the form the episode demands. Match the form to the
+   situation rather than defaulting to elimination:
+     - escort  -> BRING_OBJECT_TO_AREA on the escorted figure
+     - defense -> survive to a deadline, or hold a named place
+     - battle  -> DESTROY_OBJECT on the commander, or repel and survive
+   A deadline is the CORRECT objective for a siege the defenders had only to
+   outlast (Vienna 1529, Constantinople 1453); do not replace it with a
+   kill-quest. Conversely do not use a deadline where the episode demanded a
+   concrete act.
+   HARD REQUIREMENT: never gate victory on an area count reaching zero
+   (OBJECTS_IN_AREA <= 0), which becomes unsatisfiable if one unit garrisons,
+   converts, or flees. Any other form is permitted; choose it by episode.
+
+5. PEDAGOGY -- the right lesson.
+   A player who finishes the scenario should come away with an accurate
+   working picture of the episode. Objectives, dialogue, and events are the
+   only channel through which they learn it, so put the true content there.
+
+--- block ends ---
+
+WHAT IS NOT PENALIZED
+---------------------
+The engine's inherent abstraction is not an error. Representing a Frankish
+shield wall with the engine's Spearmen, or a Landsknecht with a Two-Handed
+Swordsman, is a limitation of the medium and scores as correct. Only
+avoidable error is penalized: the wrong person, the wrong culture, the wrong
+events.
+
+STATIC CHECKS (run before the judge; not the judge's discretion)
+---------------------------------------------------------------
+1. combatants -- every placed named hero must be named in the episode brief.
+   Tokenize the HeroInfo constant (dropping THE/OF/KHAN/HUN) and require a
+   word-boundary match in title+description. Validated on the 31 built
+   scenarios: flags 35 of 50 placed heroes, agreeing with the judge on every
+   case. Necessary, not sufficient -- it does not check side, role, or
+   whether a figure the brief requires is present at all.
+2. setting -- player.civilization must be set for every active player.
+3. objective -- EXTRACTION, not a pass/fail gate. Pull the structural form and
+   target of every DECLARE_VICTORY trigger from the trigger graph
+   (DESTROY_OBJECT / BRING_OBJECT_TO_AREA / TIMER / OBJECTS_IN_AREA, plus the
+   target object or area) and hand it to the judge, which scores only whether
+   that form fits the episode. Do NOT require a particular form: a timer
+   victory is degenerate to the reachability audit but historically correct
+   for a siege, so level 2 and level 3 may disagree by design.
+   The only hard prohibition, shared with the audit, is OBJECTS_IN_AREA <= 0.
