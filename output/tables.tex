@@ -49,7 +49,7 @@ off & freeform & 8 & 1 & 0 & 1 & 0 & 2 \\
 \end{table}
 
 \begin{table}[t]
-\caption{Historical fidelity scored by an LLM judge (Opus~5) against a fixed rubric, 1--5 per dimension. $n$ counts judgements, not scenarios (up to three independent scorings each).}
+\caption{Historical fidelity scored by an LLM judge (Opus~5) against the v1 rubric, 1--5 per dimension. $n$ counts judgements, not scenarios (up to three independent scorings each).}
 \label{tab:fidelity}
 \footnotesize\centering
 \begin{tabular}{llrrrrrrr}
@@ -63,3 +63,36 @@ off & freeform & 24 & 3.00 & 3.12 & 3.88 & 2.71 & 3.21 & 3.18 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{table}[t]
+\caption{Historical fidelity scored by an LLM judge (Opus~5) against the v2@67588872 rubric, 1--5 per dimension. $n$ counts judgements, not scenarios (up to three independent scorings each). Under the v2 rubric the overall score is the unweighted mean of combatants, setting, events and objective; pedagogy is scored and reported but excluded. \emph{Obj.}\ is scored from the victory and defeat conditions extracted from the trigger graph, not from the scenario's objectives text. v2 scores are not comparable to v1 scores.}
+\label{tab:fidelityv267588872}
+\footnotesize\centering
+\begin{tabular}{llrrrrrrr}
+\toprule
+Reach & Style & $n$ & Comb. & Setting & Events & Obj. & Ped. & Mean$_4$ \\
+\midrule
+on & templated & 24 & 2.21 & 2.00 & 2.79 & 3.96 & 3.08 & 2.74 \\
+off & templated & 21 & 2.29 & 2.05 & 3.00 & 4.05 & 3.05 & 2.85 \\
+on & freeform & 24 & 2.33 & 2.04 & 3.75 & 3.83 & 3.79 & 2.99 \\
+off & freeform & 24 & 2.62 & 2.04 & 3.83 & 4.58 & 3.79 & 3.27 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Historical fidelity scored by an LLM judge (Opus~5) against the v2@unstampe rubric, 1--5 per dimension. $n$ counts judgements, not scenarios (up to three independent scorings each). Under the v2 rubric the overall score is the unweighted mean of combatants, setting, events and objective; pedagogy is scored and reported but excluded. \emph{Obj.}\ is scored from the victory and defeat conditions extracted from the trigger graph, not from the scenario's objectives text. v2 scores are not comparable to v1 scores.}
+\label{tab:fidelityv2unstampe}
+\footnotesize\centering
+\begin{tabular}{llrrrrrrr}
+\toprule
+Reach & Style & $n$ & Comb. & Setting & Events & Obj. & Ped. & Mean$_4$ \\
+\midrule
+on & templated & 8 & 2.38 & 2.00 & 3.00 & 3.88 & 2.88 & 2.81 \\
+off & templated & 7 & 2.14 & 1.86 & 2.71 & 3.86 & 2.71 & 2.64 \\
+on & freeform & 8 & 2.38 & 2.00 & 4.00 & 3.75 & 3.12 & 3.03 \\
+off & freeform & 8 & 2.62 & 2.00 & 3.88 & 4.50 & 3.38 & 3.25 \\
+\bottomrule
+\end{tabular}
+\end{table}
+

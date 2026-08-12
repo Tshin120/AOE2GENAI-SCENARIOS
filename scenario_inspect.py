@@ -97,11 +97,98 @@ def load(path):
         return AoE2DEScenario.from_file(path)
 
 
+# ---------------------------------------------------------------------------
+# Terrain classification, for the v3 `terrain` dimension.
+#
+# Nothing in this pipeline perceived space before this: the generator writes
+# code blind and the digest carried rosters, triggers and text but no layout.
+# A terrain score was therefore unaskable. These map the parser's ~130 terrain
+# ids onto the small legend rubric_v3.render_terrain_grid expects.
+#
+# Matched by NAME rather than by id number, so a library that adds or renumbers
+# terrains keeps classifying correctly; order matters because several names
+# match more than one pattern (FOREST_AUTUMN_SNOW is forest, not snow).
+# ---------------------------------------------------------------------------
+_TERRAIN_PATTERNS = (
+    ("water", r"^(WATER|OCEAN)"),
+    ("forest", r"FOREST|JUNGLE|BAMBOO|PALM|MANGROVE"),
+    ("shallow", r"^BEACH|SHALLOW"),
+    ("snow", r"SNOW|ICE"),
+    ("road", r"^ROAD"),
+    ("rock", r"ROCK|CLIFF|QUICKSAND"),
+    ("sand", r"SAND|DESERT|GRAVEL_DESERT"),
+    ("dirt", r"^DIRT|^FARM|MUD|SAVANNAH"),
+    ("grass", r"GRASS|LEAVES|SHRUB|MOORLAND"),
+)
+
+_TERRAIN_CLASS_CACHE = None
+
+
+def _terrain_classes():
+    """{terrain id: legend key}, built once from the installed dataset."""
+    global _TERRAIN_CLASS_CACHE
+    if _TERRAIN_CLASS_CACHE is not None:
+        return _TERRAIN_CLASS_CACHE
+    import re as _re
+    from AoE2ScenarioParser.datasets.terrains import TerrainId
+    table = {}
+    for terrain in TerrainId:
+        name = terrain.name
+        key = "unknown"
+        for candidate, pattern in _TERRAIN_PATTERNS:
+            if _re.search(pattern, name):
+                key = candidate
+                break
+        table.setdefault(int(terrain.value), key)
+    _TERRAIN_CLASS_CACHE = table
+    return table
+
+
+def classify_terrain(terrain_id):
+    """Legend key for one terrain id (see rubric_v3._DEFAULT_LEGEND)."""
+    return _terrain_classes().get(int(terrain_id), "unknown")
+
+
+def terrain_class_counts(summary):
+    """{legend key: tile count} over the whole map, for the static check."""
+    counts = {}
+    for row in summary.get("terrain_grid") or []:
+        for value in row:
+            key = classify_terrain(value)
+            counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def _player_civilizations(scenario):
+    """{player_id: civilization name} for ACTIVE, non-GAIA players.
+
+    The `setting` precondition of the v2 rubric turns on whether a scenario
+    assigns civilizations at all, so the name is reported verbatim - including
+    the parser's default "RANDOM", which is exactly the case the check is
+    looking for. Best-effort: a library shape change yields {} rather than
+    breaking every consumer of the summary.
+    """
+    civs = {}
+    try:
+        for player in scenario.player_manager.players:
+            pid = int(getattr(player, "player_id", -1))
+            if pid <= 0:                      # 0 is GAIA, -1 is unreadable
+                continue
+            if not getattr(player, "active", False):
+                continue
+            civ = getattr(player, "civilization", None)
+            civs[pid] = getattr(civ, "name", None) if civ is not None else None
+    except Exception:
+        return {}
+    return civs
+
+
 def summarize(path, include_map=False):
     """Return a structured dict describing a built scenario.
 
-    Keys: path, map_size, players (unit rosters per player), triggers (name,
-    enabled, conditions, effects, dialogue), plus rolled-up counts. Raises on an
+    Keys: path, map_size, players (unit rosters per player),
+    player_civilizations (active players only), triggers (name, enabled,
+    conditions, effects, dialogue), plus rolled-up counts. Raises on an
     unparseable file so callers can record that as its own outcome.
 
     include_map=True additionally returns the data the failure-mode detectors
@@ -153,6 +240,8 @@ def summarize(path, include_map=False):
                     entry["positions"].append((int(unit.x), int(unit.y)))
             players[player_id.name] = roster
 
+        player_civilizations = _player_civilizations(scenario)
+
         triggers = []
         for trigger in trigger_manager.triggers:
             conditions = []
@@ -183,14 +272,22 @@ def summarize(path, include_map=False):
             })
 
         terrain = None
+        terrain_grid = None
+        elevation_grid = None
         if include_map:
             # Row-major grid indexed [y * map_size + x], built from each tile's
             # own coordinates rather than trusting the parser's iteration order.
             terrain = [0] * (map_size * map_size)
+            # The same data as 2D rows, plus elevation: what the terrain digest
+            # renders. Built in the same pass so the map is walked once.
+            terrain_grid = [[0] * map_size for _ in range(map_size)]
+            elevation_grid = [[0] * map_size for _ in range(map_size)]
             for tile in map_manager.terrain:
                 tx, ty = int(tile.x), int(tile.y)
                 if 0 <= tx < map_size and 0 <= ty < map_size:
                     terrain[ty * map_size + tx] = int(tile.terrain_id)
+                    terrain_grid[ty][tx] = int(tile.terrain_id)
+                    elevation_grid[ty][tx] = int(getattr(tile, "elevation", 0) or 0)
 
     dialogue = [e["message"] for t in triggers for e in t["effects"]
                 if e["message"] and e["type"] in
@@ -201,6 +298,7 @@ def summarize(path, include_map=False):
         "filename": os.path.basename(path),
         "map_size": map_size,
         "players": players,
+        "player_civilizations": player_civilizations,
         "triggers": triggers,
         "trigger_count": len(triggers),
         "unit_total": sum(e["count"] for r in players.values() for e in r.values()),
@@ -209,17 +307,76 @@ def summarize(path, include_map=False):
     if include_map:
         summary["all_units"] = all_units
         summary["terrain"] = terrain
+        summary["terrain_grid"] = terrain_grid
+        summary["elevation_grid"] = elevation_grid
     return summary
 
 
-def to_digest(summary, max_dialogue=28, max_triggers=40):
+def placed_hero_names(summary):
+    """Every named hero constant placed in the scenario, deduplicated.
+
+    The v2 `combatants` precondition asks whether each of these is named in the
+    episode brief, so it needs the constants themselves (JOAN_OF_ARC, ...)
+    rather than the roster counts.
+    """
+    names = []
+    for roster in summary.get("players", {}).values():
+        for name, entry in roster.items():
+            if entry.get("category") == "hero" and name not in names:
+                names.append(name)
+    return sorted(names)
+
+
+def terrain_digest(summary, size=32):
+    """The ASCII terrain map + elevation panel the v3 `terrain` dimension needs.
+
+    Rendering lives in rubric_v3 (it is part of the instrument, versioned with
+    the rubric text); this supplies the grid and the id->legend classifier.
+    Returns "" when the summary was built without include_map, so a caller that
+    forgets simply gets no panel rather than a wrong one.
+    """
+    grid = summary.get("terrain_grid")
+    if not grid:
+        return ""
+    from rubric_v3 import render_terrain_grid
+    return render_terrain_grid(grid, classify_terrain, size=size,
+                               elevation=summary.get("elevation_grid"))
+
+
+def to_digest(summary, max_dialogue=28, max_triggers=40, include_civilizations=False,
+              include_terrain=False):
     """Render a summary as compact prose for an LLM judge.
 
     Deliberately content-only: no filename, no model, no prompt condition, so a
     judge cannot infer which arm produced the scenario.
+
+    include_civilizations adds the per-player civilization assignment, which the
+    v2 rubric's `setting` dimension scores directly. include_terrain adds the
+    ASCII terrain map the v3 `terrain` dimension is scored from. Both are opt-in
+    for the same reason: the digest is the judge's whole view of the artifact,
+    so adding a panel silently changes what an older rubric was measuring. The
+    rubric hash on each score row covers the rubric TEXT, not the digest, so
+    nothing downstream would catch that drift - keeping the older digests
+    byte-identical is what prevents it.
     """
     lines = [f"MAP: {summary['map_size']}x{summary['map_size']} tiles",
              f"TOTAL PLACED OBJECTS: {summary['unit_total']}", ""]
+
+    if include_civilizations:
+        civs = summary.get("player_civilizations") or {}
+        lines.append("CIVILIZATION ASSIGNED PER ACTIVE PLAYER")
+        if civs:
+            for pid in sorted(civs):
+                lines.append(f"  Player {pid}: {civs[pid] or 'unset'}")
+        else:
+            lines.append("  (none readable)")
+        lines.append("")
+
+    if include_terrain:
+        panel = terrain_digest(summary)
+        if panel:
+            lines.append(panel)
+            lines.append("")
 
     lines.append("ROSTERS BY PLAYER")
     for player, roster in summary["players"].items():

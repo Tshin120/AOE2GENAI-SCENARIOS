@@ -82,6 +82,26 @@ def classify_path(trigger):
     return "other"
 
 
+def victory_defeat_triggers(triggers):
+    """Partition triggers into the (victory, defeat) paths they declare.
+
+    A DECLARE_VICTORY for the human player is a way to win; the same effect for
+    any other player is a way to lose. Both the audit and the objective-fact
+    extraction below read the graph through this one function, so the judge can
+    never be scoring a different set of paths than the audit classified.
+    """
+    victory, defeat = [], []
+    for index, trigger in enumerate(triggers):
+        for effect in trigger["effects"]:
+            if effect["type"] != "DECLARE_VICTORY":
+                continue
+            if effect.get("source_player") == HUMAN_PLAYER:
+                victory.append((index, trigger))
+            else:
+                defeat.append((index, trigger))
+    return victory, defeat
+
+
 def audit(summary, scenario_type=None):
     """Return a dict of reachability findings for one scenario summary.
 
@@ -90,15 +110,7 @@ def audit(summary, scenario_type=None):
     """
     triggers = summary["triggers"]
 
-    victory_triggers, defeat_triggers = [], []
-    for index, trigger in enumerate(triggers):
-        for effect in trigger["effects"]:
-            if effect["type"] != "DECLARE_VICTORY":
-                continue
-            if effect.get("source_player") == HUMAN_PLAYER:
-                victory_triggers.append((index, trigger))
-            else:
-                defeat_triggers.append((index, trigger))
+    victory_triggers, defeat_triggers = victory_defeat_triggers(triggers)
 
     # Which trigger indices are switched on at runtime by another trigger.
     activated = set()
@@ -159,6 +171,109 @@ def audit(summary, scenario_type=None):
         "unwinnable": not has_victory,
         "clean": clean,
     }
+
+
+# ---------------------------------------------------------------------------
+# Objective-fact extraction for the v2 fidelity rubric.
+#
+# The rubric's `objective` dimension asks whether the goal the TRIGGERS encode
+# is the goal the history posed - which is a different question from whether
+# that goal is well-formed, the one this module already answers. Both read the
+# same trigger graph, so the extraction lives here rather than in the judge:
+# the judge is handed structural facts it did not parse and cannot re-narrate.
+#
+# Deliberately NOT a pass/fail gate. A timer win is degenerate to the audit and
+# historically correct for a siege; the two levels are allowed to disagree.
+# ---------------------------------------------------------------------------
+
+def _unit_index(summary):
+    """reference_id -> placed unit, for resolving a condition's unit_object.
+
+    Only populated when the summary was built with include_map=True; without it
+    a target degrades to its raw reference id rather than failing.
+    """
+    return {u["reference_id"]: u for u in summary.get("all_units", []) or []}
+
+
+def _area_text(area):
+    if not area or any(v is None for v in area):
+        return None
+    x1, y1, x2, y2 = area
+    if (x1, y1) == (x2, y2):
+        return f"tile ({x1},{y1})"
+    return f"area ({x1},{y1})-({x2},{y2})"
+
+
+def _condition_target(condition, units):
+    """Human-readable target of one condition, for the judge to score against."""
+    ctype = condition["type"]
+    ref = condition.get("unit_object")
+    area = _area_text(condition.get("area"))
+
+    if ctype in ("DESTROY_OBJECT", "CAPTURE_OBJECT", "OBJECT_SELECTED"):
+        unit = units.get(ref)
+        if unit:
+            return f"{unit['name']} (player {unit['player_id']})"
+        return f"object #{ref}" if ref not in (None, -1) else "unspecified object"
+
+    if ctype == "BRING_OBJECT_TO_AREA":
+        unit = units.get(ref)
+        who = unit["name"] if unit else (f"object #{ref}" if ref not in (None, -1)
+                                         else "an object")
+        return f"{who} reaching {area or 'an unspecified area'}"
+
+    if ctype == "TIMER":
+        timer = condition.get("timer")
+        return f"{timer}s elapsed" if timer is not None else "an unspecified delay"
+
+    if ctype in ("OBJECTS_IN_AREA", "OWN_OBJECTS", "OWN_FEWER_OBJECTS"):
+        qty = condition.get("quantity")
+        owner = condition.get("source_player")
+        bits = [f"count {'<= 0' if isinstance(qty, int) and qty <= 0 else qty}"]
+        if owner is not None:
+            bits.append(f"player {owner}")
+        if area:
+            bits.append(area)
+        return ", ".join(bits)
+
+    bits = []
+    if condition.get("quantity") is not None:
+        bits.append(f"quantity {condition['quantity']}")
+    if condition.get("source_player") is not None:
+        bits.append(f"player {condition['source_player']}")
+    if area:
+        bits.append(area)
+    return ", ".join(bits) or "unspecified"
+
+
+def _path_fact(trigger, kind, units):
+    """One victory/defeat path as a {form, target} dict.
+
+    Conditions on a trigger are conjunctive, so a path with several of them is
+    reported as one fact with a joined form - splitting it into separate rows
+    would tell the judge the scenario offers several ways to win when it offers
+    one compound way.
+    """
+    conditions = trigger["conditions"]
+    if not conditions:
+        return {"form": "UNCONDITIONAL", "trigger": trigger["name"], "path_kind": kind,
+                "target": f'no condition - fires immediately [path "{trigger["name"]}"]'}
+    form = " + ".join(c["type"] for c in conditions)
+    target = "; ".join(_condition_target(c, units) for c in conditions)
+    return {"form": form, "trigger": trigger["name"], "path_kind": kind,
+            "target": f'{target} [path "{trigger["name"]}"]'}
+
+
+def extract_objective_conditions(summary):
+    """(victory_conditions, defeat_conditions) for rubric_v2.format_objective_facts.
+
+    Each entry is one DECLARE_VICTORY path, carrying the structural form of the
+    conditions that gate it and the object, place or deadline they name.
+    """
+    units = _unit_index(summary)
+    victory, defeat = victory_defeat_triggers(summary["triggers"])
+    return ([_path_fact(t, classify_path(t), units) for _i, t in victory],
+            [_path_fact(t, classify_path(t), units) for _i, t in defeat])
 
 
 def _sidecar_scenario_type(path):

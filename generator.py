@@ -1,6 +1,7 @@
 import os
 import re
 import ast
+import hashlib
 import sys
 import json
 import uuid
@@ -16,6 +17,8 @@ from pathlib import Path
 
 import api_config
 from provenance import write_sidecar, append_result, new_run_id, utc_now_iso
+from rubric_v2 import GENERATOR_FIDELITY_BLOCK, REACHABILITY_RECONCILIATION
+from rubric_v3 import GENERATOR_FIDELITY_BLOCK_V3
 
 # AoE2ScenarioParser imports
 from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
@@ -224,6 +227,125 @@ FIDELITY_RUBRIC_BLOCK = """
                     # Anachronism check: [what you excluded and why]
 """
 
+# ---------------------------------------------------------------------------
+# Historical-fidelity guidance, v2 (the fidelity-PROMPT arm).
+#
+# Appended to the system prompt when ScenarioConfig.fidelity_prompt is True
+# (default False, so this is opt-in and every prior run is unaffected). This is
+# a SEPARATE lever from the v1 `fidelity_rubric` above, which is left exactly as
+# it was: FIDELITY_RUBRIC_BLOCK is the instrument that produced the published
+# rubric-arm scores, so rewording it would make the paper misdescribe what ran.
+# New work should use this arm; the old one stays for reproducibility.
+#
+# The text itself lives in rubric_v2.py, which the judge also imports, so the
+# instruction and the criterion cannot drift apart. It is pasted VERBATIM -
+# including its column-0 indentation, which differs from the surrounding prompt -
+# because a byte-identical match with the paper's rubric table is worth more
+# than cosmetic alignment.
+# ---------------------------------------------------------------------------
+# The v2 fidelity block asks for two operations the base prompt never teaches:
+# assigning a civilization to each active player, and renaming a generic unit to
+# a historical figure. In the first run of the arm the model knew WHAT to do and
+# not HOW, and invented APIs for both - `datasets.civilizations`,
+# `player_manager.get_player()`, `unit.name = ...`,
+# `change_object_name(unit_object=...)`. None exist. The result was 0/8 first
+# attempt builds and one episode that never built, against 8/8 first-attempt for
+# the arm that made neither demand.
+#
+# So this block carries the API surface those two instructions require, and
+# nothing else. Every name and signature below was executed against the
+# installed parser and round-tripped from a written file before being written
+# here - it states verified facts, not a better guess.
+#
+# It ships with the fidelity arm rather than in the shared base prompt on
+# purpose: the base prompt is common to every arm, so editing it would change
+# the conditions the 31 baseline scenarios were generated under and cost a
+# baseline re-run. Attaching it here leaves that byte-identical, and makes the
+# treatment "the fidelity instructions plus the API needed to obey them", which
+# is one intervention rather than two.
+FIDELITY_API_SUPPORT_BLOCK = """\
+API REQUIRED BY THE REQUIREMENTS ABOVE
+Two of the requirements above need calls that appear nowhere else in this
+prompt. Use exactly these forms; the alternatives listed as WRONG do not
+exist in this library and will crash.
+
+1. ASSIGNING A CIVILIZATION (the SETTING requirement)
+   The Civilization enum lives in datasets.object_support, and players are
+   indexed by player number on the player manager:
+
+     from AoE2ScenarioParser.datasets.object_support import Civilization
+
+     player_manager = scenario.player_manager
+     player_manager.players[1].civilization = Civilization.FRANKS
+     player_manager.players[2].civilization = Civilization.SARACENS
+
+   players[1] is Player ONE, players[2] is Player TWO, and so on; players[0]
+   is GAIA and is left alone. Set this for every active player.
+   Members include: BRITONS, FRANKS, GOTHS, TEUTONS, JAPANESE, CHINESE,
+   BYZANTINES, PERSIANS, SARACENS, TURKS, VIKINGS, MONGOLS, CELTS, SPANISH,
+   AZTECS, MAYANS, HUNS, KOREANS, ITALIANS, INDIANS, INCAS, MAGYARS, SLAVS.
+   WRONG: there is NO module `AoE2ScenarioParser.datasets.civilizations`, and
+   NO `player_manager.get_player(...)` method.
+
+2. RENAMING A UNIT TO A HISTORICAL FIGURE (the COMBATANTS requirement)
+   A unit's name is not writable in Python; renaming is a trigger effect that
+   targets the unit by its reference_id:
+
+     martel = unit_manager.add_unit(PlayerId.ONE, unit_const=UnitInfo.CHAMPION.ID,
+                                    x=center, y=center)
+     rename = trigger_manager.add_trigger("Name the commander")
+     rename.new_condition.timer(timer=1)
+     rename.new_effect.change_object_name(selected_object_ids=martel.reference_id,
+                                          message="Charles Martel")
+
+   WRONG: `unit.name = "..."` (the property has no setter), and
+   `change_object_name(unit_object=...)` / `change_object_name(name=...)` -
+   the parameters are `selected_object_ids` and `message`.
+"""
+
+
+# Which fidelity rubric text the arm appends. v2 stays the default so the
+# existing arm+API cell stays reproducible; v3 is selected per run.
+FIDELITY_BLOCKS = {
+    "v2": GENERATOR_FIDELITY_BLOCK,
+    "v3": GENERATOR_FIDELITY_BLOCK_V3,
+}
+
+
+def _fidelity_prompt_block(reachability_prompting: bool, version: str = "v2") -> str:
+    """The v2 fidelity block, plus the reconciliation when both arms are on.
+
+    REACHABILITY_RECONCILIATION resolves the one place the two blocks genuinely
+    contradict: the reachability block forbids timer-gated victories as
+    degenerate, while the `objective` dimension calls a survival victory the
+    historically correct goal for a siege the defenders only had to outlast. It
+    settles that in history's favour while still requiring a real defeat
+    condition - so it is appended ONLY when a reachability block is present to
+    contradict.
+    """
+    blocks = ["\n\n" + FIDELITY_BLOCKS[version],
+              "\n" + FIDELITY_API_SUPPORT_BLOCK]
+    if reachability_prompting:
+        blocks.append("\n" + REACHABILITY_RECONCILIATION)
+    return "".join(blocks)
+
+
+def fidelity_prompt_hash(version: str = "v2") -> str:
+    """Identity of the exact fidelity text this build appends.
+
+    The arm is recorded in the results log as a boolean, which stopped being
+    enough the moment the block's content changed: two runs both logged
+    `fidelity_prompt: true` while being given materially different
+    instructions. Hashing the assembled text lets a cell be attributed to the
+    wording that produced it, the same way judge rows carry a rubric hash.
+    Computed for both reachability settings' worth of text via the same
+    assembler, so it moves whenever any part of the appended block moves.
+    """
+    return hashlib.sha256(
+        (_fidelity_prompt_block(False, version) + _fidelity_prompt_block(True, version))
+        .encode("utf-8")).hexdigest()[:16]
+
+
 # --- Prompt-style ablation --------------------------------------------------
 # The scenario-type templates in ScenarioGenerator._load_templates() prescribe a
 # rigid trigger count and per-section structure. prompt_style="freeform" skips
@@ -302,9 +424,15 @@ class ScenarioConfig:
 
     # --- Quality levers ---
     reachability_prompting: bool = True  # append the reachability-analysis guidance to the system prompt
-    fidelity_rubric: bool = False  # append the historical-fidelity guidance (FIDELITY_RUBRIC_BLOCK)
+    fidelity_rubric: bool = False  # append the v1 historical-fidelity guidance (FIDELITY_RUBRIC_BLOCK)
                                    # to the system prompt. Default False: opt-in treatment arm, so
                                    # every run predating it is reproducible unchanged.
+    fidelity_prompt_version: str = "v2"  # which fidelity rubric text the arm appends:
+                                   # "v2" (default, reproduces the arm+API cell) or "v3"
+    fidelity_prompt: bool = False  # append the v2 historical-fidelity guidance (rubric_v2's
+                                   # GENERATOR_FIDELITY_BLOCK, plus REACHABILITY_RECONCILIATION when
+                                   # reachability_prompting is also on). Default False: a separate
+                                   # opt-in arm from fidelity_rubric, which is left untouched.
     best_of: int = 1  # generate N candidates, keep the first that builds successfully (>=1)
     max_repair_attempts: int = 3  # self-repair retries after a validation_failure / execution_error
 
@@ -320,7 +448,15 @@ class ScenarioConfig:
 # 2.2: fidelity_rubric lever added. Off by default and the off path is
 #      byte-identical to 2.1's prompt, so 2.1 runs stay comparable; the version
 #      moves only so artefacts carrying the lever are identifiable.
-GENERATOR_VERSION = "2.2"
+# 2.3: fidelity_prompt lever added - the v2 rubric from rubric_v2.py, as its own
+#      arm alongside (not replacing) fidelity_rubric. Off by default and the off
+#      path is byte-identical to 2.2's prompt, so 2.2 runs stay comparable.
+# 2.4: FIDELITY_API_SUPPORT_BLOCK added to the fidelity_prompt arm - the verified
+#      civilization/rename API the v2 requirements need. Shipped with the arm,
+#      NOT in the shared base prompt, so every other cell's prompt is unchanged
+#      and the existing baselines stay valid. Runs now record
+#      fidelity_prompt_hash so the arm's wording is identifiable.
+GENERATOR_VERSION = "2.4"
 
 
 @dataclass
@@ -360,7 +496,11 @@ class GenerationResult:
     # Whether the historical-fidelity rubric was appended to the system prompt
     # for this run (treatment arm). Recorded so the arm stays recoverable from
     # the results log and the sidecar, not just from the output directory name.
+    # fidelity_rubric is the v1 block, fidelity_prompt the v2 one; they are
+    # separate arms and both are logged so a cell is never ambiguous.
     fidelity_rubric: bool = False
+    fidelity_prompt: bool = False
+    fidelity_prompt_version: str = "v2"
     # Whether introspection-guided repair was enabled for this run (ablation arm).
     use_introspection: bool = True
     # Which introspection fired to produce this attempt's code (importerror |
@@ -675,15 +815,19 @@ class OpenRouterAPI:
     def generate_scenario_code(self, prompt: str, model: str = None,
                                temperature: float = None, max_tokens: int = None,
                                reachability_prompting: bool = True,
-                               fidelity_rubric: bool = False) -> str:
+                               fidelity_rubric: bool = False,
+                               fidelity_prompt: bool = False,
+                               fidelity_prompt_version: str = "v2") -> str:
         """Generate scenario code using OpenRouter API.
 
         model / temperature / max_tokens fall back to the api_config defaults
         when not supplied. reachability_prompting toggles the reachability
         guidance appended to the system prompt (REACHABILITY_ANALYSIS_BLOCK);
-        fidelity_rubric toggles the historical-fidelity guidance
-        (FIDELITY_RUBRIC_BLOCK). The two are independent, so either, both or
-        neither can be appended.
+        fidelity_rubric toggles the v1 historical-fidelity guidance
+        (FIDELITY_RUBRIC_BLOCK); fidelity_prompt toggles the v2 guidance from
+        rubric_v2. All three are independent levers, so any combination can be
+        appended - though the two fidelity arms are alternatives in practice
+        and normally only one is enabled.
         """
         model = api_config.resolve_model(model)
         if temperature is None:
@@ -989,7 +1133,7 @@ class OpenRouterAPI:
                                CLIFF_DEFAULT_2, CLIFF_DEFAULT_3, ROCK_FORMATION_1, FLAG_A, FLAG_B,
                                ROMAN_RUINS, CASTLE_RUINS, TEMPLE_RUIN, SKELETON, TORCH_A, BONFIRE
                     TerrainId: WATER_DEEP, WATER_SHALLOW, BEACH, GRASS_1, GRASS_2, DIRT_1,
-                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)""" + (REACHABILITY_ANALYSIS_BLOCK if reachability_prompting else "") + (FIDELITY_RUBRIC_BLOCK if fidelity_rubric else "") + """
+                               DESERT_SAND, ROAD, FOREST_OAK (use .value property)""" + (REACHABILITY_ANALYSIS_BLOCK if reachability_prompting else "") + (FIDELITY_RUBRIC_BLOCK if fidelity_rubric else "") + (_fidelity_prompt_block(reachability_prompting, fidelity_prompt_version) if fidelity_prompt else "") + """
 
                     Return ONLY the Python code, no explanations or markdown formatting."""
                 },
@@ -1040,7 +1184,9 @@ class OpenRouterAPI:
                              model: str = None, temperature: float = None,
                              max_tokens: int = None,
                              reachability_prompting: bool = True,
-                             fidelity_rubric: bool = False) -> str:
+                             fidelity_rubric: bool = False,
+                             fidelity_prompt: bool = False,
+                             fidelity_prompt_version: str = "v2") -> str:
         """Ask the model to fix code that failed validation or execution.
 
         Sends the failing program plus the captured stderr / validation detail
@@ -1075,6 +1221,11 @@ class OpenRouterAPI:
             repair_system += "\n" + REACHABILITY_ANALYSIS_BLOCK
         if fidelity_rubric:
             repair_system += "\n" + FIDELITY_RUBRIC_BLOCK
+        # Carry the v2 arm across retries too, so a scenario rescued by repair is
+        # still a member of the treatment arm rather than a silent control.
+        if fidelity_prompt:
+            repair_system += _fidelity_prompt_block(reachability_prompting,
+                                                    fidelity_prompt_version)
 
         user_msg = (
             "The following AoE2 scenario program failed.\n\n"
@@ -2600,14 +2751,16 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
     def generate_scenario(self, config: ScenarioConfig, model: str = None,
                           temperature: float = None, max_tokens: int = None,
                           reachability_prompting: bool = None,
-                          fidelity_rubric: bool = None) -> str:
+                          fidelity_rubric: bool = None,
+                          fidelity_prompt: bool = None,
+                          fidelity_prompt_version: str = None) -> str:
         """Generate a scenario based on the provided configuration.
 
         The optional model/temperature/max_tokens/reachability_prompting/
-        fidelity_rubric arguments override the values on `config` (used by the
-        generate() orchestrator so it can log the exact resolved parameters).
-        Calling generate_scenario(config) alone is unchanged - it uses config's
-        values.
+        fidelity_rubric/fidelity_prompt arguments override the values on
+        `config` (used by the generate() orchestrator so it can log the exact
+        resolved parameters). Calling generate_scenario(config) alone is
+        unchanged - it uses config's values.
         """
         # Resolve effective parameters (explicit override > config value)
         model = model if model is not None else config.model
@@ -2617,6 +2770,11 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                                   if reachability_prompting is None else reachability_prompting)
         fidelity_rubric = (config.fidelity_rubric
                            if fidelity_rubric is None else fidelity_rubric)
+        fidelity_prompt = (config.fidelity_prompt
+                           if fidelity_prompt is None else fidelity_prompt)
+        fidelity_prompt_version = (config.fidelity_prompt_version
+                                   if fidelity_prompt_version is None
+                                   else fidelity_prompt_version)
 
         # Select the user-message prompt body. This is the ONLY thing the
         # prompt_style ablation changes; the system prompt (base + reachability),
@@ -2679,6 +2837,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             max_tokens=max_tokens,
             reachability_prompting=reachability_prompting,
             fidelity_rubric=fidelity_rubric,
+            fidelity_prompt=fidelity_prompt,
+            fidelity_prompt_version=fidelity_prompt_version,
         )
 
         return generated_code
@@ -3102,7 +3262,9 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                         config, model=model, temperature=temperature,
                         max_tokens=max_tokens,
                         reachability_prompting=reachability_prompting,
-                        fidelity_rubric=config.fidelity_rubric)
+                        fidelity_rubric=config.fidelity_rubric,
+                        fidelity_prompt=config.fidelity_prompt,
+                        fidelity_prompt_version=config.fidelity_prompt_version)
                 else:
                     # Pull ground truth from the installed parser for the failure
                     # so repair picks a valid name/signature instead of guessing.
@@ -3123,7 +3285,9 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
                         code, repair_detail, model=model, temperature=temperature,
                         max_tokens=max_tokens,
                         reachability_prompting=reachability_prompting,
-                        fidelity_rubric=config.fidelity_rubric)
+                        fidelity_rubric=config.fidelity_rubric,
+                        fidelity_prompt=config.fidelity_prompt,
+                        fidelity_prompt_version=config.fidelity_prompt_version)
             except Exception as e:
                 # An API failure is not repairable by fixing code - record and stop.
                 result = self._mk_result(
@@ -3189,6 +3353,8 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             stderr=stderr, validation_detail=validation_detail, error=error,
             prompt_style=config.prompt_style, introspection=introspection,
             fidelity_rubric=config.fidelity_rubric,
+            fidelity_prompt=config.fidelity_prompt,
+            fidelity_prompt_version=config.fidelity_prompt_version,
             use_introspection=config.use_introspection)
 
     def _log_attempt(self, results_log, result: GenerationResult):
@@ -3206,6 +3372,14 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "max_tokens": result.max_tokens,
             "reachability_prompting": result.reachability_prompting,
             "fidelity_rubric": result.fidelity_rubric,
+            "fidelity_prompt": result.fidelity_prompt,
+            # Identity of the fidelity text this run was given, so a cell can be
+            # attributed to the wording that produced it rather than to a bare
+            # boolean that stays true across revisions.
+            "fidelity_prompt_version": (result.fidelity_prompt_version
+                                        if result.fidelity_prompt else None),
+            "fidelity_prompt_hash": (fidelity_prompt_hash(result.fidelity_prompt_version)
+                                     if result.fidelity_prompt else None),
             "prompt_style": result.prompt_style,
             "use_introspection": result.use_introspection,
             "trigger_count": result.trigger_count,
@@ -3232,6 +3406,11 @@ scenario.write_to_file("OUTPUT_SCENARIO.aoe2scenario")  # Replace with actual ou
             "wikipedia_url": config.wikipedia_url,
             "reachability_prompting": result.reachability_prompting,
             "fidelity_rubric": result.fidelity_rubric,
+            "fidelity_prompt": result.fidelity_prompt,
+            "fidelity_prompt_version": (result.fidelity_prompt_version
+                                        if result.fidelity_prompt else None),
+            "fidelity_prompt_hash": (fidelity_prompt_hash(result.fidelity_prompt_version)
+                                     if result.fidelity_prompt else None),
             "prompt_style": config.prompt_style,
             "use_introspection": config.use_introspection,
             "best_of": config.best_of,
