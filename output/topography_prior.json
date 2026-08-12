@@ -1,0 +1,153 @@
+{
+  "model": "anthropic/claude-opus-5",
+  "repeats": 6,
+  "ratings": [
+    {
+      "episode": "the_fall_of_constantinople",
+      "title": "The Fall of Constantinople",
+      "scores": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "mean": 10.0,
+      "spread": 0,
+      "reason": "The Theodosian Walls, the Lycus valley, the Mesoteichion, the St Romanus and Charisius gates, the boom and the Golden Horn sea walls still stand or are surveyed, and Barbaro, Sphrantzes, Leonard of Chios and Kritovoulos place both sides' batteries and assault columns precisely."
+    },
+    {
+      "episode": "the_siege_of_vienna",
+      "title": "The Siege of Vienna",
+      "scores": [
+        9,
+        9,
+        9,
+        8,
+        9,
+        8
+      ],
+      "mean": 8.67,
+      "spread": 1,
+      "reason": "Contemporary siege plans, Salm's dispositions and Ottoman accounts fix the Carinthian and Salzburg Gates, the Burg bastion, the mine galleries and the Ottoman camp positions, and the medieval wall line is traceable under the modern Ringstrasse despite later demolition."
+    },
+    {
+      "episode": "the_battle_of_hastings",
+      "title": "The Battle of Hastings",
+      "scores": [
+        8,
+        8,
+        8,
+        9,
+        8,
+        8
+      ],
+      "mean": 8.17,
+      "spread": 1,
+      "reason": "The site at Battle Abbey is traditionally fixed and the Bayeux Tapestry, William of Poitiers and the Carmen describe the ridge, the marshy ground and the Malfosse, though the exact deployment line and even whether the fighting was on Senlac ridge or nearby (Caldbec Hill / the roundabout hypothesis) remains argued."
+    },
+    {
+      "episode": "the_road_to_reims",
+      "title": "The Road to Reims",
+      "scores": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "mean": 3.17,
+      "spread": 1,
+      "reason": "The itinerary through Auxerre, Saint-Florentin, Troyes and Chalons is documented day by day in the rehabilitation trial testimony and Reims cathedral survives, but the march involved no fixed battlefield beyond the brief investment of Troyes, whose siege lines are not mapped."
+    },
+    {
+      "episode": "the_battle_of_tours",
+      "title": "The Battle of Tours",
+      "scores": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean": 3.0,
+      "spread": 0,
+      "reason": "Only the general area between Tours and Poitiers is known; the Continuations of Fredegar and the Mozarabic Chronicle of 754 mention wooded high ground and a Frankish 'wall of ice' but no surveyed site has ever been confirmed, with candidates near Moussais-la-Bataille and Cenon only conjectural."
+    },
+    {
+      "episode": "the_exile_of_el_cid",
+      "title": "The Exile of El Cid",
+      "scores": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean": 2.0,
+      "spread": 0,
+      "reason": "A thirteen-year campaign across Zaragoza, Levante and Valencia with no single field; even well-attested engagements like Almenar, Tevar and Cuarte have only approximate locations, and the Cantar de Mio Cid and Historia Roderici are geographically vague."
+    },
+    {
+      "episode": "the_rise_of_temujin",
+      "title": "The Rise of Temujin",
+      "scores": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean": 2.0,
+      "spread": 0,
+      "reason": "The Secret History of the Mongols names sites such as Dalan Balzhut, Koyiten and the Naiman fight at Naqu Cliff, but almost none of these steppe locations are securely identified on the modern map and their relative arrangement is reconstructed from later itineraries."
+    },
+    {
+      "episode": "marco_polo_on_the_silk_road",
+      "title": "Marco Polo on the Silk Road",
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean": 1.0,
+      "spread": 0,
+      "reason": "The Travels gives a sequence of named cities and deserts but no single battlefield; the route itself is disputed and Polo's topography is often second-hand or garbled, so there is no ground to map at engagement scale."
+    }
+  ],
+  "terrain_a": "output/fidelity_v3_measA.jsonl",
+  "terrain_b": "output/fidelity_v3_measB.jsonl",
+  "rubric_version": "v3",
+  "correlations": {
+    "baseline": {
+      "spearman": 0.552,
+      "perm_p": 0.156
+    },
+    "post": {
+      "spearman": 0.562,
+      "perm_p": 0.1512
+    },
+    "delta": {
+      "spearman": -0.345,
+      "perm_p": 0.3941
+    },
+    "delta_leave_one_out": {
+      "the_fall_of_constantinople": -0.118,
+      "the_siege_of_vienna": -0.064,
+      "the_battle_of_hastings": -0.578,
+      "the_road_to_reims": -0.436,
+      "the_battle_of_tours": -0.355,
+      "the_exile_of_el_cid": -0.327,
+      "the_rise_of_temujin": -0.36,
+      "marco_polo_on_the_silk_road": -0.45
+    }
+  }
+}

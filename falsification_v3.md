@@ -1,0 +1,225 @@
+# The v3 falsification — the record
+
+Written after the v3 run, against `predictions_v3.md` (pre-registered, unedited).
+Covers NEXT_STEPS STEP 1 (record the falsification) and STEP 2 (the attempted
+resolution).
+
+This file exists so the result cannot be quietly reinterpreted later. The
+pre-registration is worth more than the hypothesis it was written to test.
+
+---
+
+## STEP 1 — The rule fired
+
+`predictions_v3.md` listed four falsification conditions. Exactly one triggered.
+
+| Pre-registered condition | Observed | Triggered |
+|---|---|---|
+| `terrain` moves **more than 0.5** | **+0.75** | **YES** |
+| Nothing moves | civilization +0.29, terrain +0.75, events +0.17 | no |
+| `terrain` re-scores **above 3.0** at measurement A | A = 2.50 | no |
+| `civilization` falls | rose +0.29 | no |
+
+> **terrain moves more than 0.5 → hypothesis is wrong; spatial layout is
+> teachable by instruction alone, and the blind-generation account of the
+> ceiling is incorrect.**
+
+Terrain moved **+0.75**. The rule fired as written.
+
+### The correct conclusion is "not supported", not "false"
+
+The result is not robust to leave-one-out. One episode carries it:
+
+| episode | A | B | Δ |
+|---|---:|---:|---:|
+| **the_battle_of_hastings** | 1.00 | 4.00 | **+3.00** |
+| the_exile_of_el_cid | 2.00 | 3.33 | +1.33 |
+| the_rise_of_temujin | 2.00 | 3.00 | +1.00 |
+| the_road_to_reims | 3.00 | 4.00 | +1.00 |
+| marco_polo_on_the_silk_road | 2.00 | 2.67 | +0.67 |
+| the_battle_of_tours | 2.00 | 2.00 | 0.00 |
+| the_fall_of_constantinople | 4.00 | 4.00 | 0.00 |
+| the_siege_of_vienna | 4.00 | 3.00 | −1.00 |
+| **mean** | **2.50** | **3.25** | **+0.75** |
+
+Hastings alone contributes **+3.00 of the +6.00 total**. Drop it and the mean
+over the remaining seven is **+0.43** — above the 0.2 stall line, below the 0.5
+falsification line, in the undetermined band between them.
+
+The direction is consistent but the sample is small: **5W–1L–2T**. On a sign
+test over the six non-tied episodes that is one-sided p ≈ 0.11, two-sided
+p ≈ 0.22. Not significant at any conventional threshold.
+
+So:
+
+- **Dead:** the strong claim that perception is unreachable by instruction.
+- **Not established:** that instruction reaches it either.
+
+### The discriminating prediction failed on all three clauses
+
+The pre-registration named one pattern as decisive:
+
+> **`terrain` moves less than 0.2 while `combatants` and `objective` each move
+> more than 0.4, in the same run.**
+
+| clause | required | observed |
+|---|---|---:|
+| terrain | < 0.2 | **+0.75** |
+| combatants | > 0.4 | **+0.00** |
+| objective | > 0.4 | **−0.46** |
+
+Not one clause held. This matters more than the headline falsification: the
+control clause was the design's whole guard against misreading a weak
+intervention as a ceiling, and the run produced the *inverse* of the predicted
+pattern — the dimension predicted to stall is the only one that moved, and both
+dimensions predicted to move did not.
+
+### Prediction accuracy was poor, and should be reported as such
+
+**1 of 5 predicted ranges was hit, and the hit was `civilization` — the control,
+predicted to do nothing.**
+
+| dimension | predicted Δ | observed Δ | |
+|---|---|---:|---|
+| combatants | +0.5 … +0.9 | +0.00 | miss |
+| **civilization** | +0.0 … +0.3 | **+0.29** | **hit** (the control) |
+| terrain | +0.0 … +0.2 | +0.75 | miss |
+| events | +0.3 … +0.6 | +0.17 | miss |
+| objective | +0.5 … +0.9 | −0.46 | miss |
+
+The `objective` miss has since been explained and is worth separating from the
+rest. The prediction assumed measurement A would fall to ~3.4 "because defeat is
+now graded"; A came back at 5.00. STEP 0 established why — the v3 anchor could
+not see a victory condition's parameters, so it could not mark down the
+degenerate cases it was written to catch. That miss was a fault in the
+instrument, not a wrong guess about the model.
+
+### The falsification is not an artifact of the broken anchor
+
+The `objective` revision (v3 → v3.1) touched only that one dimension, so terrain
+should be unaffected. It is:
+
+| | measurement A | measurement B | Δ |
+|---|---:|---:|---:|
+| terrain, v3 `dcfc95e1f8ba8c98` | 2.50 | 3.25 | **+0.75** |
+| terrain, v3.1 `02346252f802005e` | 2.46 | 3.25 | **+0.79** |
+
+Still over the 0.5 line, still +3.00 of it from Hastings, still +0.48 without
+Hastings. Re-scoring under a corrected `objective` anchor changes nothing about
+this result.
+
+### What Hastings actually did
+
+The Hastings map was **the only one in either arm to use elevation** — a plateau
+at height 3 across the middle third of the map, which is Senlac Hill. It was
+produced by the v3 clause telling the model to reason explicitly about layout,
+state where north is, and say where each side begins relative to the feature
+that mattered, before placing anything.
+
+The reading available from one episode: explicit symbolic reasoning partially
+substituted for perception. That is a hypothesis generated by this run, not a
+result of it.
+
+---
+
+## STEP 2 — The prior-strength explanation does not hold
+
+STEP 2 asked whether terrain movement tracks how canonically documented an
+episode's ground is. If it did, the operative variable would be **prior
+strength, not perception**, and terrain's ambiguity would resolve.
+
+**It does not track. The ambiguity stands.**
+
+### Method
+
+Ratings come from a model shown only the eight episode briefs and asked to rate
+how precisely each episode's physical ground is documented in the surviving
+record — 1 to 10, anchored on whether a historian could draw a confident map.
+It was never shown the terrain scores, the deltas, the hypothesis, or that this
+concerns map generation. Six independent ratings per episode.
+
+A hand ranking was the other option the plan allowed. It was rejected: whoever
+writes it here has already seen the deltas, so it cannot be blind.
+
+Reproduce with `python tools/topography_prior.py --repeats 6`.
+
+**On the stability of the ranking.** Within a run the ratings are near-identical
+(spread ≤ 1 on every episode, 0 on five of eight). Between runs they wobble by a
+few tenths, which is enough to move ρ: two independent 3-repeat runs gave
+prior-vs-Δ of −0.27 and −0.31 and prior-vs-A of +0.55 and +0.42. The figures
+below are the 6-repeat run. The point estimates are soft at n=8; the signs and
+the non-significance are not.
+
+### Result
+
+| episode | topography prior | terrain A | terrain B | Δ |
+|---|---:|---:|---:|---:|
+| the_fall_of_constantinople | 10.00 | 4.00 | 4.00 | 0.00 |
+| the_siege_of_vienna | 8.67 | 4.00 | 3.00 | −1.00 |
+| the_battle_of_hastings | 8.17 | 1.00 | 4.00 | +3.00 |
+| the_road_to_reims | 3.17 | 3.00 | 4.00 | +1.00 |
+| the_battle_of_tours | 3.00 | 2.00 | 2.00 | 0.00 |
+| the_exile_of_el_cid | 2.00 | 2.00 | 3.33 | +1.33 |
+| the_rise_of_temujin | 2.00 | 2.00 | 3.00 | +1.00 |
+| marco_polo_on_the_silk_road | 1.00 | 2.00 | 2.67 | +0.67 |
+
+| correlation | Spearman ρ | exact permutation p |
+|---|---:|---:|
+| prior vs **Δ** | **−0.35** | 0.394 |
+| prior vs baseline A | +0.55 | 0.156 |
+| prior vs post-v3 B | +0.56 | 0.151 |
+
+Prior does not predict the delta, and the sign is *negative* — if anything the
+better-documented episodes moved less. The three highest-prior episodes returned
+0.00, −1.00 and +3.00, which is the entire observed range.
+
+### The post-hoc rescue also fails
+
+The pattern in the table suggests a sharper story: instruction should help most
+where a strong prior exists but is *not expressed* in the baseline map. Hastings
+is exactly that — prior 8.17, baseline terrain 1.00.
+
+Scoring the prior onto the 1–5 terrain scale and correlating that gap with the
+delta gives **ρ = −0.12, p = 0.79**. The Pearson figure looks better (+0.44) but
+is entirely Hastings; drop it and ρ goes to **−0.69**.
+
+**This was a hypothesis derived from the data and it is unsupported.** Recording
+it here so it is not re-derived later and mistaken for a finding.
+
+### The one durable secondary result
+
+Prior *does* predict the **baseline**: ρ = +0.55 overall (p = 0.16), and
+**+0.90 with Hastings removed** — by far the strongest relationship in this
+analysis, though still one that n=8 cannot certify.
+
+The model's topographic knowledge already reaches the map before any terrain
+instruction exists. Maps built with no terrain guidance are already better for
+better-documented ground. Hastings is the single episode that breaks that
+otherwise-tight relationship, and it is the one episode the v3 instruction moved.
+
+That reframes the terrain question but does not answer it. Every candidate
+explanation tested here — perception, prior strength, unexpressed prior —
+collapses onto the same one episode.
+
+---
+
+## What this changes in the plan
+
+**The digest-feedback arm should not stay deprioritized on the stated grounds.**
+NEXT_STEPS retired it because "its premise (that terrain stalls under
+instruction) is falsified." That premise is falsified by one episode out of
+eight. At n=8 the data cannot separate *instruction reaches terrain* from
+*instruction reached Hastings*, so the arm's premise is undetermined rather than
+dead. Whether it is still the best use of a run is a separate question —
+composition may well be the better probe — but it should be decided on cost and
+value, not on a falsification this thin.
+
+**Expanding the corpus is now a precondition for any terrain claim**, not only
+for the roadblock claim in STEP 4. A result carried by one episode needs a
+corpus where one episode cannot carry it.
+
+**Report the prediction record in the paper as it stands.** 1 of 5 ranges hit,
+the hit being the control, and the discriminating prediction failing on all
+three clauses. A pre-registration is only worth what it costs to honour, and its
+value here is precisely that it stopped a +0.75 headline from being written up
+as a confirmed effect.

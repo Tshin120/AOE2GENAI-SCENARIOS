@@ -93,38 +93,76 @@ for the evidence — the short version is that the criterion which excluded
 
 ---
 
-## STEP 1 — Record the falsification
+## STEP 1 — DONE: the falsification is recorded
 
-`predictions_v3.md` pre-registered: *terrain moves more than 0.5 → hypothesis
-wrong.* Terrain moved **+0.75**. The rule fired. Do not reinterpret it after
-the fact — the pre-registration is worth more than the hypothesis.
+Full record in **`falsification_v3.md`**. Summary:
 
-**Correct conclusion: "not supported," not "false."** The result is not robust
-to leave-one-out. Hastings alone contributes +3.00 of the +6.00 total; without
-it the mean is +0.43 — above the 0.2 stall line, below the 0.5 falsification
-line. 5W-1L is p≈0.11 on a sign test. So:
+`predictions_v3.md` pre-registered *terrain moves more than 0.5 → hypothesis
+wrong.* Terrain moved **+0.75**. The rule fired. It is recorded as fired and is
+not reinterpreted — the pre-registration is worth more than the hypothesis.
+
+**Correct conclusion: "not supported," not "false."** Hastings alone contributes
++3.00 of the +6.00 total; without it the mean over the remaining seven is +0.43,
+in the undetermined band between the 0.2 stall line and the 0.5 falsification
+line. The split is 5W–1L–2T: one-sided p ≈ 0.11, two-sided p ≈ 0.22.
 
 - Dead: the strong claim that perception is unreachable by instruction.
 - Not established: that instruction reaches it either.
 
+**The discriminating prediction failed on all three clauses**, which matters
+more than the headline. It required terrain < 0.2 while combatants and objective
+each moved > 0.4; observed was terrain **+0.75**, combatants **+0.00**,
+objective **−0.46** — the exact inverse of the predicted pattern, with the
+control clause that was meant to guard against misreading a weak intervention
+firing in the wrong direction.
+
+Prediction accuracy was poor and is reported as such: **1 of 5 ranges hit, and
+the hit was `civilization`, the control predicted to do nothing.** The
+`objective` miss is now explained by STEP 0 — it assumed A would fall to ~3.4
+once defeat was graded, and A came back 5.00 because the anchor could not see a
+condition's parameters. That was an instrument fault, not a wrong guess.
+
+**Not an artifact of the broken anchor.** Re-scored under v3.1, terrain reads
+2.46 → 3.25 = **+0.79**, still over the line, still +3.00 of it from Hastings,
+still +0.48 without.
+
 The Hastings map was the only one in either arm using elevation — a plateau at
 height 3 across the middle third, i.e. Senlac Hill — produced by the v3 clause
 telling the model to reason explicitly about layout before placing anything.
-Explicit symbolic reasoning partially substituted for perception.
-
-Prediction accuracy was poor and should be reported as such: **1 of 5 ranges
-hit, and the hit was `civilization`, the control predicted to do nothing.**
+Explicit symbolic reasoning partially substituting for perception is a
+hypothesis this run generated, not a result it produced.
 
 ---
 
-## STEP 2 — Topography-prior correlation (cheap, no generation)
+## STEP 2 — DONE: prior strength does not explain it
 
-Rank the eight episodes by how canonically documented their battlefield
-geography is, then correlate with terrain delta. Hastings (+3.00) has the
-best-described topography in the corpus; Vienna regressed −1.00.
+Ratings by a model shown only the episode briefs, never the terrain scores or
+the hypothesis; six repeats. `python tools/topography_prior.py --repeats 6`,
+saved to `output/topography_prior.json`. A hand ranking was rejected as
+unblindable — whoever writes it has already seen the deltas.
 
-If it tracks, the operative variable is **prior strength, not perception**, and
-terrain's ambiguity resolves. Judge calls only, or a hand ranking.
+**It does not track. Terrain's ambiguity does not resolve.**
+
+| correlation | Spearman ρ | exact perm p |
+|---|---:|---:|
+| prior vs terrain **Δ** | **−0.35** | 0.394 |
+| prior vs baseline A | +0.55 | 0.156 |
+| prior vs post-v3 B | +0.56 | 0.151 |
+
+The sign on Δ is *negative*, and the three highest-prior episodes returned 0.00,
+−1.00 and +3.00 — the entire observed range. A post-hoc rescue (instruction
+helps most where a strong prior is *unexpressed* in the baseline) also fails:
+ρ = −0.12, p = 0.79, and −0.69 with Hastings removed. Recorded in
+`falsification_v3.md` so it is not re-derived later and mistaken for a finding.
+
+**One durable secondary result.** Prior does predict the **baseline**: ρ = +0.55,
+and **+0.90 with Hastings removed**. The model's topographic knowledge already
+reaches the map before any terrain instruction exists — pre-v3 maps are better
+for better-documented ground. Hastings is the single episode that breaks that
+otherwise-tight relationship, and it is the one episode the instruction moved.
+
+Every candidate explanation tested — perception, prior strength, unexpressed
+prior — collapses onto that one episode.
 
 ---
 
@@ -160,12 +198,20 @@ criterion above.
 
 Write `predictions_v4.md` and commit it **before** running.
 
-### Deprioritized: the digest-feedback arm
+### The digest-feedback arm — deprioritized, but not on the stated grounds
 
 Originally iteration 4 — feed the generator the terrain digest of its own first
-attempt. Its premise (that terrain stalls under instruction) is falsified, so
-it now tests effect size rather than a dichotomy. Composition is the better
-probe. Revisit later.
+attempt. It was retired because its premise (that terrain stalls under
+instruction) is falsified.
+
+**That reasoning does not survive STEP 2.** The falsification is one episode out
+of eight, and every explanation for it collapses onto that episode. At n=8 the
+data cannot separate *instruction reaches terrain* from *instruction reached
+Hastings*, so the arm's premise is undetermined, not dead.
+
+Composition may still be the better probe on cost and value — that is a
+different argument and the one to make. Do not cite the falsification as the
+reason.
 
 ---
 
@@ -177,6 +223,12 @@ claim is a null result and needs power that positive results do not — at n=8,
 **16–24 episodes** before the roadblock claim goes in the paper. This also
 supplies the held-out set for the API-facts generalization question (those
 facts were derived from these same eight episodes' failures).
+
+STEP 2 raises this from a caveat to a precondition. It is no longer only the
+*null* claims that need the corpus: the terrain **positive** is carried entirely
+by one episode, and every attempt to explain it returned to that episode. Any
+terrain claim in either direction needs a corpus in which a single episode
+cannot carry the result.
 
 ---
 
