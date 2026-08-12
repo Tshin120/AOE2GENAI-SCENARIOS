@@ -186,20 +186,37 @@ is entirely Hastings; drop it and ρ goes to **−0.69**.
 **This was a hypothesis derived from the data and it is unsupported.** Recording
 it here so it is not re-derived later and mistaken for a finding.
 
-### The one durable secondary result
+### The strongest secondary candidate — reported at full sample
 
-Prior *does* predict the **baseline**: ρ = +0.55 overall (p = 0.16), and
-**+0.90 with Hastings removed** — by far the strongest relationship in this
-analysis, though still one that n=8 cannot certify.
+Prior does appear to predict the **baseline**: **ρ = +0.55 over all eight
+episodes, p = 0.156**. That is the strongest relationship in this analysis and
+the one most worth carrying into a larger corpus. It is *not* significant at
+n=8, and it is reported here at full sample deliberately.
 
-The model's topographic knowledge already reaches the map before any terrain
-instruction exists. Maps built with no terrain guidance are already better for
-better-documented ground. Hastings is the single episode that breaks that
-otherwise-tight relationship, and it is the one episode the v3 instruction moved.
+**On the +0.90 figure.** Removing Hastings raises this to +0.90, and an earlier
+draft of this file led with that number. It should not. Hastings is dropped
+*because* it breaks the relationship, which is a data-dependent exclusion — the
+same move that correctly weakened the terrain claim from +0.75 to +0.43 would
+here be used to strengthen a claim from +0.55 to +0.90. It is also the exact
+move this file declines to accept two sections above, where the post-hoc
+rescue's friendlier Pearson figure is discounted on the grounds that it "is
+entirely Hastings." Both hinge on the same episode; the standard has to apply
+in both directions or it is not a standard.
+
+So: the model's topographic knowledge plausibly already reaches the map before
+any terrain instruction exists, and maps built with no terrain guidance may
+already be better for better-documented ground. **Candidate, not finding.** The
+between-run wobble (+0.55 and +0.42 on two independent 3-repeat runs) is
+consistent with a real positive relationship, and n=8 cannot certify one.
 
 That reframes the terrain question but does not answer it. Every candidate
 explanation tested here — perception, prior strength, unexpressed prior —
 collapses onto the same one episode.
+
+**Consequence for corpus expansion:** this hypothesis must go into the larger
+run as an open question with a pre-registered threshold, not as an established
+relationship awaiting confirmation. Writing it down as +0.90 is how it would
+arrive already assumed.
 
 ---
 

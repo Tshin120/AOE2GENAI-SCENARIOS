@@ -155,11 +155,18 @@ helps most where a strong prior is *unexpressed* in the baseline) also fails:
 ρ = −0.12, p = 0.79, and −0.69 with Hastings removed. Recorded in
 `falsification_v3.md` so it is not re-derived later and mistaken for a finding.
 
-**One durable secondary result.** Prior does predict the **baseline**: ρ = +0.55,
-and **+0.90 with Hastings removed**. The model's topographic knowledge already
-reaches the map before any terrain instruction exists — pre-v3 maps are better
-for better-documented ground. Hastings is the single episode that breaks that
-otherwise-tight relationship, and it is the one episode the instruction moved.
+**Strongest secondary candidate — not a result.** Prior appears to predict the
+**baseline**: **ρ = +0.55 over all eight episodes, p = 0.156**. Report it at
+full sample. Removing Hastings raises it to +0.90, but Hastings is dropped
+*because* it breaks the relationship — a data-dependent exclusion, and the same
+move discounted one paragraph above when it flattered the post-hoc rescue. The
+standard applies in both directions.
+
+The reading, held as a **candidate**: the model's topographic knowledge may
+already reach the map before any terrain instruction exists, so pre-v3 maps
+would already be better for better-documented ground. Carry it into the larger
+corpus as an open question with a pre-registered threshold, not as an
+established relationship awaiting confirmation.
 
 Every candidate explanation tested — perception, prior strength, unexpressed
 prior — collapses onto that one episode.
