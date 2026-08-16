@@ -86,24 +86,7 @@ ablation; `batch_retry.jsonl` = the two defense episodes on their own). Example 
 At the end, batch mode prints a per-scenario table (outcome + attempts) plus aggregate rates.
 Successes partition into three mutually exclusive buckets so the two rescue mechanisms stay separable
 — `first-attempt` (candidate 1, attempt 1), `repair-loop rescue` (candidate 1, attempts > 1), and
-`best-of-N rescue` (candidate > 1):
-
-```text
-=== Batch summary (run_id run_ab12cd34ef56) ===
-  #  Scenario                            Type        Outcome             Att  Cand
----  ----------------------------------  ----------  ------------------  ---  ----
-  1  The Battle of Tours                 battle      success               1     1
-  2  The Siege of Constantinople         defense     success               3     1
-  3  Alexander's Persian Campaign        conquest    success               2     2
-  4  The Defense of Vienna               defense     execution_error       4     1
-
-Aggregate over 4 scenario(s):
-  succeeded:              3/4  ( 75.0%)
-    first-attempt:        1/4  ( 25.0%)   [candidate 1, attempt 1]
-    repair-loop rescue:   1/4  ( 25.0%)   [candidate 1, attempts > 1]
-    best-of-N rescue:     1/4  ( 25.0%)   [candidate > 1]
-  failed:                 1/4  ( 25.0%)
-```
+`best-of-N rescue` (candidate > 1).
 
 ## Architecture
 
@@ -113,32 +96,6 @@ Only the five root-level modules are importable; everything else is a script or 
 `tools/` and `examples/` are meant to be run from the repo root (`python tools/view_scenario.py ...`);
 `examples/example_usage.py` inserts the repo root on `sys.path` so `from generator import ...` works,
 and both example scripts write into the repo-root `output/` dir regardless of the working directory.
-
-```
-generator.py           Core: prompts, validation, subprocess build, self-repair, best-of-N
-api_config.py          Model registry + defaults
-provenance.py          Sidecar + JSONL results-log writers (stdlib only)
-create_scenario.py     CLI: single scenario or JSONL batch
-run_experiment.py      Control vs treatment runner
-
-scenario_inspect.py    Built .aoe2scenario -> structured summary / LLM digest (shared reader)
-reachability_audit.py  Static unwinnability audit of built scenarios (deterministic, no API)
-fidelity_judge.py      LLM rubric scoring of historical fidelity (blind to the arm)
-rubric_v2.py           Single source of truth for the v2 rubric: the generator-side block,
-                       the judge-side anchors, the four-dimension mean, and the two static
-                       preconditions. Imported by BOTH sides so they cannot drift
-
-tools/                 view_scenario.py, extract_campaign.py, test_api.py,
-                       run_factorial.py (factorial experiment driver),
-                       analyze.py (joins the 3 evidence streams -> tables + LaTeX)
-examples/              david&goliath_scenario1.py (hand-written), example_usage.py (library API)
-batches/               JSONL batch specs
-campaigns/             Official .aoe2campaign files + campaign JSON (reference material)
-samples/               Checked-in .aoe2scenario artifacts (gitignore-exempted)
-docs/                  Analysis notes (reference_analysis_cba_survival.md)
-reachability_research/ FROZEN pre-merge generators — do not edit
-output/                Generated scenarios (gitignored), .meta.json sidecars, results.jsonl
-```
 
 ### Core Flow
 
@@ -152,28 +109,6 @@ output/                Generated scenarios (gitignored), .meta.json sidecars, re
 8. Every attempt is appended to the per-run **results log** (JSONL); a **metadata sidecar** JSON is written next to the `.aoe2scenario`
 
 Each attempt ends in exactly one recorded outcome: `success` | `validation_failure` | `execution_error` | `api_error`.
-
-### Core Modules
-
-- **`generator.py`**: Main module with:
-  - `OpenRouterAPI`: API communication. `generate_scenario_code(prompt, model, temperature, max_tokens, reachability_prompting, fidelity_rubric, fidelity_prompt)` and `repair_scenario_code(failing_code, error_detail, ...)` for the self-repair loop. `REACHABILITY_ANALYSIS_BLOCK` is appended to the system prompt when `reachability_prompting` is True; `FIDELITY_RUBRIC_BLOCK` (v1) when `fidelity_rubric` is True; `rubric_v2.GENERATOR_FIDELITY_BLOCK` (v2, via `_fidelity_prompt_block()`) when `fidelity_prompt` is True.
-  - `ScenarioGenerator`: template selection + orchestration.
-    - `generate(config, results_log=None, run_id=None) -> GenerationResult`: the funnel (generate → validate → execute, self-repair, best-of-N, sidecar, JSONL logging)
-    - `generate_scenario(config, model=..., temperature=..., max_tokens=..., reachability_prompting=..., fidelity_rubric=..., fidelity_prompt=...) -> str`: returns raw code (public API preserved; new optional overrides)
-    - `validate_scenario_code_detailed(code) -> (ok, detail, trigger_count)`; `validate_scenario_code(code) -> bool` (backward-compatible wrapper)
-    - `build_scenario(code, output_path) -> ExecutionOutcome` (structured: ok/returncode/stdout/stderr); `save_scenario(code, output_path) -> bool` (wrapper)
-  - `ScenarioConfig`: dataclass for scenario + generation parameters
-  - `ExecutionOutcome`, `GenerationResult`: structured results
-
-- **`api_config.py`**: `MODEL_REGISTRY` (friendly key → pinned OpenRouter slug), `resolve_model()`, `DEFAULT_MODEL` (current Claude Sonnet: `anthropic/claude-sonnet-5-20260630`), `DEFAULT_TEMPERATURE=0.7`, `DEFAULT_MAX_TOKENS=32000`, `REQUEST_TIMEOUT=600`. Frontier slugs are pinned dated snapshots captured from OpenRouter's live list (2026-07-17); legacy 2024 entries are retained verbatim for reproducibility (no longer served by OpenRouter).
-
-- **`provenance.py`**: `write_sidecar()`, `append_result()`, `new_run_id()`, `utc_now_iso()` (stdlib only) — the metadata sidecar and JSONL results log.
-
-- **`create_scenario.py`**: Thin CLI entry point (no generation logic — just argparse, batch-spec loading, calling `generate()`, and reporting). Runs with no args (default "Flight to Chinon" escort) or via CLI flags. Single-scenario and generation flags: `--model`, `--temperature`, `--max-tokens`, `--reachability/--no-reachability`, `--fidelity-rubric/--no-fidelity-rubric` (v1 block), `--fidelity-prompt on|off` (v2 block), `--best-of-n` (alias `--best-of`), `--max-repair-attempts`, `--prompt-style` (`templated`|`freeform`), `--scenario-type`, `--title`, `--description`, `--map-size`, `--players`, `--difficulty`, `--region`, `--player-civ`, `--enemy-civ`, `--wikipedia-url`, `--output-dir` (default `output`; filenames derived from a title slug — in batch mode the slug also embeds `prompt_style`, plus a numeric suffix on any remaining same-title/same-style collision, so specs never overwrite each other), `--output` (explicit full-path override), `--results-log` (default `output/results.jsonl`). Modes: `--batch <file>` (JSONL, see "batch mode" above), `--dry-run` (print resolved config / parsed specs, no API call), `--yes`/`-y` (skip the batch confirmation prompt). Exit code is 0 only if every requested scenario reached `success`, else non-zero (2 for a malformed batch file).
-
-- **`run_experiment.py`**: Control/treatment runner over one merged generator (`control` = `reachability_prompting=False`, `treatment` = `True`), `temperature=0.0` by default. Flags: `--model`, `--models` (sweep), `--arms`, `--best-of`, `--max-repair-attempts`, `--temperature`, `--results-log`.
-
-- **`reachability_research/generator.py`, `reachability_research/generator_reachability.py`**: FROZEN originals of the control and treatment generators, retained for reproducibility. Superseded by the top-level `generator.py` + the `reachability_prompting` flag; no longer imported by `run_experiment.py`. Do not edit.
 
 ### Generation Parameters, Flags & Provenance
 
@@ -245,43 +180,13 @@ reconciliation text is in play.
 
 **Model registry** (`api_config.MODEL_REGISTRY`; `resolve_model(key_or_slug)`): frontier keys are pinned to exact dated OpenRouter snapshots; legacy keys are retained verbatim for provenance (no longer served).
 
-| Friendly key | Slug | Notes |
-|--------------|------|-------|
-| `sonnet-5` | `anthropic/claude-sonnet-5-20260630` | **DEFAULT_MODEL** |
-| `opus-4.8` | `anthropic/claude-opus-4.8-20260528` | current Opus-class |
-| `fable-5` | `anthropic/claude-fable-5-20260609` | most capable |
-| `claude-3.5-sonnet`, `claude-3-opus`, `gpt-4`, `llama-3.1-70b`, `gemini-pro` | (legacy 2024 slugs) | retained for reproducibility; will 404 today |
-
 A raw slug not in the registry is passed through unchanged, so any OpenRouter model works.
 
-**Metadata sidecar** — `<output_path>.meta.json`, written next to every generated scenario:
-
-```json
-{
-  "title": "...", "description": "...", "scenario_type": "battle",
-  "map_size": 120, "players": 2, "difficulty": "easy",
-  "region": null, "player_civ": null, "enemy_civ": null, "wikipedia_url": null,
-  "reachability_prompting": true, "fidelity_rubric": false, "fidelity_prompt": false,
-  "prompt_style": "templated", "best_of": 1, "max_repair_attempts": 3,
-  "model": "anthropic/claude-sonnet-5-20260630", "temperature": 0.0, "max_tokens": 32000,
-  "generator_version": "2.0", "outcome": "success",
-  "run_id": "run_ab12cd34ef56", "candidate": 1, "attempts": 2, "trigger_count": 27,
-  "output_path": "output/treatment/battle_of_tours.aoe2scenario",
-  "timestamp_utc": "2026-07-17T12:34:56Z"
-}
-```
-
-**Results log** — JSONL, append-only (default `output/results.jsonl`). One line per **attempt** (self-repair retries included), so playability rates are computable per model / arm / scenario_type by grouping:
-
-```json
-{"run_id":"run_ab12cd34ef56","candidate":1,"attempt":2,"outcome":"success",
- "title":"The Battle of Tours","scenario_type":"battle",
- "model":"anthropic/claude-sonnet-5-20260630","temperature":0.0,"max_tokens":32000,
- "reachability_prompting":true,"fidelity_rubric":false,"fidelity_prompt":false,
- "prompt_style":"templated","trigger_count":27,
- "output_path":"output/treatment/battle_of_tours.aoe2scenario",
- "validation_detail":null,"stderr":null,"error":null,"introspection":null,"timestamp_utc":"2026-07-17T12:34:56Z"}
-```
+**Metadata sidecar** — `<output_path>.meta.json`, written next to every generated
+scenario. **Results log** — JSONL, append-only (default `output/results.jsonl`), one
+line per **attempt** (self-repair retries included), so playability rates are
+computable per model / arm / scenario_type by grouping. Read either file for its
+exact field list.
 
 The run's terminal outcome for a `(run_id, candidate)` is its highest `attempt` line. Outcomes: `success` (built), `validation_failure` (failed `validate_scenario_code_detailed`, not executed), `execution_error` (subprocess returncode ≠ 0, `stderr` captured), `api_error` (model call raised; not code-repairable).
 
@@ -312,17 +217,6 @@ score itself): `check_combatants_precondition()` — every placed named hero app
 not sufficient.
 
 Human expert annotation remains the gold standard the judge is validated *against*; it is not a prerequisite for running the evaluation.
-
-### Scenario Types (Templates in generator.py)
-
-| Type | Pattern | Example |
-|------|---------|---------|
-| `battle` | Direct combat, military formations | Saladin Campaign style |
-| `escort` | Protect hero traveling to destination | Joan of Arc Campaign style |
-| `diplomacy` | Unite factions through quests/tribute | Genghis Khan Campaign style |
-| `defense` | Survive waves of attackers | Siege defense patterns |
-| `conquest` | Capture enemy bases progressively | Great Wall breach style |
-| `story` | Narrative-driven with multiple acts | Combined patterns |
 
 ### AoE2ScenarioParser Patterns
 
@@ -356,40 +250,10 @@ scenario.write_to_file("output.aoe2scenario")
 
 ### Historical Accuracy: Regions and Civilizations
 
-The generator supports historically accurate terrain and buildings through `region` and `player_civ`/`enemy_civ` parameters:
-
-**Geographic Regions:**
-| Region | Terrain | Trees | Features |
-|--------|---------|-------|----------|
-| `mediterranean` | Grass, dirt, beach | Palm, sparse | Coastlines, hills |
-| `steppe` | Dry grass | Very sparse | Rolling hills, rocks |
-| `northern_europe` | Grass, forest | Oak, dense | Rivers, marshes |
-| `desert` | Sand, dirt | Palm at oases | Dunes, rocky outcrops |
-| `east_asia` | Grass | Bamboo | Mountains, rivers |
-| `middle_east` | Dirt, sand edges | Palm along rivers | River valleys, ruins |
-
-**Civilization Styles:**
-| Style | Camps | Military | Units |
-|-------|-------|----------|-------|
-| `western_european` | Pavilions, tents | Stone castles | Knights, crossbowmen |
-| `eastern_european` | Pavilions | Thick walls, keeps | Infantry, cavalry |
-| `middle_eastern` | Tents, pavilions | Curved walls | Camels, cavalry archers |
-| `central_asian` | Yurts | Minimal fortifications | Light cavalry, horse archers |
-| `east_asian` | Pavilions | Walled compounds | Unique regional units |
-| `african` | Tents, pavilions | Mud-brick | Trade-focused |
-
-**Example Usage:**
-```python
-config = ScenarioConfig(
-    title="Battle of Manzikert",
-    description="Byzantine vs Seljuk clash",
-    scenario_type="battle",
-    region="middle_east",
-    player_civ="eastern_european",  # Byzantines
-    enemy_civ="central_asian",       # Seljuks
-    wikipedia_url="https://en.wikipedia.org/wiki/Battle_of_Manzikert"
-)
-```
+The generator supports historically accurate terrain and buildings through `region` and
+`player_civ`/`enemy_civ`. The accepted values are documented on the `ScenarioConfig` fields
+(`generator.py:416-417`) and the prompt text each one injects lives in the template dicts
+around `generator.py:2849` (regions) and `generator.py:2997` (civilization styles).
 
 ### Critical Constraints
 
@@ -485,36 +349,3 @@ Scenario files (`.aoe2scenario`) go to user's AoE2 DE folder:
 ```
 C:\Users\<USERNAME>\Games\Age of Empires 2 DE\<STEAM_ID>\resources\_common\scenario\
 ```
-
-## Campaign Tools
-
-### tools/extract_campaign.py
-Extracts individual `.aoe2scenario` files from `.aoe2campaign` container files.
-
-```bash
-python tools/extract_campaign.py campaigns/cam3.aoe2campaign
-# Creates campaigns/cam3_scenarios/ folder with all scenario files (gitignored)
-```
-
-Supports AoE2 DE campaign format (version 2.00).
-
-### tools/view_scenario.py
-Displays scenario contents including map size, units by player, and triggers.
-
-```bash
-python tools/view_scenario.py campaigns/cam3_scenarios/3_Saladin_1.aoe2scenario
-python tools/view_scenario.py samples/siege_of_constantinople_1453.aoe2scenario
-```
-
-**Note:** Encrypted `.gpv` campaign files (DLC campaigns) require decryption keys. Unencrypted `.aoe2campaign` files can be extracted directly.
-
-## Included Campaign Files
-
-| File | Campaign | Scenarios |
-|------|----------|-----------|
-| campaigns/cam2.aoe2campaign | Joan of Arc | 6 |
-| campaigns/cam3.aoe2campaign | Saladin | 6 |
-| campaigns/cam4.aoe2campaign | Genghis Khan | 6 |
-
-Campaign JSON metadata (`campaigns/cam3.json`, `cam3_layout.json`, `cam4.json`, `cam4_layout.json`)
-holds the official intro/outro slideshow and menu-layout definitions, kept as reference material.
