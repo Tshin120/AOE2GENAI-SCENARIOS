@@ -84,7 +84,12 @@ output/                Generated scenarios, .meta.json sidecars, results.jsonl, 
 episodes_heldout.json  The 8 held-out episodes, no overlap with the original corpus
 predictions_v3.md      Pre-registration for the v3 run — falsified, kept as the record
 falsification_v3.md    What the v3 rule firing does and does not license
+predictions_v4.md      Pre-registration for the v4 run — committed before the run, not yet run
+predictions_v4_addendum.md
+                       Evidence that arrived after v4 was committed; records what was
+                       and was not known at pre-registration time, without amending it
 NEXT_STEPS.md          Where the loop stands and what runs next
+.claude/skills/        Claude Code skills (campaign-tools: extraction + scenario inspection)
 ```
 
 Everything at the root is importable; `tools/` and `examples/` hold scripts, run from the repo root.
@@ -450,6 +455,35 @@ A follow-up ruled out prior strength as the explanation (ρ = −0.35, p = 0.39)
 Full accounting in `falsification_v3.md`. It is kept because a pre-registration is only worth what it
 costs to honour.
 
+### The v4 run — pre-registered, not yet run
+
+`predictions_v4.md` is committed **before** any v4 generation, which is the discipline `predictions_v3.md`
+failed. Nothing in `output/` corresponds to it yet; there are no v4 numbers to report.
+
+The hypothesis it tests: **instruction reaches point facts, but not structural relations.** Where the
+ask is *which entity belongs in this slot*, stating the criterion works (`combatants` +1.00,
+`setting` +0.62); where the ask is *how the parts relate*, it does close to nothing (`events` +0.10,
+`objective` +0.10). v4 puts both asks in one run, length- and specificity-matched, so the only
+difference between them is the shape of the demand:
+
+| arm | added to the generator prompt | role |
+|---|---|---|
+| Base | nothing beyond v2.1 + API facts | reference (already built, re-used) |
+| **P** | point-fact ask — rename a generic unit where the engine ships no hero for a figure | positive control, **must move** |
+| **R** | structural ask — order events causally through the trigger graph, match force composition to sources | the probe, predicted to stall |
+
+Two design choices are worth reading before the results exist. The **primary measure is a
+deterministic static check**, not a rubric delta: at n=8 a judge-scored 0.00 on `combatants` is
+compatible with a true effect of ±0.53, so no stall claim may rest on a rubric delta except on
+`events` (SD 0.25, ±0.17 resolvable). And a **validity gate** is written down in advance — if arm P
+does not move, the run does not diagnose and no stall may be read from arm R, because that is exactly
+where v3 failed.
+
+`predictions_v4_addendum.md` records evidence that arrived after the pre-registration was committed:
+the held-out run moved `events` +0.42 [+0.09, +0.74], which cuts against v4's `events` stall
+prediction. It is dated and kept separate rather than folded back in — the prediction stands as
+written.
+
 ### Judge validation
 
 Matched briefs mean **4.20** vs mismatched **1.03** on the v2 arm — a separation of **+3.17**.
@@ -510,7 +544,9 @@ block) is frozen for the same reason — it produced the published rubric-arm sc
 **Pre-register before running.** `predictions_v3.md` says it on its own first line, and it was
 nevertheless committed after the run it predicts — the record notes that, because an mtime is weaker
 evidence than a commit. Write and commit `predictions_v<n>.md` first; a prediction recorded after the
-result is not a prediction.
+result is not a prediction. `predictions_v4.md` is the first one committed ahead of its run. When
+evidence lands after a pre-registration, add a dated addendum (`predictions_v4_addendum.md`) rather
+than editing the prediction.
 
 **Do not pool across instruments.** Scores carry a rubric version *and* a text hash. v1/v2/v3 measure
 different dimension sets, and a `.1` revision measures the same set differently. `tools/analyze.py`
